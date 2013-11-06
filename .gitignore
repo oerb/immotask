@@ -1,4 +1,13 @@
+# github auto gitignor for django
 *.log
 *.pot
 *.pyc
 local_settings.py
+
+# virtualenv
+env/
+
+# PyCharm
+# http://www.jetbrains.com/pycharm/webhelp/project.html
+.idea
+.iml
