@@ -6,58 +6,71 @@ from django.db import models
 class Address(models.Model):
     """
     Address Model
-    contains all Addresses central. In Category it will be split into
-    Company, etc.
+    contains just searchname and E-Mail. Rest is configurable by
+    Contactdata
     """
-    name = models.CharField(u'name', max_length=255)
-    first_name = models.CharField(u'first name', max_length=255)
-    shownName = models.CharField(u'shown name', max_length=255)
-    company = models.CharField(u'company', max_length=255)
-    street = models.CharField(u'street', max_length=255)
-    postal_code = models.CharField(u'postal code', max_length=20)
-    city = models.CharField(u'city', max_length=255)
-    country = models.CharField(u'country', max_length=255)
-    url = models.CharField(u'URL', max_length=255)
-    email = models.CharField(u'E-Mail', max_length=255)  # defined here for special use in sending module
-    fax = models.CharField(u'Fax', max_length=255)  # defined here for special use in sending module
-    position = models.CharField(u'position', max_length=255)
-    department = models.CharField(u'department', max_length=255)  # Abteilung
-    category = models.ForeignKey(Category, editable=False)  # Company, Person, free...
-    freetext = models.TextField(u'freetext', blank=True)
+    adr_searchname = models.CharField(verbose_name=u'name', max_length=255)
+    adr_email = models.CharField(verbose_name=u'E-Mail', max_length=255)  # defined here for special use in sending module
 
     class Meta:
-        verbose_name = u'adresse'
-        verbose_name_plural = u'adresses'
+        verbose_name = u'Adresse'
+        verbose_name_plural = u'Adresses'
         ordering = ['shownName']
+
+    def __unicode__(self):
+        return self.searchname
 
 
 class Category(models.Model):
     """
     Category Model
-    to categorize adresses in company, person etc.
+    to categorize adresses in company, personal etc.
+    so you could use tabs for organization
     """
-    name = models.CharField(u'Name')
-    description = models.TextField(u'description', blank=True)
+    ca_name = models.CharField(verbose_name=u'Name')
+    ca_description = models.TextField(verbose_name=u'Description', blank=True)
 
     class Meta:
         verbose_name = u'category'
         verbose_name_plural = u'categories'
 
+    def __unicode__(self):
+        return self.ca_name
 
-class Condtactdata(models.Model):
+class CondtactData(models.Model):
     """
     Contactdata Model
     for phone, fax, email etc.
     """
-    contacttype = models.ForeignKey(Contacttype, editable=False)
-    contact = models.CharField(255)
-    address = models.ForeignKey(Address, editable=False)
+    cd_contacttype_id = models.ForeignKey(Contacttype)
+    cd_textfield = models.CharField(255)
+    cd_address_id = models.ForeignKey(Address)
 
-class Contacttype(models.Model):
+    def __unicode__(self):
+        return self.cd_contacttype_id.ct_name
+
+
+class ContactDataFulltext(models.Model):
+    """
+    Contactdata Fulltext Model
+    for Fulltext elements
+    """
+    cf_contacttype_id = models.ForeignKey(Contacttype)
+    cf_textfield = models.TextField()
+    cf_address_id = models.ForeignKey(Address, editable=False)
+
+    def __unicode__(self):
+        return self.cf_textfield
+
+
+class ContactType(models.Model):
     """
     Contacttype Model
     Types like phone, fax, email, etc.
     """
-    name = models.CharField(u'name', max_length=20)
-    notice = models.CharField(u'notice', max_length=255)
+    ct_name = models.CharField(u'name', max_length=20)
+    ct_notice = models.CharField(u'notice', max_length=255)
+    ct_category_id = models.ForeignKey(Category)
 
+    def __unicode__(self):
+        return self.ct_name
