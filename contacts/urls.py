@@ -6,5 +6,5 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     # URL for contact in Detail
-    url(r'^(?P<item_id>\d+)/$', 'contacts.views.index', name='blog_item'),
+    url(r'^(?P<item_id>\d+)/$', 'contacts.views.index', name='contact_detail'),
 )
