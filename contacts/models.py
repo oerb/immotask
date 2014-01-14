@@ -18,7 +18,7 @@ class Address(models.Model):
         ordering = ['adr_searchname']
 
     def __unicode__(self):
-        return self.searchname
+        return self.adr_searchname
 
 
 class Category(models.Model):
