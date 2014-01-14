@@ -37,6 +37,7 @@ class Category(models.Model):
     def __unicode__(self):
         return self.ca_name
 
+
 class ContactType(models.Model):
     """
     Contacttype Model
