@@ -76,7 +76,7 @@ class ContactDataFulltext(models.Model):
     """
     cf_contacttype_id = models.ForeignKey(ContactType)
     cf_textfield = models.TextField()
-    cf_address_id = models.ForeignKey(Address, editable=False)
+    cf_address_id = models.ForeignKey(Address)
 
     def __unicode__(self):
         return self.cf_textfield
