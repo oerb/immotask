@@ -25,7 +25,7 @@ class Image(models.Model):
         verbose_name_plural = u'Images'
 
     def __unicode__(self):
-        return  self.bild_subject
+        return  self.image_subject
 
 class Menu(models.Model):
     """

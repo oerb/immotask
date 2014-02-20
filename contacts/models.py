@@ -52,7 +52,7 @@ class ContactType(models.Model):
         return self.ct_name
 
 
-class CondtactData(models.Model):
+class ContactData(models.Model):
     """
     Contactdata Model
     for phone, fax, email etc.
