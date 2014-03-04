@@ -1,27 +1,30 @@
 {% extends "base.html" %}
-{%  block title %}Kontakt: {{ address.adr_searchname }},{{ address.adr_email }}{% endblock %}
+{%  block title %}Kontakt{% endblock %}
 {% block content %}
-
+    <h2>{{ address.adr_searchname }}</h2>
+    <h2><a href="mailto:{{ address.adr_email }}">{{ address.adr_email }}</a></h2>
+    <p> <br> </p>
     <ul class="nav nav-tabs">
         {%  for catagory in catagories %}
-        <li><a href="#">{{ catagory.ca_name }}</a>
-            <div class="table-responsive">
-                <table class="table table-striped">
-                    <tbody>
-                    {% for adr_item in adr_data %}
-                        {% if adr_item.cd_contacttype_id.ct_category_id == catagory %}
-                        <tr>
-                            <td>{{ adr_item.cd_contacttype_id.ct_name }}</td>
-                            <td>{{ adr_item.cd_textfield }}</td>
-                        </tr>
-                        {% endif %}
-                    {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </li>
+            {% if catagory == 1 %}
+            <li class="active"><a href="#">{{ catagory.ca_name }}</a></li>
+            {% else %}
+            <li><a href="#">{{ catagory.ca_name }}</a></li>
+            {% endif %}
         {% endfor %}
     </ul>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <tbody>
+            {% for adr_item in adr_data %}
 
+                <tr>
+                    <td>{{ adr_item.cd_contacttype_id.ct_name }}</td>
+                    <td>{{ adr_item.cd_textfield }}</td>
+                </tr>
 
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}
