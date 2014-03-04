@@ -1,7 +1,30 @@
 {% extends "base.html" %}
-{%  block title %}
-    <h1> Nothing in here ( detail.html ) </h1>
-{% endblock %}
+{%  block title %}Kontakt: {{ address.adr_searchname }}{% endblock %}
 {% block content %}
-    <p>Ehhh.... ja!</p>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Bezeichner</th>
+                    <th>Daten</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Suchname</td>
+                    <td>{{ address.adr_searchname }}</td>
+                </tr>
+                <tr>
+                    <td>E-Mail</td>
+                    <td>{{ address.adr_email }}</td>
+                </tr>
+            {% for adr_item in adr_data %}
+                <tr>
+                    <td>{{ adr_item.cd_contacttype_id.ct_name }}</td>
+                    <td>{{ adr_item.cd_textfield }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}
