@@ -14,7 +14,7 @@ def ct_detail_tab(request, address_id, catagory_id):
         catagory_id = int(catagory_id)
         address = get_object_or_404(Address, pk=address_id)
         adr_fulltextfields = ContactDataFulltext.objects.filter(cf_address_id=address.id)
-        adr_data = ContactData.objects.filter(cd_address_id=address.id)
+        adr_data = ContactData.objects.filter(cd_address_id=address.id) # TODO: .order_by('ct_contacttype_id__ct_sort_id')
         catagories = Category.objects.all()
         return render(request, 'contacts/detailtab.html', {'address': address, 'adr_fulltextfields': adr_fulltextfields,
                                                   'adr_data': adr_data, 'catagory_id': catagory_id, 'catagories': catagories})
