@@ -5,11 +5,11 @@
     <h2><a href="mailto:{{ address.adr_email }}">{{ address.adr_email }}</a></h2>
     <p> <br> </p>
     <ul class="nav nav-tabs">
-        {%  for catagory in catagories %}
+        {%  for category in categories %}
             {% if catagory.id == 1 %}
-            <li class="active"><a href="#">{{ catagory.ca_name }}</a></li>
+            <li class="active"><a href="#">{{ category.ca_name }}</a></li>
             {% else %}
-            <li><a href="{% url "contact_detailtab" address.id catagory.id %}">{{ catagory.ca_name }}</a></li>
+            <li><a href="{% url "contact_detailtab" address.id category.id %}">{{ category.ca_name }}</a></li>
             {% endif %}
         {% endfor %}
     </ul>

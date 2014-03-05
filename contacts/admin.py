@@ -11,6 +11,12 @@ class ContactDataAdmin(admin.ModelAdmin):
     # list_filter = ('cd_address_id',)
     search_fields = ('cd_address_id__adr_searchname',)
 
+class ContactTypeAdmin(admin.ModelAdmin):
+    """
+    For nice Menu
+    """
+    list_display = ('ct_name', 'ct_category_id', 'ct_sort_id')
+
 # Registrationpart
 admin.site.register(Address)
 admin.site.register(Category)
@@ -18,4 +24,4 @@ admin.site.register(Category)
 admin.site.register(ContactDataFulltext)
 admin.site.register(ContactData, ContactDataAdmin)
 
-admin.site.register(ContactType)
+admin.site.register(ContactType, ContactTypeAdmin)

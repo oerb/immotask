@@ -5,11 +5,11 @@
     <h2><a href="mailto:{{ address.adr_email }}">{{ address.adr_email }}</a></h2>
     <p> <br> </p>
     <ul class="nav nav-tabs">
-        {%  for catagory in catagories %}
-            {% if catagory.id == catagory_id %}
-            <li class="active"><a href="{% url "contact_detailtab" address.id catagory.id %}">{{ catagory.ca_name }}</a></li>
+        {%  for category in categories %}
+            {% if category.id == category_id %}
+            <li class="active"><a href="{% url "contact_detailtab" address.id category.id %}">{{ category.ca_name }}</a></li>
             {% else %}
-            <li><a href="{% url "contact_detailtab" address.id catagory.id %}">{{ catagory.ca_name }}</a></li>
+            <li><a href="{% url "contact_detailtab" address.id category.id %}">{{ category.ca_name }}</a></li>
             {% endif %}
         {% endfor %}
     </ul>
@@ -17,7 +17,7 @@
         <table class="table table-striped">
             <tbody>
             {% for adr_item in adr_data %}
-            {% if adr_item.cd_contacttype_id.ct_category_id.id == catagory_id %}
+            {% if adr_item.cd_contacttype_id.ct_category_id.id == category_id %}
                 <tr>
                     <td>{{ adr_item.cd_contacttype_id.ct_name }}</td>
                     <td>{{ adr_item.cd_textfield }}</td>

@@ -49,7 +49,8 @@ class ContactType(models.Model):
     ct_sort_id = models.IntegerField(verbose_name=u'sort_id')
 
     def __unicode__(self):
-        return self.ct_name
+        info = str(self.ct_category_id) + " , " + str(self.ct_name)
+        return info
 
 
 class ContactData(models.Model):
