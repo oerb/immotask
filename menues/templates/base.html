@@ -40,7 +40,6 @@
                     {% include "menu/menu.html" %}
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-
                     {% if user.is_authenticated %}
                     <li>
                         <a href="{% url	"logout" %}">logout</a>

@@ -7,7 +7,7 @@
     <ul class="nav nav-tabs">
         {%  for catagory in catagories %}
             {% if catagory.id == catagory_id %}
-            <li class="active"><a href="#">{{ catagory.ca_name }}</a></li>
+            <li class="active"><a href="{% url "contact_detailtab" address.id catagory.id %}">{{ catagory.ca_name }}</a></li>
             {% else %}
             <li><a href="{% url "contact_detailtab" address.id catagory.id %}">{{ catagory.ca_name }}</a></li>
             {% endif %}

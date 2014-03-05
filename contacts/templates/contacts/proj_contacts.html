@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{%  block title %}Projekt Kontakte{% endblock %}
+{% block content %}
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <tbody>
+            {% for address in addresses %}
+                <tr>
+                    <td><a href="{% url "contact_detail" address.id %}">{{ address.adr_searchname }}</a></td>
+                    <td>{{ address.adr_email }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
