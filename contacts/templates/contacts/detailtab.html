@@ -6,10 +6,10 @@
     <p> <br> </p>
     <ul class="nav nav-tabs">
         {%  for catagory in catagories %}
-            {% if catagory.id == 2 %}
+            {% if catagory.id == catagory_id %}
             <li class="active"><a href="#">{{ catagory.ca_name }}</a></li>
             {% else %}
-            <li><a href="#">{{ catagory.ca_name }}</a></li>
+            <li><a href="{% url "contact_detailtab" address.id catagory.id %}">{{ catagory.ca_name }}</a></li>
             {% endif %}
         {% endfor %}
     </ul>
@@ -17,7 +17,7 @@
         <table class="table table-striped">
             <tbody>
             {% for adr_item in adr_data %}
-            {% if adr_item.cd_contacttype_id.ct_category_id.id == 2 %}
+            {% if adr_item.cd_contacttype_id.ct_category_id.id == catagory_id %}
                 <tr>
                     <td>{{ adr_item.cd_contacttype_id.ct_name }}</td>
                     <td>{{ adr_item.cd_textfield }}</td>
