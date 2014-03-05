@@ -32,7 +32,7 @@ class Menu(models.Model):
     Homepage Menu
     """
     subject = models.CharField(max_length=100)
-    description = models.TextField()
+    description = models.TextField(blank=True)
     level = models.PositiveIntegerField()
     parent = models.ForeignKey('self', blank=True, null=True,
                              related_name=u'Parent')

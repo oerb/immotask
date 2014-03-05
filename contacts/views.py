@@ -1,6 +1,7 @@
 from contacts.models import Address, Category, ContactType, ContactData, ContactDataFulltext
 from django.shortcuts import get_object_or_404, render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from contacts.forms import ContactForm
 
 def ct_detail(request, address_id):
         address = get_object_or_404(Address, pk=address_id)
@@ -23,3 +24,15 @@ def proj_contacts(request):
     adr_data = ContactData.objects.all()
     addresses = Address.objects.all()
     return render(request, 'contacts/proj_contacts.html', {'adr_data': adr_data, 'addresses': addresses})
+
+def new_contact(request):
+    # TODO: Not tested, list of all ContactsTypes to fill
+    message = None
+    if request.method == "POST":
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            searchname = request.POST['searchname']
+            email = request.POST['email']
+    else:
+        form = ContactForm()
+    return render(request, 'contacts/new_contact.html', {'message': message, 'form': form})

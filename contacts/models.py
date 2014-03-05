@@ -44,7 +44,7 @@ class ContactType(models.Model):
     Types like phone, fax, email, etc.
     """
     ct_name = models.CharField(verbose_name=u'Name', max_length=20)
-    ct_info = models.CharField(verbose_name=u'Notice', max_length=255)
+    ct_info = models.CharField(verbose_name=u'Notice', max_length=255, blank=True)
     ct_category_id = models.ForeignKey(Category)
     ct_sort_id = models.IntegerField(verbose_name=u'sort_id')
 
