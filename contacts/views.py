@@ -41,3 +41,25 @@ def new_contact(request):
     else:
         form = ContactForm()
     return render(request, 'contacts/new_contact.html', {'message': message, 'form': form})
+
+def edit_contact(request, adr_id):
+    message = None
+    if request.method == "POST":
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            adr = Address(adr_searchname=form.cleaned_data['searchname'],
+                          adr_email=form.cleaned_data['email'])
+            adr.save()
+            contacttypes = ContactType.objects.all()
+            for ct_type in contacttypes:
+                ctdata = ContactData(cd_contacttype_id= ct_type,
+                                     cd_textfield = form.cleaned_data['{index}'.format(index=ct_type.id)],
+                                     cd_address_id = adr)
+                ctdata.save()
+
+            return redirect('proj_contacts')
+    else:
+        form = ContactForm()
+        adr = Address.objects.filter(id=adr_id)
+        form.searchname.bound_data()
+    return render(request, 'contacts/edit_contact.html', {'message': message, 'form': form})
