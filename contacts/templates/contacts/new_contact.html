@@ -4,17 +4,14 @@
     <form class="form-horizontal" role="form" action="" method="post">{% csrf_token %}
         {% for field in form %}
         <div class="form-group">
-            <label for="" class="col-md-2 control-label ">{{ field.label_tag }}</label>
-            <div class="col-md-6">
-                <label for="" class="col-md-2 control-label label-warning">{{ field.errors }}</label>
-            </div>
+                <label for="" class="col-md-5 control-label ">{{ field.label_tag }}</label>
             <div class="col-md-6">
                 {{ field }}
             </div>
         </div>
         {% endfor %}
         <div class="form-group">
-            <input class="btn btn-primary btn-lg col-md-offset-3 col-md-4" type="submit" value="submit"></input>
+            <input class="btn btn-primary btn-lg col-md-offset-4 col-md-4" type="submit" value="submit"></input>
         </div>
     </form>
 {% endblock %}
