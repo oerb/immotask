@@ -1,11 +1,20 @@
 {% extends "base.html" %}
 {%  block title %}Kontakt{% endblock %}
 {% block content %}
-    <form class="form" role="form" action="" method="post">{% csrf_token %}
+    <form class="form-horizontal" role="form" action="" method="post">{% csrf_token %}
         {% for field in form %}
-           <p>{{ field.errors }}</p>
-           <p>{{ field.label_tag }} {{ field }}</p>
+        <div class="form-group">
+            <label for="" class="col-md-2 control-label ">{{ field.label_tag }}</label>
+            <div class="col-md-6">
+                <label for="" class="col-md-2 control-label label-warning">{{ field.errors }}</label>
+            </div>
+            <div class="col-md-6">
+                {{ field }}
+            </div>
+        </div>
         {% endfor %}
-        <input class="btn btn-primary btn-lg " type="submit" value="submit"></input>
+        <div class="form-group">
+            <input class="btn btn-primary btn-lg col-md-offset-3 col-md-4" type="submit" value="submit"></input>
+        </div>
     </form>
 {% endblock %}

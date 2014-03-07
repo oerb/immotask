@@ -1,7 +1,7 @@
 from contacts.models import Address, Category, ContactType, ContactData, ContactDataFulltext
 from django.shortcuts import get_object_or_404, render, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from contacts.forms import ContactForm, contact_form_dyn_expand
+from contacts.forms import ContactForm
 
 
 # TODO: Url, TAB and Item Id using/filtering in template and view
@@ -51,6 +51,7 @@ def edit_contact(request, adr_id):
                           adr_email=form.cleaned_data['email'])
             adr.save()
             contacttypes = ContactType.objects.all()
+            # TODO: ct_type proof need to be implemented
             for ct_type in contacttypes:
                 ctdata = ContactData(cd_contacttype_id= ct_type,
                                      cd_textfield = form.cleaned_data['{index}'.format(index=ct_type.id)],
