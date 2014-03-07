@@ -1,7 +1,7 @@
 from contacts.models import Address, Category, ContactType, ContactData, ContactDataFulltext
 from django.shortcuts import get_object_or_404, render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from contacts.forms import ContactForm
+from contacts.forms import ContactForm, contact_form_dyn_expand
 
 
 # TODO: Url, TAB and Item Id using/filtering in template and view
@@ -22,11 +22,15 @@ def proj_contacts(request):
 def new_contact(request):
     # TODO: Not tested, list of all ContactsTypes to fill
     message = None
+    contacttypes = ContactType.objects.all()
     if request.method == "POST":
         form = ContactForm(request.POST)
+        contact_form_dyn_expand(form)
         if form.is_valid():
             searchname = request.POST['searchname']
             email = request.POST['email']
     else:
         form = ContactForm()
-    return render(request, 'contacts/new_contact.html', {'message': message, 'form': form})
+        print dir(form)
+        contact_form_dyn_expand(form)
+    return render(request, 'contacts/new_contact.html', {'message': message, 'form': form, 'contacttypes': contacttypes})

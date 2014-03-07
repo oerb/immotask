@@ -5,6 +5,8 @@ Forms
 """
 
 from django import forms
+from contacts.models import ContactType
+
 
 class LoginForm(forms.Form):
     username = forms.CharField()
