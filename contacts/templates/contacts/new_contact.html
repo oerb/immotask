@@ -2,10 +2,8 @@
 {%  block title %}Kontakt{% endblock %}
 {% block content %}
     <form class="form-signin" role="form"action="" method="post">{% csrf_token %}
-        <p>Searchname: {{ form.searchname }}</p>
-        <p>E-Mail: {{ form.email }}</p>
-        {% for element in form.fields.insert %}
-            <p>{{ element }}</p>
+        {% for field in form %}
+           <p>{{ field.label_tag }} {{ field }}</p>
         {% endfor %}
         <button class="btn btn-primary btn-lg " type="submit" value="submit">
             Speichern

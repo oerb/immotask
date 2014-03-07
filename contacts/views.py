@@ -31,6 +31,6 @@ def new_contact(request):
             email = request.POST['email']
     else:
         form = ContactForm()
-        print dir(form)
         contact_form_dyn_expand(form)
+        #print dir(form.fields.append()) #"\n".join(form.__dict__)
     return render(request, 'contacts/new_contact.html', {'message': message, 'form': form, 'contacttypes': contacttypes})
