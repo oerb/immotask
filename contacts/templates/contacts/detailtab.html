@@ -26,6 +26,7 @@
             {% endfor %}
             </tbody>
         </table>
+        <button class="btn btn-primary btn-lg " type="button" onclick="location.href='{% url "edit_contact" address.id %}'">bearbeiten</button>
     </div>
 {% endblock %}
 {% block banner_right %}
@@ -55,11 +56,6 @@
         <li>
             <a href="#">
                 Dokumente
-            </a>
-        </li>
-        <li>
-            <a href="#">
-                Bearbeiten
             </a>
         </li>
         <li>
