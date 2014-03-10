@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 {%  block title %}Kontakt{% endblock %}
 {% block content %}
-    <label class="label-warning col-lg-offset-3 col-md-6">{{ form.errors }}</label>
+    <label class="{% if form.errors %}label-warning{% endif %} col-lg-offset-3 col-md-6">{{ form.errors }}</label>
     <form class="form-horizontal" role="form" action="" method="post">{% csrf_token %}
         {% for field in form %}
         <div class="form-group">
-                <label for="" class="col-md-5 control-label ">{{ field.label_tag }}</label>
-            <div class="col-md-6">
+            <label for="" class="col-md-4 control-label ">{{ field.label_tag }}</label>
+            <div class="col-md-5">
                 {{ field }}
             </div>
         </div>

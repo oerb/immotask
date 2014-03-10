@@ -42,25 +42,27 @@ def new_contact(request):
         form = ContactForm()
     return render(request, 'contacts/new_contact.html', {'message': message, 'form': form})
 
-def edit_contact(request, adr_id):
+def edit_contact(request, address_id):
     message = None
+    contacttypes = ContactType.objects.all()
     if request.method == "POST":
         form = ContactForm(request.POST)
         if form.is_valid():
-            adr = Address(adr_searchname=form.cleaned_data['searchname'],
+            adr = Address(id=address_id ,adr_searchname=form.cleaned_data['searchname'],
                           adr_email=form.cleaned_data['email'])
             adr.save()
-            contacttypes = ContactType.objects.all()
             # TODO: ct_type proof need to be implemented
             for ct_type in contacttypes:
-                ctdata = ContactData(cd_contacttype_id= ct_type,
-                                     cd_textfield = form.cleaned_data['{index}'.format(index=ct_type.id)],
-                                     cd_address_id = adr)
-                ctdata.save()
-
-            return redirect('proj_contacts')
+                ctdata = ContactData(cd_contacttype_id=ct_type,
+                                     cd_textfield=form.cleaned_data['{index}'.format(index=ct_type.id)],
+                                     cd_address_id=adr)
+            ctdata.save()
+        return redirect('proj_contacts')
     else:
-        form = ContactForm()
-        adr = Address.objects.filter(id=adr_id)
-        form.searchname.bound_data()
+        adr = get_object_or_404(Address, pk=address_id)
+        datadict = {'searchname':adr.adr_searchname, 'email':adr.adr_email}
+        adr_data = ContactData.objects.filter(cd_address_id=address_id).order_by('cd_contacttype_id__ct_sort_id')
+        for adr_element in adr_data:
+            datadict['{index}'.format(index=adr_element.cd_contacttype_id.id)] = adr_element.cd_textfield
+        form = ContactForm(initial=datadict)
     return render(request, 'contacts/edit_contact.html', {'message': message, 'form': form})

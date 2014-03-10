@@ -1,11 +1,17 @@
 {% extends "base.html" %}
 {%  block title %}Kontakt Bearbeiten{% endblock %}
 {% block content %}
-    <form class="form" role="form" action="" method="post">{% csrf_token %}
+    <label class="{% if form.errors %}label-warning{% endif %} col-lg-offset-3 col-md-6">{{ form.errors }}</label>
+    <form class="form-horizontal" role="form" action="" method="post">{% csrf_token %}
+        <p>{{ form.errors }}</p>
         {% for field in form %}
-           <p>{{ field.errors }}</p>
-           <p>{{ field.label_tag }} {{ field }}</p>
+        <div class="form-group">
+            <label for="" class="col-md-4 control-label ">{{ field.label_tag }}</label>
+            <div class="col-md-5">
+                {{ field }}
+            </div>
+        </div>
         {% endfor %}
-        <input class="btn btn-primary btn-lg " type="submit" value="submit"></input>
+        <input class="btn btn-primary btn-lg col-md-offset-4 col-md-4" type="submit" value="submit"></input>
     </form>
 {% endblock %}
