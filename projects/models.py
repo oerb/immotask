@@ -1,6 +1,8 @@
 from django.db import models
 from contacts.models import Address
 from menues.models import Image
+from docs.models import Doc
+from tasks.models import Task
 # Create your models here.
 
 
@@ -25,6 +27,9 @@ class ProjectAddress(models.Model):
     pa_adrtype = models.ForeignKey(ProjAdrTyp)
     pa_projid = models.ForeignKey(Project)
 
+    def __unicode__(self):
+        return self.pa_adr_id.adr_searchname
+
 
 class ProjDoc(models.Model):
     """
@@ -32,8 +37,10 @@ class ProjDoc(models.Model):
     contains a join to the docs app
     """
     pd_projid = models.ForeignKey(Project)
-    # pd_docid = models.ForeignKey(Doc) TODO: sign after Doc Apps Model is developed
+    pd_docid = models.ForeignKey(Doc)
 
+    def __unicode__(self):
+        return self.pd_docid.doc_subject
 
 class Project(models.Model):
     """
@@ -44,8 +51,11 @@ class Project(models.Model):
     pro_name = models.CharField(verbose_name=u'Name', max_length=250)
     pro_info = models.CharField(verbose_name=u'Info', max_length=250, blank=True)
     pro_date = models.DateField(verbose_name=u'Erstellt')
-    pro_hide = models.BooleanField() # TODO: Standardwert True
+    pro_hide = models.BooleanField()  # TODO: Standardwert True
     pro_done_date = models.DateTimeField( blank=True)
+
+    def __unicode__(self):
+        return self.pro_name
 
 
 class ProjDataLayer(models.Model):
@@ -57,16 +67,22 @@ class ProjDataLayer(models.Model):
     pdl_info = models.CharField(verbose_name=u'Info', max_length='250', blank=True)
     pdl_sortid = models.IntegerField(verbose_name=u'Sort Order', blank=True)
 
+    def __unicode__(self):
+        return self.pdl_name
+
 
 class ProjTask(models.Model):
     """
     Projekt Tasks
     join to Tasks app
     """
-    pass
+    pt_taskid = models.ForeignKey(Task)
+    pt_projid = models.ForeignKey(Project)
 
-    # pt_task_id = modler.ForeignKey(Task) TODO: after Task app is modeled
-
+    def __unicode__(self):
+        info = "Projekt: " + str(self.pt_projid.id) + " " + str(self.pt_projid.pro_name) \
+               + " TaskID: " + str(self.pt_taskid.id)
+        return info
 
 
 class ProjStruct(modelsModel):
@@ -79,6 +95,9 @@ class ProjStruct(modelsModel):
     ps_name = models.CharField(verbose_name=u'Name', max_length=100)
     ps_imgid = models.ForeignKey(Image, blank=True)  # For Images infront of the Trea
 
+    def __unicode__(self):
+        return self.ps_name
+
 
 class ProjData(models.Model):
     """
@@ -88,3 +107,7 @@ class ProjData(models.Model):
     proj_text = models.CharField(verbose_name=u'Text', max_length=250)
     proj_double = models.DecimalField(verbose_name=u'Dezimalfeld', max_length=250)
     proj_unit = models.CharField(verbose_name=u'Einheit', max_length=20)
+
+    def __unicode__(self):
+        info = str(self.proj_text) + " " + str(self.proj_double) + " " + str(self.proj_unit)
+        return info

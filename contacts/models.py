@@ -9,7 +9,7 @@ class Address(models.Model):
     contains just searchname and E-Mail. Rest is configurable by
     Contactdata
     """
-    adr_searchname = models.CharField(verbose_name=u'name', max_length=255)
+    adr_searchname = models.CharField(verbose_name=u'Name', max_length=255)
     adr_email = models.CharField(verbose_name=u'E-Mail', max_length=255)  # defined here for special use in sending module
 
     class Meta:

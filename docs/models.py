@@ -11,6 +11,10 @@ class DocType(models.Model):
     dt_name = models.CharField(verbose_name=u'Name', max_length=100)
     dt_info = models.CharField(verbose_name=u'Info', max_length=250)
 
+    def __unicode__(self):
+        return self.dt_name
+
+
 class Doc(models.Model):
     """
     Documents
@@ -19,3 +23,6 @@ class Doc(models.Model):
     doc_subject = models.CharField(max_length=100, verbose_name=u'Subject')
     doc_file = models.FileField(upload_to="docs/")
     # doc_userid = models.ForeignKey() TODO: UserID has to be added
+
+    def __unicode__(self):
+        return self.doc_subject
