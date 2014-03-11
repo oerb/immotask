@@ -10,7 +10,7 @@ class Address(models.Model):
     Contactdata
     """
     adr_searchname = models.CharField(verbose_name=u'Name', max_length=255)
-    adr_email = models.CharField(verbose_name=u'E-Mail', max_length=255)  # defined here for special use in sending module
+    adr_email = models.CharField(verbose_name=u'E-Mail', max_length=255)  # defined for special use in sending module
 
     class Meta:
         verbose_name = u'Adresse'
@@ -63,8 +63,8 @@ class ContactData(models.Model):
     cd_address_id = models.ForeignKey(Address)
 
     class Meta:
-        verbose_name= u'Contact Data'
-        verbose_name_plural= u'Contact Data'
+        verbose_name = u'Contact Data'
+        verbose_name_plural = u'Contact Data'
 
     def __unicode__(self):
         return self.cd_contacttype_id.ct_name
@@ -81,5 +81,3 @@ class ContactDataFulltext(models.Model):
 
     def __unicode__(self):
         return self.cf_textfield
-
-
