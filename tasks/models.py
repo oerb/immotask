@@ -1,6 +1,7 @@
 from django.db import models
 from docs.models import Doc
 from contacts.models import Address
+from django.contrib.auth.models import User, Group
 
 # Create your models here.
 
@@ -48,10 +49,14 @@ class Task(models.Model):
     """
     ta_shorttxt = models.CharField(verbose_name=u'Kurztext', max_length=250)
     ta_longtxt = models.TextField(verbose_name=u'Meldungstext', blank= True)
-    ta_date = models.DateTimeField() # for first edit TODO: auto set Date
+    ta_date = models.DateTimeField(verbose_name=u'Erstellt',auto_now_add=True) # for first edit TODO: auto set Date
+    ta_editor = models.ForeignKey(User)
+    ta_begin = models.DateTimeField(verbose_name=u'Begin', blank=True, null=True)
+    ta_end = models.DateTimeField(verbose_name=u'End', blank=True, null=True)
+    ta_warn = models.DateField(verbose_name=u'Warnen', blank=True, null=True)
     ta_priority = models.IntegerField(blank=True)
-    ta_adrid_ext = models.ForeignKey(Address)  # External
-    # ta_adrid_int = models.ForeignKey(User)  # Internal TODO: Userid ADD
+    ta_adrid_from = models.ForeignKey(Address)  # External
+    ta_adrid_to = models.ForeignKey(Address)  # Internal TODO: Userid ADD
     ta_tasktype = models.ForeignKey(TaskType)
     # ta_parent = models.ForeignKey(self, blank=True) TODO: Self ForeignKey ...
 
