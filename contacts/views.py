@@ -53,10 +53,12 @@ def edit_contact(request, address_id):
             adr.save()
             # TODO: ct_type proof need to be implemented
             for ct_type in contacttypes:
-                ctdata = ContactData(cd_contacttype_id=ct_type,
+                cd_id = ContactData.objects.filter(cd_contacttype_id__id=ct_type.id, cd_address_id__id=address_id)
+                ctdata = ContactData(id=cd_id, cd_contacttype_id=ct_type,
                                      cd_textfield=form.cleaned_data['{index}'.format(index=ct_type.id)],
                                      cd_address_id=adr)
-            ctdata.save()
+                ctdata.save()
+            print "After Save Print"
         return redirect('proj_contacts')
     else:
         adr = get_object_or_404(Address, pk=address_id)
