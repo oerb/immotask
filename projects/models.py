@@ -6,6 +6,22 @@ from tasks.models import Task
 # Create your models here.
 
 
+class Project(models.Model):
+    """
+    Projects
+    central Order ID for structuring Adresses, Documents, Tasks
+    in to Projekt-Elements like Houses, Rooms, development etc.
+    """
+    pro_name = models.CharField(verbose_name=u'Name', max_length=250)
+    pro_info = models.CharField(verbose_name=u'Info', max_length=250, blank=True)
+    pro_date = models.DateField(verbose_name=u'Erstellt')
+    pro_hide = models.BooleanField(verbose_name=u'Hide')  # TODO: Standardwert True
+    pro_done_date = models.DateTimeField( blank=True)
+
+    def __unicode__(self):
+        return self.pro_name
+
+
 class ProjAdrTyp(models.Model):
     """
     Projekt Address Types like
@@ -43,22 +59,6 @@ class ProjDoc(models.Model):
         return self.pd_docid.doc_subject
 
 
-class Project(models.Model):
-    """
-    Projects
-    central Order ID for structuring Adresses, Documents, Tasks
-    in to Projekt-Elements like Houses, Rooms, development etc.
-    """
-    pro_name = models.CharField(verbose_name=u'Name', max_length=250)
-    pro_info = models.CharField(verbose_name=u'Info', max_length=250, blank=True)
-    pro_date = models.DateField(verbose_name=u'Erstellt')
-    pro_hide = models.BooleanField(verbose_name=u'Hide')  # TODO: Standardwert True
-    pro_done_date = models.DateTimeField( blank=True)
-
-    def __unicode__(self):
-        return self.pro_name
-
-
 class ProjDataLayer(models.Model):
     """
     Projects Data Layer
@@ -86,7 +86,7 @@ class ProjTask(models.Model):
         return info
 
 
-class ProjStruct(modelsModel):
+class ProjStruct(models.Model):
     """
     Project Structure
     For structuring the Project
@@ -106,7 +106,7 @@ class ProjData(models.Model):
     like, Start, End, Objekt, Streat, Architekt ...
     """
     proj_text = models.CharField(verbose_name=u'Text', max_length=250)
-    proj_double = models.DecimalField(verbose_name=u'Dezimalfeld', max_length=250)
+    proj_double = models.DecimalField(verbose_name=u'Dezimalfeld', max_digits=15, decimal_places=2)
     proj_unit = models.CharField(verbose_name=u'Einheit', max_length=20)
 
     def __unicode__(self):
