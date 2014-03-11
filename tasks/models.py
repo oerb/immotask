@@ -55,8 +55,8 @@ class Task(models.Model):
     ta_end = models.DateTimeField(verbose_name=u'End', blank=True, null=True)
     ta_warn = models.DateField(verbose_name=u'Warnen', blank=True, null=True)
     ta_priority = models.IntegerField(blank=True)
-    ta_adrid_from = models.ForeignKey(Address)  # External
-    ta_adrid_to = models.ForeignKey(Address)  # Internal
+    ta_adrid_from = models.ForeignKey(Address, related_name=u'Task-From')  # External
+    ta_adrid_to = models.ForeignKey(Address, related_name=u'Task-To')  # Internal
     ta_tasktype = models.ForeignKey(TaskType)
     # ta_parent = models.ForeignKey(self, blank=True) TODO: Self ForeignKey ...
 
