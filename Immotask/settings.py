@@ -129,6 +129,9 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'contacts',
     'menues',
+    'projects',
+    'tasks',
+    'docs',
 )
 
 # Template processors by Oerb
