@@ -17,7 +17,6 @@ def ct_detail_tab(request, address_id, category_id):
                                                            'category_id': category_id,
                                                            'categories': categories})
 
-
 def proj_contacts(request):
     # TODO: Needs to be filtered by project ID, Needs more Addresselements
     adr_data = ContactData.objects.all()

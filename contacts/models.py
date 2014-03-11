@@ -47,6 +47,7 @@ class ContactType(models.Model):
     ct_info = models.CharField(verbose_name=u'Notice', max_length=255, blank=True)
     ct_category_id = models.ForeignKey(Category)
     ct_sort_id = models.IntegerField(verbose_name=u'sort_id')
+    # ct_viewshown = models.BooleanField(verbose_name=u'In Ansicht anzeigen') TODO: add for dyn View layout
 
     def __unicode__(self):
         info = str(self.ct_category_id) + " , " + str(self.ct_name)

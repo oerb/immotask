@@ -3,6 +3,7 @@ from docs.models import Doc
 
 # Create your models here.
 
+
 class TaskType(models.Model):
     """
     Tasks Types
@@ -14,6 +15,7 @@ class TaskType(models.Model):
 
     def __unicode__(self):
         return self.tt_name
+
 
 class Task(models.Model):
     """
