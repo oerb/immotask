@@ -103,7 +103,7 @@ class ProjStruct(models.Model):
 class ProjData(models.Model):
     """
     Project Data
-    like, Start, End, Objekt, Streat, Architekt ...
+    like, Start, End, Objekt, Architekt ...
     """
     proj_text = models.CharField(verbose_name=u'Text', max_length=250)
     proj_double = models.DecimalField(verbose_name=u'Dezimalfeld', max_digits=15, decimal_places=2)
