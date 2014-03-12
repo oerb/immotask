@@ -19,9 +19,10 @@ def ct_detail_tab(request, address_id, category_id):
 
 def proj_contacts(request):
     # TODO: Needs to be filtered by project ID, Needs more Addresselements
-    adr_data = ContactData.objects.all()
+    contacttypes = ContactType.objects.all()
+    adr_data = ContactData.objects.all().order_by('cd_contacttype_id__ct_sort_id')
     addresses = Address.objects.all()
-    return render(request, 'contacts/proj_contacts.html', {'adr_data': adr_data, 'addresses': addresses})
+    return render(request, 'contacts/proj_contacts.html', {'adr_data': adr_data, 'addresses': addresses, 'contacttypes':contacttypes})
 
 
 def new_contact(request):

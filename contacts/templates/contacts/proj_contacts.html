@@ -3,11 +3,27 @@
 {% block content %}
     <div class="table-responsive">
         <table class="table table-striped">
+            <thead>
+                <tr>
+                    <td>Suchname</td>
+                    <td>E-Mail</td>
+                    {% for ctype in contacttypes %}
+                        {% if ctype.ct_viewshown %}
+                            <td>{{ ctype.ct_name }}</td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            </thead>
             <tbody>
             {% for address in addresses %}
                 <tr>
                     <td><a href="{% url "contact_detailtab" address.id 1 %}">{{ address.adr_searchname }}</a></td>
                     <td>{{ address.adr_email }}</td>
+                    {% for adr in adr_data %}
+                        {% if adr.cd_address_id.id == address.id and adr.cd_contacttype_id.ct_viewshown %}
+                            <td>{{ adr.cd_textfield }}</td>
+                        {% endif %}
+                    {% endfor %}
                 </tr>
             {% endfor %}
             </tbody>
