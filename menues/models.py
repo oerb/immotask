@@ -25,7 +25,8 @@ class Image(models.Model):
         verbose_name_plural = u'Images'
 
     def __unicode__(self):
-        return  self.image_subject
+        return self.image_subject
+
 
 class Menu(models.Model):
     """
@@ -33,9 +34,10 @@ class Menu(models.Model):
     """
     subject = models.CharField(max_length=100)
     description = models.TextField(blank=True)
+    link = models.CharField(max_length=250, blank=True)
+    linkintern = models.BooleanField(verbose_name='Link Intern')
     level = models.PositiveIntegerField()
-    parent = models.ForeignKey('self', blank=True, null=True,
-                             related_name=u'Parent')
+    parent = models.ForeignKey('self', blank=True, null=True, related_name=u'Parent')
     menu_hide = models.BooleanField()
     date_creation = models.DateTimeField(editable=False, auto_now_add=True)
     date_last_edit = models.DateTimeField(editable=False, auto_now=True)
