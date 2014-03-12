@@ -24,7 +24,7 @@ def metainfos_blogname(request):
         for e in mblogname:
             metainfo_blogname = e.metainfo
     else:
-        metainfo_blogname = 'simplehome'
+        metainfo_blogname = 'Immotask'
     return {'metainfo_blogname':metainfo_blogname}
 
 def metainfos_footer(request):
@@ -36,7 +36,7 @@ def metainfos_footer(request):
         for e in mfooter:
             metainfo_footer = e.metainfo
     else:
-        metainfo_footer = 'Simplehome Django based Blog Example by Oerb'
+        metainfo_footer = 'Immotask, Django based Taskmanager for real estate by Oerb'
     return {'metainfo_footer':metainfo_footer}
 
 def metainfos_author(request):
