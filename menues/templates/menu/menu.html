@@ -10,7 +10,11 @@
         {% for level2element in level2menulist %}
             {% if level2element.parent == element %}
                 <li>
-                    <a href="{% url "proj_contacts"  %}">{{level2element.subject}}</a>
+                    {% if level2element.linkintern %}
+                        <a href="{% url level2element.link  %}">{{level2element.subject}}</a>
+                    {% else %}
+                        <a href="{{ level2element.link }}">{{level2element.subject}}</a>
+                    {% endif %}
                 </li>
             {% endif %}
         {% endfor %}
