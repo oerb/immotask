@@ -3,10 +3,6 @@
 <li class="dropdown">
     <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{ element.subject }}<b class="caret"></b></a>
     <ul class="dropdown-menu">
-        <li class="dropdown-header">
-            <a href="{% url "proj_contacts"  %}"> - all - </a>
-        </li>
-        <li class="divider"></li>
         {% for level2element in level2menulist %}
             {% if level2element.parent == element %}
                 <li>

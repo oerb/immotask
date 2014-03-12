@@ -2,6 +2,7 @@ from contacts.models import Address, Category, ContactType, ContactData, Contact
 from django.shortcuts import get_object_or_404, render, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from contacts.forms import ContactForm
+from projects.models import ProjectAddress
 
 
 # TODO: Url, TAB and Item Id using/filtering in template and view
@@ -21,7 +22,7 @@ def proj_contacts(request):
     # TODO: Needs to be filtered by project ID, Needs more Addresselements
     contacttypes = ContactType.objects.all()
     adr_data = ContactData.objects.all().order_by('cd_contacttype_id__ct_sort_id')
-    addresses = Address.objects.all()
+    addresses = ProjectAddress.objects.filter(pa_projid=1)  # TODO: Projekt Choice implementation
     return render(request, 'contacts/proj_contacts.html', {'adr_data': adr_data, 'addresses': addresses, 'contacttypes':contacttypes})
 
 

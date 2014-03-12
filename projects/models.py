@@ -31,7 +31,7 @@ class ProjAdrTyp(models.Model):
     pat_info = models.CharField(verbose_name=u'Info', max_length=250, blank=True)
 
     def __unicode__(self):
-        return pat_name
+        return self.pat_name
 
 
 class ProjectAddress(models.Model):
