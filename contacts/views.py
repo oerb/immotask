@@ -18,12 +18,19 @@ def ct_detail_tab(request, address_id, category_id):
                                                            'category_id': category_id,
                                                            'categories': categories})
 
+
 def proj_contacts(request):
     # TODO: Needs to be filtered by project ID, Needs more Addresselements
     contacttypes = ContactType.objects.all()
     adr_data = ContactData.objects.all().order_by('cd_contacttype_id__ct_sort_id')
     addresses = ProjectAddress.objects.filter(pa_projid=1)  # TODO: Projekt Choice implementation
-    return render(request, 'contacts/proj_contacts.html', {'adr_data': adr_data, 'addresses': addresses, 'contacttypes':contacttypes})
+    return render(request, 'contacts/proj_contacts.html', {'adr_data': adr_data, 'addresses': addresses,
+                                                           'contacttypes':contacttypes})
+
+
+def test(request):
+    data = [ "AA", "BB", "CC", "DD", "EE" ]
+    return render(request, 'contacts/test.html', {'data': data})
 
 
 def new_contact(request):
@@ -39,6 +46,7 @@ def new_contact(request):
                 ctdata = ContactData(cd_contacttype_id=ct_type,
                                      cd_textfield=form.cleaned_data['{index}'.format(index=ct_type.id)],
                                      cd_address_id=adr)
+                print ctdata
                 ctdata.save()
             return redirect('proj_contacts')
     else:
@@ -49,7 +57,9 @@ def new_contact(request):
 def edit_contact(request, address_id):
     message = None
     contacttypes = ContactType.objects.all()
+    categories = Category.objects.all()
     if request.method == "POST":
+        print "First IF"
         form = ContactForm(request.POST)
         if form.is_valid():
             adr = Address(id=address_id, adr_searchname=form.cleaned_data['searchname'],
@@ -58,9 +68,15 @@ def edit_contact(request, address_id):
             # TODO: ct_type proof need to be implemented
             for ct_type in contacttypes:
                 cd_id = ContactData.objects.filter(cd_contacttype_id__id=ct_type.id, cd_address_id__id=address_id)
-                ctdata = ContactData(id=cd_id, cd_contacttype_id=ct_type,
-                                     cd_textfield=form.cleaned_data['{index}'.format(index=ct_type.id)],
-                                     cd_address_id=adr)
+                if len(cd_id) > 0:
+                    ctdata = ContactData(id=cd_id, cd_contacttype_id=ct_type,
+                                         cd_textfield=form.cleaned_data['{index}'.format(index=ct_type.id)],
+                                         cd_address_id=adr)
+                else:
+                    ctdata = ContactData(cd_contacttype_id=ct_type,
+                                         cd_textfield=form.cleaned_data['{index}'.format(index=ct_type.id)],
+                                         cd_address_id=adr)
+                print (ctdata, cd_id)
                 ctdata.save()
             print "After Save Print"
         return redirect('proj_contacts')
@@ -71,4 +87,4 @@ def edit_contact(request, address_id):
         for adr_element in adr_data:
             datadict['{index}'.format(index=adr_element.cd_contacttype_id.id)] = adr_element.cd_textfield
         form = ContactForm(initial=datadict)
-    return render(request, 'contacts/edit_contact.html', {'message': message, 'form': form})
+    return render(request, 'contacts/edit_contact.html', {'message': message, 'form': form, 'categories': categories})

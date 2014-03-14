@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<!-- Nav tabs -->
+<ul class="nav nav-tabs">
+    {% for dat in data %}
+        <li {% if forloop.first %}class="active"{% endif %}><a href="#{{ dat }}" data-toggle="tab">{{ dat }}</a></li>
+    {% endfor %}
+</ul>
+<!-- Tab panes -->
+<div class="tab-content">
+    {% for dat in data %}
+    <div class="tab-pane {% if forloop.first %}active{% endif %}" id="{{ dat }}">text {{ dat }}</div>
+    {% endfor %}
+</div>
+{% endblock %}

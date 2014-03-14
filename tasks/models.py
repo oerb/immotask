@@ -59,7 +59,7 @@ class Task(models.Model):
     ta_adrid_from = models.ForeignKey(Address, related_name=u'Task-From')  # External
     ta_adrid_to = models.ForeignKey(Address, related_name=u'Task-To')  # Internal
     ta_tasktype = models.ForeignKey(TaskType, verbose_name=u'Meldungstyp')
-    ta_parent = models.ForeignKey('self', blank=True, null=True, related_name=u'Parent')
+    ta_parent = models.ForeignKey('Task', blank=True, null=True, related_name=u'Parent')
 
     def __unicode__(self):
         return self.ta_shorttxt

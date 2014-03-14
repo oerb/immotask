@@ -11,4 +11,5 @@ urlpatterns = patterns('',
     url(r'^view/$', 'contacts.views.proj_contacts', name='proj_contacts'),
     url(r'^new/$', 'contacts.views.new_contact', name='new_contact'),
     url(r'^edit/(?P<address_id>\d+)$', 'contacts.views.edit_contact', name='edit_contact'),
+    url(r'^test/$', 'contacts.views.test', name="ct_test")
 )
