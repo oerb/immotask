@@ -46,7 +46,6 @@ def new_contact(request):
                 ctdata = ContactData(cd_contacttype_id=ct_type,
                                      cd_textfield=form.cleaned_data['{index}'.format(index=ct_type.id)],
                                      cd_address_id=adr)
-                print ctdata
                 ctdata.save()
             return redirect('proj_contacts')
     else:
@@ -86,5 +85,6 @@ def edit_contact(request, address_id):
         adr_data = ContactData.objects.filter(cd_address_id=address_id).order_by('cd_contacttype_id__ct_sort_id')
         for adr_element in adr_data:
             datadict['{index}'.format(index=adr_element.cd_contacttype_id.id)] = adr_element.cd_textfield
-        form = ContactForm(initial=datadict)
+        form = ContactForm(initial=datadict)  # TODO: datadict index out of contacttype_id and catagory_id for Tab's
+        # or send filtered by category and ordered and give a list with the stop-point
     return render(request, 'contacts/edit_contact.html', {'message': message, 'form': form, 'categories': categories})
