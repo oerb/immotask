@@ -52,8 +52,10 @@ class Task(models.Model):
     ta_longtxt = models.TextField(verbose_name=u'Meldungstext', blank= True)
     ta_date = models.DateTimeField(verbose_name=u'Erstellt', auto_now_add=True) # for first edit TODO: auto set Date
     ta_editor = models.ForeignKey(User, verbose_name=u'Ersteller', default=User)
-    ta_begin = models.DateTimeField(verbose_name=u'Begin', blank=True, null=True)
-    ta_end = models.DateTimeField(verbose_name=u'End', blank=True, null=True)
+    ta_begin = models.DateField(verbose_name=u'Begin', blank=True, null=True)
+    ta_begintime = models.TimeField(verbose_name=u'Startzeitpunkt', blank=True, null=True)
+    ta_end = models.DateField(verbose_name=u'End', blank=True, null=True)
+    ta_endtime = models.TimeField(verbose_name=u'Endzeitpunkt', blank=True, null=True)
     ta_warn = models.DateField(verbose_name=u'Warnen', blank=True, null=True)
     ta_priority = models.IntegerField(blank=True)
     ta_adrid_from = models.ForeignKey(Address, related_name=u'Task-From')  # External
