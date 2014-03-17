@@ -50,7 +50,7 @@ class Task(models.Model):
     """
     ta_shorttxt = models.CharField(verbose_name=u'Kurztext', max_length=250)
     ta_longtxt = models.TextField(verbose_name=u'Meldungstext', blank= True)
-    ta_date = models.DateTimeField(verbose_name=u'Erstellt', auto_now_add=True) # for first edit TODO: auto set Date
+    ta_date = models.DateTimeField(verbose_name=u'Erstellt', editable=False, auto_now_add=True) # for first edit TODO: auto set Date
     ta_editor = models.ForeignKey(User, verbose_name=u'Ersteller', default=User)
     ta_begin = models.DateField(verbose_name=u'Begin', blank=True, null=True)
     ta_begintime = models.TimeField(verbose_name=u'Startzeitpunkt', blank=True, null=True)
@@ -64,7 +64,8 @@ class Task(models.Model):
     ta_parent = models.ForeignKey('Task', blank=True, null=True, related_name=u'Parent')
 
     def __unicode__(self):
-        return self.ta_shorttxt
+        infotxt = str(self.id) + " | " + str(self.ta_shorttxt)
+        return infotxt
 
 
 class TaskDoc(models.Model):

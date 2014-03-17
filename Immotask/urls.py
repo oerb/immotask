@@ -20,6 +20,7 @@ urlpatterns = patterns('',
     # app Urls include
     url(r'^menues/', include('menues.urls')),
     url(r'^contacts/', include('contacts.urls')),
+    url(r'^tasks/', include('tasks.urls')),
 )
 urlpatterns += staticfiles_urlpatterns()
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
