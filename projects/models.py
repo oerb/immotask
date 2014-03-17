@@ -94,7 +94,8 @@ class ProjStruct(models.Model):
     """
     ps_sortid = models.IntegerField(blank=True)
     ps_name = models.CharField(verbose_name=u'Name', max_length=100)
-    ps_imgid = models.ForeignKey(Image, blank=True)  # For Images infront of the Trea
+    ps_imgid = models.ForeignKey(Image, blank=True, null=True)  # For Images infront of the Trea
+    ps_parent = models.ForeignKey('self', blank=True, null=True, related_name=u'Parent')
 
     def __unicode__(self):
         return self.ps_name
