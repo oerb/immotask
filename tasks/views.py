@@ -1,6 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from tasks.models import Task, TaskType, TaskDoc, AuthoriseStruct
 from tasks.forms import TaskForm
+from usrsettings.models import Setting
+from projects.models import ProjTask
 
 # Create your views here.
 def new_task(request):
@@ -22,6 +24,12 @@ def new_task(request):
                         ta_tasktype=form.cleaned_data['tasktype'],
                         )
             task.save()
+            usersetting = Setting.objects.filter(se_user=request.user)
+            if usersetting:
+                for pid in usersetting:
+                    proj_id = pid.se_current_proj
+                    projtask = ProjTask(pt_taskid=task, pt_projid=proj_id)
+                    projtask.save()
 
             return redirect('proj_contacts')
     else:
