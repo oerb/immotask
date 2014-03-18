@@ -132,6 +132,7 @@ INSTALLED_APPS = (
     'projects',
     'tasks',
     'docs',
+    'settings',
 )
 
 # Template processors by Oerb

@@ -14,16 +14,16 @@ class AuthoriseStruct(models.Model):
     """
     as_name = models.CharField(verbose_name=u'Name', max_length=100)
     as_info = models.CharField(verbose_name=u'Info', max_length=250, blank=True)
-    # as_user1_id = models.ForeignKey(User) TODO: Userid add
+    as_user1_id = models.ForeignKey(User)
     as_user1_level = models.IntegerField(blank=True, null=True)
     as_u1_name = models.CharField(verbose_name=u'L1 Name', max_length=100, blank=True)
-    # as_user2_id = models.ForeignKey(User) TODO: Userid add
+    as_user2_id = models.ForeignKey(User, blank=True, null=Ture)
     as_user2_level = models.IntegerField(blank=True, null=True)
     as_u2_name = models.CharField(verbose_name=u'L2 Name', max_length=100, blank=True)
-    # as_user3_id = models.ForeignKey(User) TODO: Userid add
+    as_user3_id = models.ForeignKey(User, blank=True, null=Ture)
     as_user3_level = models.IntegerField(blank=True, null=True)
     as_u3_name = models.CharField(verbose_name=u'L3 Name', max_length=100, blank=True)
-    # as_user4_id = models.ForeignKey(User) TODO: Userid add
+    as_user4_id = models.ForeignKey(User, blank=True, null=Ture)
     as_user4_level = models.IntegerField(blank=True, null=True)
     as_u4_name = models.CharField(verbose_name=u'L4 Name', max_length=100, blank=True)
 
