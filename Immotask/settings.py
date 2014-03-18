@@ -153,8 +153,9 @@ TEMPLATE_CONTEXT_PROCESSORS=(
         "Immotask.custom_processors.metainfos_footer",
         "Immotask.custom_processors.metainfos_author",
         "Immotask.custom_processors.metainfos_keywords",
-        "Immotask.custom_processors.metainfos_descriptions"
-
+        "Immotask.custom_processors.metainfos_descriptions",
+        "Immotask.custom_processors.projectlists",
+        "Immotask.custom_processors.current_proj_id",
 )
 
 # Tinymce config

@@ -1,6 +1,7 @@
 # Custom Context_Processors
 from menues.models import Menu, MetaInfos
 from usrsettings.models import Setting
+from projects.models import Project
 
 
 
@@ -85,16 +86,16 @@ def current_proj_id(request):
     projects = Setting.objects.filter(se_user=request.user)
     if projects:
         for pid in projects:
-            proj_id = pid.id
-        else:
-            proj_id = None
-        return {'proj_id': proj_id}
+            proj_id = pid.se_current_proj
+    else:
+        proj_id = "---"
+    return {'proj_id': proj_id}
     # TODO: User Settings Model develop, proj_id choice in base.html Menu
 
 
-def projects(request):
+def projectlists(request):
     """
     Projects for Choice
     """
-    projectlist = Setting.objects.all()
+    projectlist = Project.objects.all()
     return {'projectlist': projectlist}

@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from contacts.forms import ContactForm
 from projects.models import ProjectAddress
+from usrsettings.models import Setting
 
 
 # TODO: Url, TAB and Item Id using/filtering in template and view
@@ -23,7 +24,13 @@ def proj_contacts(request):
     # TODO: Needs to be filtered by project ID, Needs more Addresselements
     contacttypes = ContactType.objects.all()
     adr_data = ContactData.objects.all().order_by('cd_contacttype_id__ct_sort_id')
-    addresses = ProjectAddress.objects.filter(pa_projid=1)  # TODO: Projekt Choice implementation
+    current_proj = Setting.objects.filter(se_user=request.user)
+    if current_proj:
+        for e in current_proj:
+            addresses = ProjectAddress.objects.filter(pa_projid=e.se_current_proj)
+            print "proj_contacts > current_proj"
+    else:
+        addresses = ""  # TODO: Projekt Choice implementation
     return render(request, 'contacts/proj_contacts.html', {'adr_data': adr_data, 'addresses': addresses,
                                                            'contacttypes':contacttypes})
 
