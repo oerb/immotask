@@ -74,3 +74,10 @@ def metainfos_descriptions(request):
     else:
         metainfo_descriptions = ''
     return {'metainfo_descriptions':metainfo_descriptions}
+
+
+# def current_proj_id(request):
+    """
+    Delivering the user set proj_id for use in Tasks etc.
+    """
+    # TODO: User Settings Model develop, proj_id choice in base.html Menu

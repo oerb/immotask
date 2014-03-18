@@ -17,10 +17,10 @@
             <tbody>
             {% for address in addresses %}
                 <tr>
-                    <td><a href="{% url "contact_detailtab" address.id 1 %}">{{ address.pa_adr_id.adr_searchname }}</a></td>
+                    <td><a href="{% url "contact_detailtab" address.pa_adr_id.id 1 %}">{{ address }}</a></td>
                     <td><a href="mailto:{{ address.pa_adr_id.adr_email }}">{{ address.pa_adr_id.adr_email }}</a></td>
                     {% for adr in adr_data %}
-                        {% if adr.cd_address_id.id == address.id and adr.cd_contacttype_id.ct_viewshown %}
+                        {% if adr.cd_address_id.id == address.pa_adr_id.id and adr.cd_contacttype_id.ct_viewshown %}
                             <td>{{ adr.cd_textfield }}</td>
                         {% endif %}
                     {% endfor %}
