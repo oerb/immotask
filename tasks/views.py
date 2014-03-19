@@ -61,7 +61,7 @@ def task_detail_print(request, task_id):
     todata = ContactData.objects.filter(cd_address_id=task.ta_adrid_to.id)
     return render(request, 'tasks/print_task.html', {'task': task, 'todata': todata})
 
-def task_typed_print(request, task_id, tasktype_id):
+def task_typed_print(request, task_id):
     task = get_object_or_404(Task, pk=task_id)
     template = task.ta_tasktype.tt_template
     # Example: tasks/typedprint/anschreiben.html
