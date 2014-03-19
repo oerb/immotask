@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from tasks.models import Task, TaskType, TaskDoc, AuthoriseStruct
+from tasks.models import Task, TaskType, TaskDoc, AuthoriseStruct, TaskTemplateFields
 from tasks.forms import TaskForm
 from usrsettings.models import Setting
 from projects.models import ProjTask
@@ -33,7 +33,7 @@ def new_task(request):
                     projtask = ProjTask(pt_taskid=task, pt_projid=proj_id)
                     projtask.save()
 
-            return redirect('proj_contacts')
+            return redirect('proj_tasks')
     else:
         form = TaskForm()
     return render(request, 'contacts/new_contact.html', {'message': message, 'form': form})
@@ -66,16 +66,17 @@ def task_typed_print(request, task_id):
     template = task.ta_tasktype.tt_template
     # Example: tasks/typedprint/anschreiben.html
     todata = ContactData.objects.filter(cd_address_id=task.ta_adrid_to.id)
+    printfields = TaskTemplateFields.objects.filter(id=1)
     for element in todata:  # TODO: contacttype by task type layout
-        if element.cd_contacttype_id.id == 8:
+        if element.cd_contacttype_id == printfields[0].ttf_company:
             company = element.cd_textfield
-        elif element.cd_contacttype_id.id == 5:
-            streat = element.cd_textfield
-        elif element.cd_contacttype_id.id == 6:
+        elif element.cd_contacttype_id== printfields[0].ttf_name:
+            name = element.cd_textfield
+        elif element.cd_contacttype_id == printfields[0].ttf_zipcode:
             postalcode = element.cd_textfield
-        elif element.cd_contacttype_id.id == 7:
+        elif element.cd_contacttype_id == printfields[0].ttf_city:
             city = element.cd_textfield
         else:
             pass
-    return render(request, template, {'task': task, 'todata': todata, 'company': company, 'streat': streat,
+    return render(request, template, {'task': task, 'todata': todata, 'company': company, 'name': name,
                                       'postalcode': postalcode, 'city': city})
