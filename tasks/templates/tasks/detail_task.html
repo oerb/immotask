@@ -15,5 +15,8 @@
     </div>
 {% endblock %}
 {% block banner_right %}
-    <p><a href="{% url "print_detail_task" task.id %}">{{ task.id }}</a></p>
+    <p><a href="{% url "print_typed_task" task.id 3 %}">Mängelrüge §4 Print</a></p>
+    <p><a href="{% url "print_typed_task" task.id 4 %}">Mängelrüge §13 Print</a></p>
+    <p><a href="{% url "print_typed_task" task.id 1 %}">Anschreiben Print</a></p>
+    <p><a href="{% url "print_typed_task" task.id 2 %}">Vermerk Print</a></p>
 {% endblock %}

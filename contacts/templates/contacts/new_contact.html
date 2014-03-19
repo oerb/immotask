@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{%  block title %}Kontakt{% endblock %}
 {% block content %}
     <label class="{% if form.errors %}label-warning{% endif %} col-lg-offset-3 col-md-6">{{ form.errors }}</label>
     <form class="form-horizontal" role="form" action="" method="post">{% csrf_token %}
