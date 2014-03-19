@@ -3,6 +3,7 @@ from tasks.models import Task, TaskType, TaskDoc, AuthoriseStruct
 from tasks.forms import TaskForm
 from usrsettings.models import Setting
 from projects.models import ProjTask
+from django.shortcuts import get_object_or_404, render, redirect
 
 # Create your views here.
 def new_task(request):
@@ -46,3 +47,12 @@ def taskprojview(request):
         projecttasks = ""
         print " ####### No Project Tasks ######### "
     return render(request, 'tasks/proj_tasks.html', {'projecttask': projecttasks})
+
+
+def task_detail(request, task_id):
+    task = get_object_or_404(Task, pk=task_id)
+    return render(request, 'tasks/detail_task.html', {'task': task})
+
+def task_detail_print(request, task_id):
+    task = get_object_or_404(Task, pk=task_id)
+    return render(request, 'tasks/print_task.html', {'task': task})

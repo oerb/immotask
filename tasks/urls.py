@@ -8,4 +8,6 @@ urlpatterns = patterns('',
                        url(r'^new/$', 'tasks.views.new_task', name='new_task'),
                        # url(r'^edit/(?P<task_id>\d+)$', 'task.views.edit_task', name='edit_task'),
                        url(r'^view/$', 'tasks.views.taskprojview', name='proj_tasks'),
+                       url(r'^(?P<task_id>\d+)/$', 'tasks.views.task_detail', name='detail_task'),
+                       url(r'^print/(?P<task_id>\d+)/$', 'tasks.views.task_detail_print', name='print_detail_task'),
 )

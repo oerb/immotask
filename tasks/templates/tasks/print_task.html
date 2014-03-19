@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+{{ task.ta_tasktype.tt_name }}
+<h3>{{ task.ta_shorttxt }}</h3>
+<p class="alert-info">Erstellt: {{ task.ta_date }} von: {{ task.ta_editor }}</p>
+<div class="center-block">
+    {{ task.ta_longtxt }}
+</div>
+<p class="alert-info">von: {{ task.ta_adrid_from.adr_searchname }}</p>
+<p class="alert-info">an: {{ task.ta_adrid_to.adr_searchname }}</p>
+<p class="alert-info">Begin: {{ task.ta_begin }}</p>
+<p class="alert-info">Ende: {{ task.ta_end }}</p>
+<h4>Aufgaben aus dieser Aufgabe:</h4>
+</body>
+</html>
+
+

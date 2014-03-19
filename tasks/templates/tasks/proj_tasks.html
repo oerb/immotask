@@ -16,8 +16,8 @@
             <tbody>
             {% for task in projecttask %}
                 <tr>
-                    <td><a href="#">{{ task.pt_taskid.id }}</a></td>
-                    <td><a href="#">{{ task.pt_taskid.ta_shorttxt }}</a></td>
+                    <td><a href="{% url "detail_task" task.id %}">{{ task.pt_taskid.id }}</a></td>
+                    <td><a href="{% url "detail_task" task.id %}">{{ task.pt_taskid.ta_shorttxt }}</a></td>
                     <td>{{ task.pt_taskid.ta_begin }}</td>
                     <td>{{ task.pt_taskid.ta_adrid_to }}</td>
                     <td>{{ task.pt_taskid.ta_adrid_from }}</td>
