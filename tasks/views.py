@@ -4,6 +4,7 @@ from tasks.forms import TaskForm
 from usrsettings.models import Setting
 from projects.models import ProjTask
 from django.shortcuts import get_object_or_404, render, redirect
+from contacts.models import ContactData
 
 # Create your views here.
 def new_task(request):
@@ -55,4 +56,33 @@ def task_detail(request, task_id):
 
 def task_detail_print(request, task_id):
     task = get_object_or_404(Task, pk=task_id)
-    return render(request, 'tasks/print_task.html', {'task': task})
+    todata = ContactData.objects.filter(cd_address_id=task.ta_adrid_to.id)
+    return render(request, 'tasks/print_task.html', {'task': task, 'todata': todata})
+
+def task_typed_print(request, task_id, tasktype_id):
+    task = get_object_or_404(Task, pk=task_id)
+    todata = ContactData.objects.filter(cd_address_id=task.ta_adrid_to.id)
+    for element in todata:
+        if element.cd_contacttype_id.id == 8:
+            company = element.cd_textfield
+        elif element.cd_contacttype_id.id == 5:
+            streat = element.cd_textfield
+        elif element.cd_contacttype_id.id == 6:
+            postalcode = element.cd_textfield
+        elif element.cd_contacttype_id.id == 7:
+            city = element.cd_textfield
+        else:
+            pass
+    if int(tasktype_id) == 1:
+        template = 'tasks/typedprint/anschreiben.html'
+    elif int(tasktype_id) == 2:
+        template = 'tasks/typedprint/vermerk.html'
+    elif int(tasktype_id) == 3:
+        template = 'tasks/typedprint/mangel_p4.html'
+    elif int(tasktype_id) == 4:
+        template = 'tasks/typedprint/mangel_p13.html'
+    else:
+        print "Wahl ist else ######## " + tasktype_id + "  ########"
+        template = 'tasks/print_task.html'
+    return render(request, template, {'task': task, 'todata': todata, 'company': company, 'streat': streat,
+                                      'postalcode': postalcode, 'city': city})

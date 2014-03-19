@@ -1,9 +1,32 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Anschreiben</title>
+    <title>Anschreiben - Print</title>
 </head>
 <body>
-
+    <div style="font-size: small;line-height: 80%;">
+        <br/>
+        <br/>
+        <p>{{ company }}</p>
+        <p>{{ streat }}</p>
+        <p>{{ postalcode }} {{ city }}</p>
+        <br/>
+        <br/>
+        <h3>{{ task.ta_tasktype.tt_name }}</h3>
+        <h4>{{ task.ta_shorttxt }}</h4>
+    </div>
+    <div style="font-size: small;line-height: 80%;text-align: right;">
+        <p>{{ task.ta_date|date:"d.m.Y"}}</p>
+    </div>
+    <div style="font-size: small;line-height: 80%;">
+        <br/>
+        <br/>
+            {{ task.ta_longtxt }}
+        <p>von: {{ task.ta_adrid_from.adr_searchname }}</p>
+        <p>an: {{ task.ta_adrid_to.adr_searchname }}</p>
+        <p>Begin: {{ task.ta_begin }}</p>
+        <p>Ende: {{ task.ta_end }}</p>
+        <h4>Aufgaben aus dieser Aufgabe:</h4>
+    </div>
 </body>
 </html>

@@ -1,9 +1,54 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Mangel §4</title>
+    <title>Anschreiben - Print</title>
 </head>
 <body>
-
+    <div style="font-size: small;line-height: 80%;">
+        <br/>
+        <br/>
+        <p>{{ company }}</p>
+        <p>{{ streat }}</p>
+        <p>{{ postalcode }} {{ city }}</p>
+        <br/>
+        <br/>
+    </div>
+    <div style="font-size: small;line-height: 80%;text-align: right;">{{ task.ta_date|date:"d.m.Y" }}</div>
+    <div style="font-size: small;line-height: 80%;">
+        <br/>
+        <br/>
+        <h3>Mängelrüge gemäß VOB / B § 4</h3>
+        <h4>{{ task.ta_shorttxt }}</h4>
+        </br>
+        <p>Sehr geehrte Damen und Herren,</p>
+        </br>
+        <p>durch unsere Bauleitung wurde nachfolgender Mangel an o.g. Bauvorhaben festgestellt:</p>
+        </br>
+        <p>{{ task.ta_longtxt }}</p>
+        </br>
+        <p>Wir fordern Sie auf alle Vorbezeichneten Mängel</p>
+        <p>bis spätestens: {{ task.ta_end }}</p>
+        <p>zu beseitigen und unserer Bauleitung durch Unterschrift auf diesem Schreiben die Beseitigung der Mängel anzuzeigen.</p>
+        <p>Wir weisen darauf hin, dass wir nach fruchtlosem Ablauf des o.g. Termines die Beseitigung der Mängel durch Sie </p>
+        <p>ablehnen und eine fachgerechte Ausführung der Leistung zu Ihren Lasten veranlassen werden.</p>
+        <p>Evtl. sich aus den Mängeln ergebende Schadensersatzansprüche bleiben unberührt.</p>
+        </br>
+        <p>Mit freundlichen Grüßen</p>
+        </br>
+        <p>i.A. Dipl. Ing. Björn Leppin</p>
+        </br>
+        <p>WoGebau Wohn- & Gewerbebauträger GmbH & Co.KG</p>
+        <p>Wohlauer Straße 32, 40721 Hilden</p>
+        </br>
+        <p>Tel. 0049 2103 49 09 32 – Fax 0049 2103 49 09 8032</p>
+        <p>www.wohnbau-derr.de – Mail bjoern_leppin@wohnbau-derr de</p>
+        </br>
+        <p>WoGebau Wohn- & Gewerbebauträger GmbH & Co.KG</p>
+        <p>Amtsgericht Düsseldorf HRA 15954</p>
+        <p>Alleinige Komplementärin:</p>
+        <p>WoGebau Wohn- und Gewerbebauträger GmbH</p>
+        <p>Amtsgericht Düsseldorf HRB 45112</p>
+        <p>Geschäftsführer: T. S. Derr, H.-J. Reinert</p>
+    </div>
 </body>
 </html>
