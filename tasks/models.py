@@ -94,5 +94,3 @@ class TaskTemplateFields(models.Model):
     ttf_country = models.ForeignKey(ContactType, related_name=u'Land', verbose_name=u'Land')
     ttf_fax = models.ForeignKey(ContactType, related_name=u'Fax', verbose_name=u'Fax')
 
-    def __unicode__(self):
-        return self.id
