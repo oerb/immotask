@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{%  block title %}Projekt Aufgaben{% endblock %}
+{% block content %}
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <td>ID</td>
+                    <td>Kurztext</td>
+                    <td>Datum</td>
+                    <td>an</td>
+                    <td>von</td>
+                    <td>Status</td>
+                </tr>
+            </thead>
+            <tbody>
+            {% for task in projecttask %}
+                <tr>
+                    <td><a href="#">{{ task.pt_taskid.id }}</a></td>
+                    <td><a href="#">{{ task.pt_taskid.ta_shorttxt }}</a></td>
+                    <td>{{ task.pt_taskid.ta_begin }}</td>
+                    <td>{{ task.pt_taskid.ta_adrid_to }}</td>
+                    <td>{{ task.pt_taskid.ta_adrid_from }}</td>
+                    <td>STATUS</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+{% block banner_right %}
+{% endblock %}

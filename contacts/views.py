@@ -21,16 +21,14 @@ def ct_detail_tab(request, address_id, category_id):
 
 
 def proj_contacts(request):
-    # TODO: Needs to be filtered by project ID, Needs more Addresselements
     contacttypes = ContactType.objects.all()
     adr_data = ContactData.objects.all().order_by('cd_contacttype_id__ct_sort_id')
     current_proj = Setting.objects.filter(se_user=request.user)
     if current_proj:
         for e in current_proj:
             addresses = ProjectAddress.objects.filter(pa_projid=e.se_current_proj)
-            print "proj_contacts > current_proj"
     else:
-        addresses = ""  # TODO: Projekt Choice implementation
+        addresses = ""
     return render(request, 'contacts/proj_contacts.html', {'adr_data': adr_data, 'addresses': addresses,
                                                            'contacttypes':contacttypes})
 

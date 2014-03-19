@@ -35,3 +35,14 @@ def new_task(request):
     else:
         form = TaskForm()
     return render(request, 'contacts/new_contact.html', {'message': message, 'form': form})
+
+
+def taskprojview(request):
+    current_proj = Setting.objects.filter(se_user=request.user)
+    if current_proj:
+        for e in current_proj:
+            projecttasks = ProjTask.objects.filter(pt_projid=e.se_current_proj)
+    else:
+        projecttasks = ""
+        print " ####### No Project Tasks ######### "
+    return render(request, 'tasks/proj_tasks.html', {'projecttask': projecttasks})
