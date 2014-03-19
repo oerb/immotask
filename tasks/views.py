@@ -66,7 +66,7 @@ def task_typed_print(request, task_id, tasktype_id):
     template = task.ta_tasktype.tt_template
     # Example: tasks/typedprint/anschreiben.html
     todata = ContactData.objects.filter(cd_address_id=task.ta_adrid_to.id)
-    for element in todata:
+    for element in todata:  # TODO: contacttype by task type layout
         if element.cd_contacttype_id.id == 8:
             company = element.cd_textfield
         elif element.cd_contacttype_id.id == 5:
