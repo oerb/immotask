@@ -1,6 +1,6 @@
 from django.db import models
 from docs.models import Doc
-from contacts.models import Address
+from contacts.models import Address, ContactType
 from django.contrib.auth.models import User, Group
 
 
@@ -39,6 +39,7 @@ class TaskType(models.Model):
     tt_name = models.CharField(verbose_name=u'Name', max_length=100)
     tt_info = models.CharField(verbose_name=u'Info', max_length=250, blank=True)
     tt_authstruct_id = models.ForeignKey(AuthoriseStruct)  # For a Structure in Signing the Task to get done
+    tt_template = models.CharField(max_length=50, verbose_name=u'Templatename') # for Printlayout
 
     def __unicode__(self):
         return self.tt_name
@@ -79,3 +80,19 @@ class TaskDoc(models.Model):
 
     def __unicode__(self):
         return self.td_info
+
+class TaskTemplateFields(models.Model):
+    """
+    Matching Address_Data Types to Print Template Layoutfields
+    """
+    ttf_company = models.ForeignKey(ContactType, related_name=u'Firma', verbose_name=u'Firma')
+    ttf_name = models.ForeignKey(ContactType, related_name=u'Name', verbose_name=u'Name')
+    ttf_form_of_adr = models.ForeignKey(ContactType, related_name=u'Anrede', verbose_name=u'Anrede')
+    ttf_zipcode = models.ForeignKey(ContactType, related_name=u'PLZ', verbose_name=u'PLZ')
+    ttf_city = models.ForeignKey(ContactType, related_name=u'Stadt', verbose_name=u'Stadt')
+    ttf_postboxzip = models.ForeignKey(ContactType, related_name=u'PLZ_Postbox', verbose_name=u'PLZ Postbox')
+    ttf_country = models.ForeignKey(ContactType, related_name=u'Land', verbose_name=u'Land')
+    ttf_fax = models.ForeignKey(ContactType, related_name=u'Fax', verbose_name=u'Fax')
+
+    def __unicode__(self):
+        return self.id

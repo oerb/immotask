@@ -1,33 +1,28 @@
 {% extends "base.html" %}
 {% block title %} Login {% endblock %}
 {% block content %}
-    <div class="container col-md-6">
-        <form class="form-signin" role="form"action="" method="post">{% csrf_token %}
-            <h2 class="form-signin-heading">
-	            <h1 class="text-center">Login</h1>
-            </h2>
+    <form class="form-horizontal col-md-offset-5 col-md-2" action="" method="post">{% csrf_token %}
 
-            {% if message %}
-            <p class="system-message text-center text-warning">{{message}}</p>
-            {% endif %}
+        {% if message %}
+        <p class="system-message text-center text-warning">{{message}}</p>
+        {% endif %}
 
-            <p class="text-center">{{ form.username.label }}</p>
-            <div class="text-center">
-                {{ form.username }}
-            </div>
+        <p class="center-block"><h4>{{ form.username.label }}</h4></p>
+        <div class="center-block">
+            {{ form.username }}
+        </div>
 
-            <p class="text-center">{{ form.password.label }}</p>
-            <div class="text-center">
-                {{ form.password }}
-            </div>
-
-            <!--{{form.as_p}}-->
-            <div class="text-center">
-                <button class="btn btn-primary btn-lg " type="submit" value="login">
-                    Anmelden
-                </button>
-            </div>
-        </form>
-    </div>
+        <h4 class="center-block">{{ form.password.label }}</h4>
+        <div class="center-block">
+            {{ form.password }}
+        </div>
+        </br>
+        <!--{{form.as_p}}-->
+        <div class="text-center">
+            <button class="btn btn-primary btn-lg col-md-12 " type="submit" value="login">
+                Anmelden
+            </button>
+        </div>
+    </form>
 {% endblock %}
 

@@ -28,7 +28,7 @@ def login_page(request):
 
 def logout_view(request):
     logout(request)
-    return redirect('homepage')
+    return redirect('login')
 
 def impressum(request):
     impressumtext = get_object_or_404(MetaInfos, metainfo_subject="impressum")

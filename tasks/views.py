@@ -40,13 +40,15 @@ def new_task(request):
 
 
 def taskprojview(request):
-    current_proj = Setting.objects.filter(se_user=request.user)
-    if current_proj:
-        for e in current_proj:
-            projecttasks = ProjTask.objects.filter(pt_projid=e.se_current_proj)
+    if request.user.is_authenticated():
+        current_proj = Setting.objects.filter(se_user=request.user)
+        if current_proj:
+            for e in current_proj:
+                projecttasks = ProjTask.objects.filter(pt_projid=e.se_current_proj)
+        else:
+            projecttasks = ""
     else:
-        projecttasks = ""
-        print " ####### No Project Tasks ######### "
+            projecttasks = ""
     return render(request, 'tasks/proj_tasks.html', {'projecttask': projecttasks})
 
 
@@ -61,6 +63,8 @@ def task_detail_print(request, task_id):
 
 def task_typed_print(request, task_id, tasktype_id):
     task = get_object_or_404(Task, pk=task_id)
+    template = task.ta_tasktype.tt_template
+    # Example: tasks/typedprint/anschreiben.html
     todata = ContactData.objects.filter(cd_address_id=task.ta_adrid_to.id)
     for element in todata:
         if element.cd_contacttype_id.id == 8:
@@ -73,16 +77,5 @@ def task_typed_print(request, task_id, tasktype_id):
             city = element.cd_textfield
         else:
             pass
-    if int(tasktype_id) == 1:
-        template = 'tasks/typedprint/anschreiben.html'
-    elif int(tasktype_id) == 2:
-        template = 'tasks/typedprint/vermerk.html'
-    elif int(tasktype_id) == 3:
-        template = 'tasks/typedprint/mangel_p4.html'
-    elif int(tasktype_id) == 4:
-        template = 'tasks/typedprint/mangel_p13.html'
-    else:
-        print "Wahl ist else ######## " + tasktype_id + "  ########"
-        template = 'tasks/print_task.html'
     return render(request, template, {'task': task, 'todata': todata, 'company': company, 'streat': streat,
                                       'postalcode': postalcode, 'city': city})
