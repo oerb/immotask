@@ -84,13 +84,10 @@ def current_proj_id(request):
     """
     Delivering the user set proj_id for use in Tasks etc.
     """
+
     if request.user.is_authenticated():
-        projects = Setting.objects.filter(se_user=request.user)
-        if projects:
-            for pid in projects:
-                proj_id = pid.se_current_proj.id
-        else:
-            proj_id = "---"
+        proj_name = request.user.setting.se_current_proj
+        proj_id = proj_name.pro_name
     else:
         proj_id = "---"
     return {'proj_id': proj_id}
