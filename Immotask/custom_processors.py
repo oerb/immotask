@@ -87,7 +87,10 @@ def current_proj_id(request):
 
     if request.user.is_authenticated():
         proj_name = request.user.setting.se_current_proj
-        proj_id = proj_name.pro_name
+        if proj_name:
+            proj_id = proj_name.pro_name
+        else:
+            proj_id = "---"
     else:
         proj_id = "---"
     return {'proj_id': proj_id}
