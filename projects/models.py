@@ -24,8 +24,8 @@ class Project(models.Model):
 
 class ProjAdrTyp(models.Model):
     """
-    Projekt Address Types like
-    Architekt, Planning, Companies ...
+    Project Address Types like
+    Architect Planning, Companies ...
     """
     pat_name = models.CharField(verbose_name=u'Name', max_length=100)
     pat_info = models.CharField(verbose_name=u'Info', max_length=250, blank=True)
@@ -62,7 +62,7 @@ class ProjDoc(models.Model):
 class ProjDataLayer(models.Model):
     """
     Projects Data Layer
-    like Architekt, Country, Projekt Owner etc.
+    like Architect, Country, Projekt Owner etc.
     """
     pdl_name = models.CharField(verbose_name=u'Name', max_length='100')
     pdl_info = models.CharField(verbose_name=u'Info', max_length='250', blank=True)
@@ -74,7 +74,7 @@ class ProjDataLayer(models.Model):
 
 class ProjTask(models.Model):
     """
-    Projekt Tasks
+    Project Tasks
     join to Tasks app
     """
     pt_taskid = models.ForeignKey(Task)
