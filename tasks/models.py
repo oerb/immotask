@@ -89,10 +89,11 @@ class TaskTemplateFields(models.Model):
     ttf_name = models.ForeignKey(ContactType, related_name=u'Name', verbose_name=u'Name')
     ttf_form_of_adr = models.ForeignKey(ContactType, related_name=u'Anrede', verbose_name=u'Anrede')
     ttf_zipcode = models.ForeignKey(ContactType, related_name=u'PLZ', verbose_name=u'PLZ')
-    # ttf_streat
+    ttf_streat = models.ForeignKey(ContactType, related_name=u'Strasse', verbose_name=u'Strasse')
     ttf_city = models.ForeignKey(ContactType, related_name=u'Stadt', verbose_name=u'Stadt')
     ttf_postboxzip = models.ForeignKey(ContactType, related_name=u'PLZ_Postbox', verbose_name=u'PLZ Postbox')
-    # ttf_postbox_city
+    ttf_postbox_city = models.ForeignKey(ContactType, related_name=u'Postfach_Stadt', verbose_name=u'Postfach Stadt')
+    ttf_postboxcode = models.ForeignKey(ContactType, related_name=u'Postfach_Nr', verbose_name=u'Postfach Nr')
     ttf_country = models.ForeignKey(ContactType, related_name=u'Land', verbose_name=u'Land')
     ttf_fax = models.ForeignKey(ContactType, related_name=u'Fax', verbose_name=u'Fax')
 
