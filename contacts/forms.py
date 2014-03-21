@@ -1,6 +1,7 @@
 __author__ = 'oerb'
 from django import forms
 from contacts.models import ContactType
+from projects.models import Project, ProjAdrTyp
 
 class ContactForm(forms.Form):
     searchname = forms.CharField(max_length=150, widget=forms.TextInput(attrs={'class': 'form-control',
@@ -16,6 +17,11 @@ class ContactForm(forms.Form):
                 forms.CharField(max_length=250, label=ct_type.ct_name, required=False,
                                 widget=forms.TextInput(attrs={'class': 'form-control'}))
 
+class ContactToProjForm(forms.Form):
+    project = forms.ModelChoiceField(queryset=Project.objects.all())
+    project.widget.attrs['class']='form-control'
+    addresstype = forms.ModelChoiceField(queryset=ProjAdrTyp.objects.all())
+    addresstype.widget.attrs['class']='form-control'
 
 
 

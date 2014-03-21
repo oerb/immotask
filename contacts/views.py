@@ -1,8 +1,8 @@
 from contacts.models import Address, Category, ContactType, ContactData, ContactDataFulltext
 from django.shortcuts import get_object_or_404, render, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from contacts.forms import ContactForm
-from projects.models import ProjectAddress
+from contacts.forms import ContactForm, ContactToProjForm
+from projects.models import ProjectAddress, Project, ProjAdrTyp
 from usrsettings.models import Setting
 from django.contrib.auth.decorators import login_required
 
@@ -29,6 +29,15 @@ def proj_contacts(request):
     current_proj = request.user.setting.se_current_proj.id
     addresses = ProjectAddress.objects.filter(pa_projid=current_proj)
     return render(request, 'contacts/proj_contacts.html', {'adr_data': adr_data, 'addresses': addresses,
+                                                           'contacttypes':contacttypes})
+
+
+@login_required()
+def all_contacts(request):
+    contacttypes = ContactType.objects.all()
+    adr_data = ContactData.objects.all().order_by('cd_contacttype_id__ct_sort_id')
+    addresses = Address.objects.all()
+    return render(request, 'contacts/all_contacts.html', {'adr_data': adr_data, 'addresses': addresses,
                                                            'contacttypes':contacttypes})
 
 
@@ -92,3 +101,24 @@ def edit_contact(request, address_id):
         form = ContactForm(initial=datadict)  # TODO: datadict index out of contacttype_id and catagory_id for Tab's
         # or send filtered by category and ordered and give a list with the stop-point
     return render(request, 'contacts/edit_contact.html', {'message': message, 'form': form, 'categories': categories})
+
+
+@login_required
+def proj_to_address(request, adr_id):
+    message = None
+    if request.method == "POST":
+        form = ContactToProjForm(request.POST)
+        if form.is_valid():
+            address = get_object_or_404(Address, pk=adr_id)
+            proj_adr = ProjectAddress(pa_adr_id=address,
+                                      pa_adrtype=form.cleaned_data['addresstype'],
+                                      pa_projid=form.cleaned_data['project'])
+
+            proj_adr.save() # TODO: Proof if Address is in Project
+            return redirect('all_contacts')
+    else:
+        projects = Project.objects.all()
+        adrtypes = ProjAdrTyp.objects.all()
+        form = ContactToProjForm()
+    return render(request, 'contacts/add_projaddr.html', {'message': message, 'form': form,
+                                                          'projects': projects, 'adrtypes': adrtypes})
