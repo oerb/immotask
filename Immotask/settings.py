@@ -91,6 +91,9 @@ STATICFILES_FINDERS = (
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'o$q+=+u*t_s#=w--0q^j^6(zysin-g(cr@7ki0eiwkb@48%q$@'
 
+# Setting the Login_Url especially when @login_required Decorator is in use
+LOGIN_URL = '/menues/login/'
+
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',

@@ -17,4 +17,4 @@ class Setting(models.Model):
     se_mailwarn = models.BooleanField(verbose_name=u'get Mail warnings')
     se_newtaskmail = models.BooleanField(verbose_name=u'get New Tasks as Mail')
     se_address = models.ForeignKey(Address, verbose_name=u'Adresse', blank=True, null=True)
-    se_user = models.ForeignKey(User, verbose_name=u'user', related_name=u'se_user', blank=True, null=True)
+    se_user = models.OneToOneField(User)

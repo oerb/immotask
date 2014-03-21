@@ -7,10 +7,6 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'Immotask.views.home', name='home'),
-    # url(r'^Immotask/', include('Immotask.foo.urls')),
-
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
@@ -21,6 +17,8 @@ urlpatterns = patterns('',
     url(r'^menues/', include('menues.urls')),
     url(r'^contacts/', include('contacts.urls')),
     url(r'^tasks/', include('tasks.urls')),
+    url(r'^$', 'menues.views.mainpage', name='mainpage')
+
 )
 urlpatterns += staticfiles_urlpatterns()
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

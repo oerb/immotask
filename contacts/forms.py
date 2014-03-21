@@ -3,7 +3,8 @@ from django import forms
 from contacts.models import ContactType
 
 class ContactForm(forms.Form):
-    searchname = forms.CharField(max_length=150, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Suchname'}))
+    searchname = forms.CharField(max_length=150, widget=forms.TextInput(attrs={'class': 'form-control',
+                                                                               'placeholder': 'Suchname'}))
     email = forms.EmailField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Email'}))
 
     def __init__(self, *args, **kwargs):

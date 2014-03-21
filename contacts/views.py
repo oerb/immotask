@@ -4,34 +4,30 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from contacts.forms import ContactForm
 from projects.models import ProjectAddress
 from usrsettings.models import Setting
-
+from django.contrib.auth.decorators import login_required
 
 # TODO: Url, TAB and Item Id using/filtering in template and view
+
+
+@login_required
 def ct_detail_tab(request, address_id, category_id):
-        category_id = int(category_id)
-        address = get_object_or_404(Address, pk=address_id)
-        adr_fulltextfields = ContactDataFulltext.objects.filter(cf_address_id=address.id)
-        adr_data = ContactData.objects.filter(cd_address_id=address.id).order_by('cd_contacttype_id__ct_sort_id')
-        categories = Category.objects.all()
-        return render(request, 'contacts/detailtab.html', {'address': address,
-                                                           'adr_fulltextfields': adr_fulltextfields,
-                                                           'adr_data': adr_data,
-                                                           'category_id': category_id,
-                                                           'categories': categories})
+    category_id = int(category_id)
+    address = get_object_or_404(Address, pk=address_id)
+    adr_fulltextfields = ContactDataFulltext.objects.filter(cf_address_id=address.id)
+    adr_data = ContactData.objects.filter(cd_address_id=address.id).order_by('cd_contacttype_id__ct_sort_id')
+    categories = Category.objects.all()
+    return render(request, 'contacts/detailtab.html', {'address': address,
+                                                       'adr_fulltextfields': adr_fulltextfields,
+                                                       'adr_data': adr_data,
+                                                       'category_id': category_id,
+                                                       'categories': categories})
 
-
+@login_required()
 def proj_contacts(request):
     contacttypes = ContactType.objects.all()
     adr_data = ContactData.objects.all().order_by('cd_contacttype_id__ct_sort_id')
-    if request.user.is_authenticated():
-        current_proj = Setting.objects.filter(se_user=request.user)
-        if current_proj:
-            for e in current_proj:
-                addresses = ProjectAddress.objects.filter(pa_projid=e.se_current_proj)
-        else:
-            addresses = ""
-    else:
-        addresses = ""
+    current_proj = request.user.setting.se_current_proj.id
+    addresses = ProjectAddress.objects.filter(pa_projid=current_proj)
     return render(request, 'contacts/proj_contacts.html', {'adr_data': adr_data, 'addresses': addresses,
                                                            'contacttypes':contacttypes})
 
@@ -40,7 +36,7 @@ def test(request):
     data = [ "AA", "BB", "CC", "DD", "EE" ]
     return render(request, 'contacts/test.html', {'data': data})
 
-
+@login_required
 def new_contact(request):
     message = None
     if request.method == "POST":
@@ -60,7 +56,7 @@ def new_contact(request):
         form = ContactForm()
     return render(request, 'contacts/new_contact.html', {'message': message, 'form': form})
 
-
+@login_required
 def edit_contact(request, address_id):
     message = None
     contacttypes = ContactType.objects.all()

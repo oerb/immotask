@@ -5,8 +5,10 @@ from usrsettings.models import Setting
 from projects.models import ProjTask
 from django.shortcuts import get_object_or_404, render, redirect
 from contacts.models import ContactData
+from django.contrib.auth.decorators import login_required
 
-# Create your views here.
+
+@login_required
 def new_task(request):
     message = None
     if request.method == "POST":
@@ -39,28 +41,27 @@ def new_task(request):
     return render(request, 'contacts/new_contact.html', {'message': message, 'form': form})
 
 
+@login_required
 def taskprojview(request):
-    if request.user.is_authenticated():
-        current_proj = Setting.objects.filter(se_user=request.user)
-        if current_proj:
-            for e in current_proj:
-                projecttasks = ProjTask.objects.filter(pt_projid=e.se_current_proj)
-        else:
-            projecttasks = ""
-    else:
-            projecttasks = ""
+    current_proj = request.user.setting.se_current_proj.id
+    projecttasks = ProjTask.objects.filter(pt_projid=current_proj)
     return render(request, 'tasks/proj_tasks.html', {'projecttask': projecttasks})
 
 
+@login_required
 def task_detail(request, task_id):
     task = get_object_or_404(Task, pk=task_id)
     return render(request, 'tasks/detail_task.html', {'task': task})
 
+
+@login_required
 def task_detail_print(request, task_id):
     task = get_object_or_404(Task, pk=task_id)
     todata = ContactData.objects.filter(cd_address_id=task.ta_adrid_to.id)
     return render(request, 'tasks/print_task.html', {'task': task, 'todata': todata})
 
+
+@login_required
 def task_typed_print(request, task_id):
     task = get_object_or_404(Task, pk=task_id)
     template = task.ta_tasktype.tt_template

@@ -12,5 +12,4 @@ urlpatterns = patterns('',
         name="logout"),
     # Meta Infos etc.
     url(r'^impressum/$', 'menues.views.impressum', name='impressum'),
-
 )
