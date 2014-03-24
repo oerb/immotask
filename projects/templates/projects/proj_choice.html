@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{%  block title %}Projekt wählen{% endblock %}
+{% block content %}
+    <form class="form-horizontal" role="form" action="" method="post">{% csrf_token %}
+        <div class="row">
+            <div class="col-md-offset-3 col-md-6">
+                {% for field in form %}
+                    {{ field }}
+                {% endfor %}
+                </br></br></br>
+            </div>
+            <div class="col-md-offset-3">
+                <input class="btn btn-primary btn-lg col-md-offset-2 col-md-4" type="submit" value="Anwenden"></input>
+            </div>
+        </div>
+    </form>
+{% endblock %}

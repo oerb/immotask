@@ -11,4 +11,4 @@ urlpatterns = patterns('',
                        url(r'^(?P<task_id>\d+)/$', 'tasks.views.task_detail', name='detail_task'),
                        url(r'^print/(?P<task_id>\d+)/$', 'tasks.views.task_detail_print', name='print_detail_task'),
                        url(r'^Tprint/(?P<task_id>\d+)/$', 'tasks.views.task_typed_print', name='print_typed_task'),
-)
+                       )
