@@ -1,15 +1,13 @@
 {% extends "base.html" %}
-{%  block title %}Alle Projekte{% endblock %}
+{%  block title %}Projekt Adresstypen{% endblock %}
 {% block content %}
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <td>Projekt</td>
-                    <td>Erstellt</td>
-                    <td>Geschlossen</td>
-                    <td>Verbergen</td>
-                    <td></td>
+                    <td>Bezeichnung</td>
+                    <td>Infotext</td>
+                    <td>Aktion</td>
                 </tr>
             </thead>
             <tbody>
@@ -25,23 +23,4 @@
             </tbody>
         </table>
     </div>
-{% endblock %}
-{% block banner_right %}
-    <ul class="nav nav-pills nav-stacked">
-        <li>
-            <a href="{% url "proj_new" %}">
-                Projekt anlegen
-            </a>
-        </li>
-        <li>
-            <a href="{% url "proj_new_adrtype" %}">
-                Adresstyp anlegen
-            </a>
-        </li>
-        <li>
-            <a href="{% url "proj_edit_adrtype" 1%}">
-                Adresstypen bearbeiten
-            </a>
-        </li>
-    </ul>
 {% endblock %}

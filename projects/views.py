@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
-from .forms import ProjectChoiceForm, ProjectForm
-from .models import Project
+from .forms import ProjectChoiceForm, ProjectForm, ProjAdrTypeForm
+from .models import Project, ProjAdrTyp
 from django.shortcuts import render, redirect, get_object_or_404
 
 
@@ -94,7 +94,42 @@ def project_set_view(request, proj_id, hide):
     return render(request, 'projects/all_projects.html', data)
 
 
+@login_required
+def new_proj_contact_type(request):
+    """
+    New Project-Contact-Type
+    """
+    data = {}
+    data['message'] = None
+    if request.method == "POST":
+        form = ProjAdrTypeForm(request.POST)
+        if form.is_valid():
+            projadrtype = ProjAdrTyp(pat_name=form.cleaned_data['pat_name'],
+                                     pat_info=form.cleaned_data['pat_info'])
+            projadrtype.save()
+            return redirect('proj_all')  # TODO: use next for Redirect
+    else:
+        data['form'] = ProjAdrTypeForm()
+    return render(request, 'projects/new_projadrtype.html', data)
 
 
-
-
+def proj_edit_adrtype(request, projadrtype_id):
+    """
+    edit Projekt Address Type
+    """
+    data = {}
+    data['message'] = None
+    data['form_title'] = u"Adresstyp f\xfcr Projekte bearbeiten"
+    projadrtype = get_object_or_404(ProjAdrTyp, pk=projadrtype_id)
+    print "thist..........." + str(projadrtype.id)
+    if request.method == "POST":
+        form = ProjAdrTypeForm(request.POST)
+        if form.is_valid():
+            projadrtype.pat_name = form.cleaned_data['pat_name']
+            projadrtype.pat_info = form.cleaned_data['pat_info']
+            projadrtype.save()
+            return redirect('proj_all')  # TODO: use next for Redirect
+    else:
+        innitialdata = {'pat_name': projadrtype.pat_name, 'pat_info': projadrtype.pat_info}
+        data['form'] = ProjAdrTypeForm(initial=innitialdata)
+    return render(request, 'projects/edit_projadrtype.html', data)

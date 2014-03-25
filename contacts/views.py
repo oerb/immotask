@@ -22,7 +22,7 @@ def ct_detail_tab(request, address_id, category_id):
                                                        'category_id': category_id,
                                                        'categories': categories})
 
-@login_required()
+@login_required
 def proj_contacts(request):
     contacttypes = ContactType.objects.all()
     adr_data = ContactData.objects.all().order_by('cd_contacttype_id__ct_sort_id')
@@ -32,8 +32,12 @@ def proj_contacts(request):
                                                            'contacttypes':contacttypes})
 
 
-@login_required()
+
+@login_required
 def all_contacts(request):
+    """
+    Show all Contacts for Project Join or else
+    """
     contacttypes = ContactType.objects.all()
     adr_data = ContactData.objects.all().order_by('cd_contacttype_id__ct_sort_id')
     addresses = Address.objects.all()
@@ -41,9 +45,6 @@ def all_contacts(request):
                                                            'contacttypes':contacttypes})
 
 
-def test(request):
-    data = [ "AA", "BB", "CC", "DD", "EE" ]
-    return render(request, 'contacts/test.html', {'data': data})
 
 @login_required
 def new_contact(request):
@@ -103,20 +104,26 @@ def edit_contact(request, address_id):
 
 @login_required
 def proj_to_address(request, adr_id):
-    message = None
+    """
+    Contact join Project
+    """
+    data = {}
+    data['message'] = None
+    data['current_proj'] = request.user.setting.se_current_proj
+    data['address'] = get_object_or_404(Address, pk=adr_id)
     if request.method == "POST":
         form = ContactToProjForm(request.POST)
         if form.is_valid():
-            address = get_object_or_404(Address, pk=adr_id)
-            proj_adr = ProjectAddress(pa_adr_id=address,
+
+            proj_adr = ProjectAddress(pa_adr_id=data['address'],
                                       pa_adrtype=form.cleaned_data['addresstype'],
                                       pa_projid=form.cleaned_data['project'])
 
             proj_adr.save() # TODO: Proof if Address is in Project
             return redirect('all_contacts')
     else:
-        projects = Project.objects.all()
-        adrtypes = ProjAdrTyp.objects.all()
-        form = ContactToProjForm()
-    return render(request, 'contacts/add_projaddr.html', {'message': message, 'form': form,
-                                                          'projects': projects, 'adrtypes': adrtypes})
+        data['projects'] = Project.objects.all()
+        data['adrtypes'] = ProjAdrTyp.objects.all()
+        innitialdata = {'project': data['current_proj'].id }
+        data['form'] = ContactToProjForm(initial=innitialdata)
+    return render(request, 'contacts/add_projaddr.html', data)
