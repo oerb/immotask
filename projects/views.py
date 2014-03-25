@@ -28,14 +28,13 @@ def project_choice(request):
 @login_required
 def project_new(request):
     """
-    For Project Choice
+    For Project New
     """
     data = {}
     message = None
     if request.method == "POST":
         form = ProjectForm(request.POST)
         if form.is_valid():
-            print "Form is valid ####################"
             proj_new = Project(pro_name=form.cleaned_data['proj_name'],
                                pro_info=form.cleaned_data['proj_info'],
                                pro_hide=form.cleaned_data['proj_hide'])
@@ -46,4 +45,25 @@ def project_new(request):
     return render(request, 'projects/new_proj.html', data)
 
 
+@login_required
+def project_edit(request, proj_id):
+    """
+    For Project Edit
+    """
+    data = {}
+    project = get_object_or_404(Project, pk=proj_id)
+    if request.method == "POST":
+        form = ProjectForm(request.POST)
+        if form.is_valid():
+            print "Edit Form Validated ############## !"
+            proj_edit = Project(id=project.id, pro_name=form.cleaned_data['proj_name'],
+                               pro_info=form.cleaned_data['proj_info'],
+                               pro_hide=form.cleaned_data['proj_hide'],
+                               pro_date=project.pro_date)
+            proj_edit.save()
+            return redirect('proj_tasks')  # TODO: use next for Redirect
+    else:
+        initialdata = {'proj_name': project.pro_name, 'proj_info': project.pro_info, 'proj_hide': project.pro_hide}
+        data['form'] = ProjectForm(initial=initialdata)
+    return render(request, 'projects/edit_proj.html', data)
 
