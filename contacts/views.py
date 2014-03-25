@@ -71,7 +71,6 @@ def edit_contact(request, address_id):
     contacttypes = ContactType.objects.all()
     categories = Category.objects.all()
     if request.method == "POST":
-        print "First IF"
         form = ContactForm(request.POST)
         if form.is_valid():
             adr = Address(id=address_id, adr_searchname=form.cleaned_data['searchname'],
@@ -90,7 +89,6 @@ def edit_contact(request, address_id):
                                          cd_address_id=adr)
                 print (ctdata, cd_id)
                 ctdata.save()
-            print "After Save Print"
         return redirect('proj_contacts')
     else:
         adr = get_object_or_404(Address, pk=address_id)

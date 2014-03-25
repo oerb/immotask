@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from tasks.models import Task, TaskType, TaskDoc, AuthoriseStruct, TaskTemplateFields
 from tasks.forms import TaskForm
 from usrsettings.models import Setting
-from projects.models import ProjTask
+from projects.models import ProjTask, Project
 from django.shortcuts import get_object_or_404, render, redirect
 from contacts.models import ContactData
 from django.contrib.auth.decorators import login_required
@@ -44,6 +44,17 @@ def new_task(request):
 @login_required
 def taskprojview(request):
     current_proj = request.user.setting.se_current_proj.id
+    projecttasks = ProjTask.objects.filter(pt_projid=current_proj)
+    return render(request, 'tasks/proj_tasks.html', {'projecttask': projecttasks})
+
+
+@login_required
+def set_proj_view(request, proj_id):
+    proj_choice = request.user.setting
+    proj_choice.se_current_proj = get_object_or_404(Project, pk=proj_id)
+    proj_choice.save()
+    current_proj = get_object_or_404(Project, pk=proj_id)
+    current_proj = proj_choice.se_current_proj.id
     projecttasks = ProjTask.objects.filter(pt_projid=current_proj)
     return render(request, 'tasks/proj_tasks.html', {'projecttask': projecttasks})
 

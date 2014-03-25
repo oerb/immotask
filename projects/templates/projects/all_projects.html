@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{%  block title %}Alle Projekte{% endblock %}
+{% block content %}
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <td>Projekt</td>
+                    <td>Erstellt</td>
+                    <td>Geschlossen</td>
+                    <td>Verbergen</td>
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody>
+            {% for proj in projects %}
+                <tr>
+                    <td><a href="{% url "task_set_view" proj.id %}">{{ proj.pro_name }}</a></td>
+                    <td>{{ proj.pro_date }}</td>
+                    <td>{{ proj.pro_done_date }}</td>
+                    <td><a class="btn btn-default col_md_1" {% if proj.pro_hide %}href="{% url "proj_set_view" proj.id 0 %}">anzeigen{% else %}href={% url "proj_set_view" proj.id 1 %}>verbergen{% endif %}</a>
+                    <td><a class="btn btn-default col_md_1" href="{% url "proj_edit" proj.id %}">bearbeiten</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+{% block banner_right %}
+    <ul class="nav nav-pills nav-stacked">
+        <li>
+            <a href="{% url "proj_new" %}">
+                Projekt anlegen
+            </a>
+        </li>
+    </ul>
+{% endblock %}

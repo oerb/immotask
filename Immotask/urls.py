@@ -15,6 +15,7 @@ urlpatterns = patterns('',
 
     # app Urls include
     url(r'^menues/', include('menues.urls')),
+    url(r'^projects/', include('projects.urls')),
     url(r'^contacts/', include('contacts.urls')),
     url(r'^tasks/', include('tasks.urls')),
     url(r'^$', 'menues.views.mainpage', name='mainpage')
