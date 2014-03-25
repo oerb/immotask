@@ -15,7 +15,7 @@ class Project(models.Model):
     pro_name = models.CharField(verbose_name=u'Name', max_length=250)
     pro_info = models.CharField(verbose_name=u'Info', max_length=250, blank=True)
     pro_date = models.DateField(verbose_name=u'Erstellt', editable=False, auto_now_add=True)
-    pro_hide = models.BooleanField(verbose_name=u'Hide')  # TODO: Standardwert True
+    pro_hide = models.BooleanField(verbose_name=u'Hide', default=False)  # TODO: Standardwert True
     pro_done_date = models.DateTimeField(blank=True, null=True)
 
     def __unicode__(self):
@@ -104,8 +104,10 @@ class ProjStruct(models.Model):
 class ProjData(models.Model):
     """
     Project Data
-    like, Start, End, Objekt, Architekt ...
+    like, Start, End, Objekt, Architekt Porject Saldo...
     """
+    proj_id = models.ForeignKey(Project)
+    proj_datalayer_id = models.ForeignKey(ProjDataLayer)
     proj_text = models.CharField(verbose_name=u'Text', max_length=250)
     proj_double = models.DecimalField(verbose_name=u'Dezimalfeld', max_digits=15, decimal_places=2)
     proj_unit = models.CharField(verbose_name=u'Einheit', max_length=20)

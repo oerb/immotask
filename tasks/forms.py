@@ -8,6 +8,9 @@ import datetime
 
 
 class TaskForm(forms.Form):
+    """
+    Form for new Tasks
+    """
     adr_from = forms.ModelChoiceField(queryset=Address.objects.all())
     adr_from.widget.attrs['class'] = 'form-control'
     adr_to = forms.ModelChoiceField(queryset=Address.objects.all())

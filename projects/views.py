@@ -1,8 +1,8 @@
 from django.contrib.auth.decorators import login_required
-from .forms import ProjectChoiceForm
-from usrsettings.models import Setting
+from .forms import ProjectChoiceForm, ProjectForm
+from .models import Project
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.models import User
+
 
 
 
@@ -23,6 +23,27 @@ def project_choice(request):
     else:
         data['form'] = ProjectChoiceForm()
     return render(request, 'projects/proj_choice.html', data)
+
+
+@login_required
+def project_new(request):
+    """
+    For Project Choice
+    """
+    data = {}
+    message = None
+    if request.method == "POST":
+        form = ProjectForm(request.POST)
+        if form.is_valid():
+            print "Form is valid ####################"
+            proj_new = Project(pro_name=form.cleaned_data['proj_name'],
+                               pro_info=form.cleaned_data['proj_info'],
+                               pro_hide=form.cleaned_data['proj_hide'])
+            proj_new.save()
+            return redirect('proj_tasks')  # TODO: use next for Redirect
+    else:
+        data['form'] = ProjectForm()
+    return render(request, 'projects/new_proj.html', data)
 
 
 

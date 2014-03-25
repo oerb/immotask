@@ -34,7 +34,7 @@
         <div class="container" >
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                        <li class="navbar-text">Projekt: {{ proj_id }}</li>
+                    <a class="navbar-text" href="{% url 'proj_choice' %}">Projekt: {{ proj_id }}</a>
                     {% include "menu/menu.html" %}
                 </ul>
                 <ul class="nav navbar-nav navbar-right">

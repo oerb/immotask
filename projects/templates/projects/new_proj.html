@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{%  block title %}Neues Projekt{% endblock %}
+{% block content %}
+    <form class="form-horizontal" role="form" action="" method="post">{% csrf_token %}
+            {% for field in form %}
+            <div class="form-group ">
+                <label class="col-md-4 control-label ">{{ field.label_tag }}</label>
+                <div class=" col-md-6">
+                        {{ field }}
+                </div>
+            </div>
+            {% endfor %}
+            </br></br></br>
+            <div class="col-md-offset-3">
+                <input class="btn btn-primary btn-lg col-md-offset-2 col-md-4" type="submit" value="Speichern"></input>
+            </div>
+    </form>
+{% endblock %}

@@ -1,14 +1,17 @@
 __author__ = 'oerb'
 
 """
-Forms
+Form
 """
 
 from django import forms
-from contacts.models import ContactType
+
 
 
 class LoginForm(forms.Form):
+    """
+    Form for Login
+    """
     username = forms.CharField()
     username.widget.attrs['class'] = 'form-control'
     password = forms.CharField(widget=forms.PasswordInput())
