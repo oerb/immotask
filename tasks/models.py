@@ -40,7 +40,7 @@ class TaskType(models.Model):
     """
     tt_name = models.CharField(verbose_name=u'Name', max_length=100)
     tt_info = models.CharField(verbose_name=u'Info', max_length=250, blank=True)
-    tt_authstruct_id = models.ForeignKey(AuthoriseStruct)  # For a Structure in Signing the Task to get done
+    # tt_authstruct_id = models.ForeignKey(AuthoriseStruct)  # Outdated /For a Structure in Signing the Task to get done
     tt_template = models.CharField(max_length=50, verbose_name=u'Templatename') # for Printlayout
 
     def __unicode__(self):
