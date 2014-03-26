@@ -9,7 +9,10 @@ from django.contrib.auth.decorators import login_required
 
 
 @login_required
-def new_task(request):
+def new_task(request, parent_id):
+    """
+    New Task
+    """
     message = None
     if request.method == "POST":
         form = TaskForm(request.POST)
@@ -27,6 +30,8 @@ def new_task(request):
                         ta_adrid_to=form.cleaned_data['adr_to'],
                         ta_tasktype=form.cleaned_data['tasktype'],
                         )
+            if not parent_id == 0:
+                task.ta_parent = get_object_or_404(Task, pk=parent_id)
             task.save()
             usersetting = Setting.objects.filter(se_user=request.user)
             if usersetting:
@@ -61,8 +66,10 @@ def set_proj_view(request, proj_id):
 
 @login_required
 def task_detail(request, task_id):
-    task = get_object_or_404(Task, pk=task_id)
-    return render(request, 'tasks/detail_task.html', {'task': task})
+    data = {}
+    data['task'] = get_object_or_404(Task, pk=task_id)
+    data['taskchilds'] = Task.objects.filter(ta_parent=data['task'])
+    return render(request, 'tasks/detail_task.html', data)
 
 
 @login_required
