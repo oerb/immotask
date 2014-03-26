@@ -11,13 +11,45 @@
         <p class="alert-info">an: {{ task.ta_adrid_to.adr_searchname }}</p>
         <p class="alert-info">Begin: {{ task.ta_begin }}</p>
         <p class="alert-info">Ende: {{ task.ta_end }}</p>
-        <h4>Aufgaben aus dieser Aufgabe:</h4>
+
+    </div>
+    <h4>Aufgaben aus dieser Aufgabe:</h4>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <td>ID</td>
+                    <td>Kurztext</td>
+                    <td>Datum</td>
+                    <td>an</td>
+                    <td>von</td>
+                    <td>Status</td>
+                </tr>
+            </thead>
+            <tbody>
+            {% for task in taskchilds %}
+                <tr>
+                    <td><a href="{% url "detail_task" task.id %}">{{ task.id }}</a></td>
+                    <td><a href="{% url "detail_task" task.id %}">{{ task.ta_shorttxt }}</a></td>
+                    <td>{{ task.pt_taskid.ta_begin }}</td>
+                    <td>{{ task.pt_taskid.ta_adrid_to }}</td>
+                    <td>{{ task.pt_taskid.ta_adrid_from }}</td>
+                    <td>STATUS</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
     </div>
 {% endblock %}
 {% block banner_right %}
     <ul class="nav nav-pills nav-stacked">
         <li>
             <a href="{% url "print_typed_task" task.id %}">Drucken</a>
+        </li>
+        <li>
+            <a href="{% url "new_task" task.id %}">
+                Folgeaufgabe erstellen
+            </a>
         </li>
     </ul>
 {% endblock %}
