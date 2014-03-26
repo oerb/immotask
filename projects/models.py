@@ -2,8 +2,8 @@ from django.db import models
 from contacts.models import Address
 from menues.models import Image
 from docs.models import Doc
-from tasks.models import Task
-# Create your models here.
+from tasks.models import Task, TaskType
+from django.contrib.auth.models import User, Group
 
 
 class Project(models.Model):
@@ -115,4 +115,55 @@ class ProjData(models.Model):
 
     def __unicode__(self):
         info = str(self.proj_text) + " " + str(self.proj_double) + " " + str(self.proj_unit)
+        return info
+
+
+class Donelist(models.Model):
+    """
+    Contains the Done behavior for Tasks with Authorization Level
+    """
+    LEVEL_CHOICES = (
+        (1, 'Level1'),
+        (2, 'Level2'),
+        (3, 'Level3'),
+        (4, 'Level4'),
+        (5, 'Level5'),
+        (6, 'Level6'),
+        (7, 'Level7'),
+        (8, 'Level8'),
+    )
+    dl_projtask_id = models.ForeignKey(ProjTask, related_name=u'ProjectTask')
+    dl_user_id = models.ForeignKey(User, related_name=u'User_id')
+    dl_level = models. IntegerField(max_length=2, verbose_name=u'Level', choices=LEVEL_CHOICES)
+    dl_done = models.BooleanField(default=False, verbose_name=u'Done')
+    dl_date = models.DateTimeField(auto_now=True, verbose_name=u'Done Date')
+
+    def __unicode__(self):
+        info = str(self.dl_user_id) + " / " + str(self.dl_projtask_id)
+        return info
+
+
+class DonelistLayer(models.Model):
+    """
+    Contains the Authorization Level for Donelist
+    ( when not in Logic TASK_To and TASK_From )
+    """
+    LEVEL_CHOICES = (
+        (1, 'Level1'),
+        (2, 'Level2'),
+        (3, 'Level3'),
+        (4, 'Level4'),
+        (5, 'Level5'),
+        (6, 'Level6'),
+        (7, 'Level7'),
+        (8, 'Level8'),
+    )
+    dll_tasktype_id = models.ForeignKey(TaskType, related_name=u'TaskType')
+    dll_proj_id = models.ForeignKey(Project, related_name=u'Project')
+    dll_user_id = models.ForeignKey(User, related_name=u'User')
+    dll_level = models.IntegerField(max_length=2, verbose_name=u'Level', choices=LEVEL_CHOICES)
+    dll_standard = models.BooleanField(default=True, verbose_name=u'Is Standard')
+
+    def __unicode__(self):
+        info = str(self.dll_level) + " / " + str(self.dll_user_id) + " / " + str(self.dll_tasktype_id)
         return info
