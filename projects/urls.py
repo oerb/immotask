@@ -2,6 +2,7 @@ __author__ = 'leppin'
 
 from django.conf.urls import patterns, url
 from .views import project_choice, project_new, project_edit, all_projects, new_proj_contact_type, proj_edit_adrtype
+from .views import proj_adrtype_view
 
 urlpatterns = patterns('',
                        url(r'^choice/$', project_choice, name='proj_choice' ),
@@ -12,4 +13,5 @@ urlpatterns = patterns('',
                            name='proj_set_view'),
                        url(r'^new_adrtype/$', new_proj_contact_type, name='proj_new_adrtype' ),
                        url(r'^edit_adrtype/(?P<projadrtype_id>\d+)$', proj_edit_adrtype, name='proj_edit_adrtype' ),
+                       url(r'^projadrtypes/$', proj_adrtype_view, name='proj_view_adrtype')
                        )

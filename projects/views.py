@@ -133,3 +133,13 @@ def proj_edit_adrtype(request, projadrtype_id):
         innitialdata = {'pat_name': projadrtype.pat_name, 'pat_info': projadrtype.pat_info}
         data['form'] = ProjAdrTypeForm(initial=innitialdata)
     return render(request, 'projects/edit_projadrtype.html', data)
+
+
+@login_required
+def proj_adrtype_view(request):
+    """
+    Project Address Type View
+    """
+    data = {}
+    data['projadrtypes'] = ProjAdrTyp.objects.all()
+    return render(request, 'projects/projadrtypes.html', data)

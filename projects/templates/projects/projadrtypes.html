@@ -11,13 +11,11 @@
                 </tr>
             </thead>
             <tbody>
-            {% for proj in projects %}
+            {% for adrtype in projadrtypes %}
                 <tr>
-                    <td><a href="{% url "task_set_view" proj.id %}">{{ proj.pro_name }}</a></td>
-                    <td>{{ proj.pro_date }}</td>
-                    <td>{{ proj.pro_done_date }}</td>
-                    <td><a class="btn btn-default col_md_1" {% if proj.pro_hide %}href="{% url "proj_set_view" proj.id 0 %}">anzeigen{% else %}href={% url "proj_set_view" proj.id 1 %}>verbergen{% endif %}</a>
-                    <td><a class="btn btn-default col_md_1" href="{% url "proj_edit" proj.id %}">bearbeiten</a></td>
+                    <td><a href="{% url "proj_edit_adrtype" adrtype.id %}">{{ adrtype.pat_name }}</a></td>
+                    <td>{{ adrtype.pat_info }}</td>
+                    <td><a class="btn btn-default col_md_1" href="{% url "proj_edit_adrtype" adrtype.id %}">bearbeiten</a></td>
                 </tr>
             {% endfor %}
             </tbody>

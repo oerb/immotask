@@ -27,7 +27,7 @@ class ProjAdrTyp(models.Model):
     Project Address Types like
     Architect Planning, Companies ...
     """
-    pat_name = models.CharField(verbose_name=u'Name', max_length=30)
+    pat_name = models.CharField(unique=True, verbose_name=u'Name', max_length=30)
     pat_info = models.CharField(verbose_name=u'Info', max_length=250, blank=True)
 
     def __unicode__(self):
