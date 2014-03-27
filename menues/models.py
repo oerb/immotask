@@ -32,11 +32,15 @@ class Menu(models.Model):
     """
     Homepage Menu
     """
+    LEVEL_CHOICES = (
+        (1, 'Level1'),
+        (2, 'Level2'),
+    )
     subject = models.CharField(max_length=100)
     description = models.TextField(blank=True)
     link = models.CharField(max_length=250, blank=True)
     linkintern = models.BooleanField(verbose_name='Link Intern')
-    level = models.PositiveIntegerField()
+    level = models.PositiveIntegerField(choices=LEVEL_CHOICES)
     parent = models.ForeignKey('self', blank=True, null=True, related_name=u'Parent')
     menu_hide = models.BooleanField()
     date_creation = models.DateTimeField(editable=False, auto_now_add=True)

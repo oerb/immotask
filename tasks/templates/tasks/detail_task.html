@@ -31,9 +31,9 @@
                 <tr>
                     <td><a href="{% url "detail_task" task.id %}">{{ task.id }}</a></td>
                     <td><a href="{% url "detail_task" task.id %}">{{ task.ta_shorttxt }}</a></td>
-                    <td>{{ task.pt_taskid.ta_begin }}</td>
-                    <td>{{ task.pt_taskid.ta_adrid_to }}</td>
-                    <td>{{ task.pt_taskid.ta_adrid_from }}</td>
+                    <td>{{ task.ta_begin }}</td>
+                    <td>{{ task.ta_adrid_to }}</td>
+                    <td>{{ task.ta_adrid_from }}</td>
                     <td>STATUS</td>
                 </tr>
             {% endfor %}

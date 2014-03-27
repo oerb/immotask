@@ -30,9 +30,11 @@ def new_task(request, parent_id):
                         ta_adrid_to=form.cleaned_data['adr_to'],
                         ta_tasktype=form.cleaned_data['tasktype'],
                         )
-            if not parent_id == 0:
+            if not parent_id == "0":
                 task.ta_parent = get_object_or_404(Task, pk=parent_id)
             task.save()
+
+
             usersetting = Setting.objects.filter(se_user=request.user)
             if usersetting:
                 for pid in usersetting:
