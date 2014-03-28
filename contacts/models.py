@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 from django.db import models
+from django.contrib.auth.models import User, Group
 
 
 class Address(models.Model):
@@ -11,6 +12,7 @@ class Address(models.Model):
     """
     adr_searchname = models.CharField(verbose_name=u'Name', max_length=255)
     adr_email = models.CharField(verbose_name=u'E-Mail', max_length=255)  # defined for special use in sending module
+    adr_user_id = models.ForeignKey(User, related_name=u'AddressUserId', blank=True, null=True)
 
     class Meta:
         verbose_name = u'Adresse'

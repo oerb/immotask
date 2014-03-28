@@ -53,7 +53,8 @@ def new_contact(request):
         form = ContactForm(request.POST)
         if form.is_valid():
             adr = Address(adr_searchname=form.cleaned_data['searchname'],
-                          adr_email=form.cleaned_data['email'])
+                          adr_email=form.cleaned_data['email'],
+                          adr_user_id=request.user) # TODO: Wrong user_id - Fix this
             adr.save()
             contacttypes = ContactType.objects.all()
             for ct_type in contacttypes:
