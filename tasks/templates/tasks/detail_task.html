@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{%  block title %}{{ task.ta_tasktype.tt_name }}{% endblock %}
+{%  block title %}Aufgabe({{ task.id }}) - {{ task.ta_tasktype.tt_name }}{% endblock %}
 {% block content %}
     <div class="panel panel-primary">
         <div class="panel-heading">
