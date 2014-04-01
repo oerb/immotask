@@ -33,14 +33,30 @@ def new_task(request, parent_id):
             if not parent_id == "0":
                 task.ta_parent = get_object_or_404(Task, pk=parent_id)
             task.save()
-
-
-            usersetting = Setting.objects.filter(se_user=request.user)
-            if usersetting:
-                for pid in usersetting:
+            # Add Task to ProjektTasks
+            usrsetting = Setting.objects.filter(se_user=request.user)
+            print str(usrsetting) + "#"*10
+            if usrsetting:
+                for pid in usrsetting:
                     proj_id = pid.se_current_proj
                     projtask = ProjTask(pt_taskid=task, pt_projid=proj_id)
                     projtask.save()
+
+                    # Add Done Items to Donelist
+                    # ----- Level1 -----
+                    if task.ta_adrid_from.adr_user_id:
+                        donelist = Donelist(dl_projtask_id=projtask,
+                                            dl_user_id=task.ta_adrid_from.adr_user_id,
+                                            dl_level=1
+                                            )
+                        donelist.save()
+                    # ----- Level2 -----
+                    if task.ta_adrid_to.adr_user_id:
+                        donelist = Donelist(dl_projtask_id=projtask,
+                                            dl_user_id=task.ta_adrid_to.adr_user_id,
+                                            dl_level=1
+                                            )
+                        donelist.save()
 
             return redirect('proj_tasks')
     else:
@@ -84,26 +100,31 @@ def task_detail_print(request, task_id):
 
 @login_required
 def task_typed_print(request, task_id):
-    task = get_object_or_404(Task, pk=task_id)
-    template = task.ta_tasktype.tt_template
+    data = {}
+    data['task'] = get_object_or_404(Task, pk=task_id)
+    template = 'tasks/typedprint/' + str(data['task'].ta_tasktype.tt_template)
     # Example: tasks/typedprint/anschreiben.html
-    todata = ContactData.objects.filter(cd_address_id=task.ta_adrid_to.id)
+    todata = ContactData.objects.filter(cd_address_id=data['task'].ta_adrid_to.id)
     printfields = TaskTemplateFields.objects.filter(id=1)
     for element in todata:  # TODO: contacttype by task type layout more Elements
         if element.cd_contacttype_id == printfields[0].ttf_company:
-            company = element.cd_textfield
+            data['company'] = element.cd_textfield
         elif element.cd_contacttype_id== printfields[0].ttf_name:
-            name = element.cd_textfield
+            data['name'] = element.cd_textfield
         elif element.cd_contacttype_id == printfields[0].ttf_zipcode:
-            postalcode = element.cd_textfield
+            data['postalcode'] = element.cd_textfield
         elif element.cd_contacttype_id == printfields[0].ttf_city:
-            city = element.cd_textfield
+            data['city'] = element.cd_textfield
         else:
             pass
-    return render(request, template, {'task': task, 'todata': todata, 'company': company, 'name': name,
-                                      'postalcode': postalcode, 'city': city})
+    return render(request, template, data)
+
+
 @login_required
 def set_task_done(request, task_id):
+    """
+    change Donelist.dl_done the True or False state for given Donelist.dl_projtask_id
+    """
     data = {}
     donelist_task = Donelist.objects.get(dl_projtask_id=task_id, dl_user_id=request.user)
     print str(donelist_task.dl_done) + "#"*10
