@@ -149,8 +149,6 @@ class DonelistLayer(models.Model):
     ( when not in Logic TASK_To and TASK_From )
     """
     LEVEL_CHOICES = (
-        (1, 'Level1'),
-        (2, 'Level2'),
         (3, 'Level3'),
         (4, 'Level4'),
         (5, 'Level5'),
@@ -159,9 +157,11 @@ class DonelistLayer(models.Model):
         (8, 'Level8'),
     )
     dll_tasktype_id = models.ForeignKey(TaskType, related_name=u'TaskType')
-    dll_proj_id = models.ForeignKey(Project, related_name=u'Project')
+    # if Standard = True >> goes over all where no Project Level is defined
+    dll_proj_id = models.ForeignKey(Project, related_name=u'Project', null=True, blank=True)
     dll_user_id = models.ForeignKey(User, related_name=u'User')
     dll_level = models.IntegerField(max_length=2, verbose_name=u'Level', choices=LEVEL_CHOICES)
+    # if Standard = True >> goes over all where no Project Level is defined
     dll_standard = models.BooleanField(default=True, verbose_name=u'Is Standard')
 
     def __unicode__(self):
