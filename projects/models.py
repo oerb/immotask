@@ -15,7 +15,7 @@ class Project(models.Model):
     pro_name = models.CharField(verbose_name=u'Name', max_length=40)
     pro_info = models.CharField(verbose_name=u'Info', max_length=250, blank=True)
     pro_date = models.DateField(verbose_name=u'Erstellt', editable=False, auto_now_add=True)
-    pro_hide = models.BooleanField(verbose_name=u'Hide', default=False)  # TODO: Standardwert True
+    pro_hide = models.BooleanField(verbose_name=u'Hide', default=False)
     pro_done_date = models.DateTimeField(blank=True, null=True)
 
     def __unicode__(self):
