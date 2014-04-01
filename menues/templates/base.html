@@ -55,9 +55,11 @@
     <!-- Begin Bage Content -->
     <div class="row">
         <div class="container">
-            <div class="page-header ">
-                <h1>{% block title %}{% endblock %}</h1>
+            {% if title %}
+            <div class="page-header">
+                <h1><small>{% block title %}{% endblock %}</small></h1>
             </div>
+            {% endif %}
         </div>
     </div>
     <div class="row">

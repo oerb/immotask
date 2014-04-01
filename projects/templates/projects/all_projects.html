@@ -1,6 +1,9 @@
 {% extends "base.html" %}
-{%  block title %}Alle Projekte{% endblock %}
 {% block content %}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3>alle Projekte</h3>
+    </div>
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>
@@ -8,7 +11,7 @@
                     <td>Projekt</td>
                     <td>Erstellt</td>
                     <td>Geschlossen</td>
-                    <td>Verbergen</td>
+                    <td></td>
                     <td></td>
                 </tr>
             </thead>
@@ -16,32 +19,29 @@
             {% for proj in projects %}
                 <tr>
                     <td><a href="{% url "task_set_view" proj.id %}">{{ proj.pro_name }}</a></td>
-                    <td>{{ proj.pro_date }}</td>
-                    <td>{{ proj.pro_done_date }}</td>
-                    <td><a class="btn btn-default col_md_1" {% if proj.pro_hide %}href="{% url "proj_set_view" proj.id 0 %}">anzeigen{% else %}href={% url "proj_set_view" proj.id 1 %}>verbergen{% endif %}</a>
-                    <td><a class="btn btn-default col_md_1" href="{% url "proj_edit" proj.id %}">bearbeiten</a></td>
+                    <td>{{ proj.pro_date|date:"d.m.Y" }}</td>
+                    <td>{{ proj.pro_done_date|date:"d.m.Y" }}</td>
+                    <td><a class="btn-sm col_md_1" {% if proj.pro_hide %}href="{% url "proj_set_view" proj.id 0 %}"><span class="glyphicon glyphicon-eye-close"></span>{% else %}href={% url "proj_set_view" proj.id 1 %}><span class="glyphicon glyphicon-eye-open"></span>{% endif %}</a>
+                    <td><a class="btn-sm col_md_1" href="{% url "proj_edit" proj.id %}"><span class="glyphicon glyphicon-edit"></span></a></td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
     </div>
+</div>
 {% endblock %}
 {% block banner_right %}
-    <ul class="nav nav-pills nav-stacked">
-        <li>
-            <a href="{% url "proj_new" %}">
-                Projekt anlegen
-            </a>
-        </li>
-        <li>
-            <a href="{% url "proj_new_adrtype" %}">
-                Adresstyp anlegen
-            </a>
-        </li>
-        <li>
-            <a href="{% url "proj_view_adrtype" %}">
-                Adresstypen bearbeiten
-            </a>
-        </li>
-    </ul>
+<div class="list-group">
+    <p class="list-group-item-heading">Projekt</p>
+    <a class="list-group-item" href="{% url "proj_new" %}">
+        erstellen
+    </a>
+    <p class="list-group-item-heading">Adresstypen</p>
+    <a class="list-group-item" href="{% url "proj_new_adrtype" %}">
+        anlegen
+    </a>
+    <a class="list-group-item" href="{% url "proj_view_adrtype" %}">
+        Adresstyp bearbeiten
+    </a>
+</div>
 {% endblock %}

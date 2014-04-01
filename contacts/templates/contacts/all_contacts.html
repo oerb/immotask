@@ -1,53 +1,47 @@
 {% extends "base.html" %}
-{%  block title %}Alle Kontakte{% endblock %}
 {% block content %}
-    <div class="table-responsive">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <td>Suchname</td>
-                    <td>E-Mail</td>
-                    {% for ctype in contacttypes %}
-                        {% if ctype.ct_viewshown %}
-                            <td>{{ ctype.ct_name }}</td>
-                        {% endif %}
-                    {% endfor %}
-                </tr>
-            </thead>
-            <tbody>
-            {% for address in addresses %}
-                <tr>
-                    <td><a href="{% url "contact_detailtab" address.id 1 %}">{{ address }}</a></td>
-                    <td><a href="mailto:{{ address.adr_email }}">{{ address.adr_email }}</a></td>
-                    {% for adr in adr_data %}
-                        {% if adr.cd_address_id.id == address.id and adr.cd_contacttype_id.ct_viewshown %}
-                            <td>{{ adr.cd_textfield }}</td>
-                        {% endif %}
-                    {% endfor %}
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3>Alle Kontakte</h3>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <td>Suchname</td>
+                        <td>E-Mail</td>
+                        {% for ctype in contacttypes %}
+                            {% if ctype.ct_viewshown %}
+                                <td>{{ ctype.ct_name }}</td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                {% for address in addresses %}
+                    <tr>
+                        <td><a href="{% url "contact_detailtab" address.id 1 %}">{{ address }}</a></td>
+                        <td><a href="mailto:{{ address.adr_email }}">{{ address.adr_email }}</a></td>
+                        {% for adr in adr_data %}
+                            {% if adr.cd_address_id.id == address.id and adr.cd_contacttype_id.ct_viewshown %}
+                                <td>{{ adr.cd_textfield }}</td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 {% endblock %}
 {% block banner_right %}
-    <ul class="nav nav-pills nav-stacked">
-        <li>
-            <a href="#">
-                <span class="badge pull-right">4</span>
-                überfällige Meldungen
+    <div class="list-group">
+            <p class="list-group-item-heading">Kontakt</p>
+            <a class="list-group-item" href="{% url "proj_contacts" %}">
+                Projektansicht
             </a>
-        </li>
-            <li>
-            <a href="#">
-                <span class="badge pull-right">2</span>
-                neue Meldungen
+            <a class="list-group-item" href="{% url "new_contact" %}">
+                anlegen
             </a>
-        </li>
-            <li>
-            <a href="{% url "new_contact" %}">
-                Kontakt anlegen
-            </a>
-        </li>
-    </ul>
+    </div>
 {% endblock %}
