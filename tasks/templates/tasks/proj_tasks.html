@@ -13,20 +13,24 @@
                     <td>Datum</td>
                     <td>an</td>
                     <td>von</td>
-                    <td></td>
+                    <td>Status</td>
                     <td></td>
                 </tr>
             </thead>
             <tbody>
-            {% for task in projecttask %}
+            {% for task in donelist %}
                 <tr>
-                    <td><a href="{% url "detail_task" task.pt_taskid.id %}">{{ task.pt_taskid.id }}</a></td>
-                    <td><a href="{% url "detail_task" task.pt_taskid.id %}">{{ task.pt_taskid.ta_shorttxt }}</a></td>
-                    <td>{{ task.pt_taskid.ta_begin|date:"d.m.Y" }}</td>
-                    <td>{{ task.pt_taskid.ta_adrid_to }}</td>
-                    <td>{{ task.pt_taskid.ta_adrid_from }}</td>
-                    <td><span class="glyphicon glyphicon-minus-sign"></span></td>
-                    <td><a type="button" class="btn-sm" href="{% url "detail_task" task.pt_taskid.id %}"><span class="glyphicon glyphicon-edit"></span>                        </a>
+                    <td><a href="{% url "detail_task" task.dl_projtask_id.pt_taskid.id %}">{{ task.dl_projtask_id.pt_taskid.id }}</a></td>
+                    <td><a href="{% url "detail_task" task.dl_projtask_id.pt_taskid.id %}">{{ task.dl_projtask_id.pt_taskid.ta_shorttxt }}</a></td>
+                    <td>{{ task.dl_projtask_id.pt_taskid.ta_begin|date:"d.m.Y" }}</td>
+                    <td>{{ task.dl_projtask_id.pt_taskid.ta_adrid_to }}</td>
+                    <td>{{ task.dl_projtask_id.pt_taskid.ta_adrid_from }}</td>
+                    <td>
+                        <a href="{% url "done_task" task.id %}">
+                            <span class={% if task.dl_done == False %}"glyphicon glyphicon-minus-sign">{% else %}"glyphicon glyphicon-ok"{% endif %}</span>
+                        </a>
+                    </td>
+                    <td><a type="button" class="btn-sm" href="{% url "detail_task" task.dl_projtask_id.pt_taskid.id %}"><span class="glyphicon glyphicon-edit"></span>                        </a>
                     </td>
                 </tr>
             {% endfor %}

@@ -103,3 +103,18 @@ def task_typed_print(request, task_id):
             pass
     return render(request, template, {'task': task, 'todata': todata, 'company': company, 'name': name,
                                       'postalcode': postalcode, 'city': city})
+
+def set_task_done(request, task_id):
+    data = {}
+    donelist_task = Donelist.objects.get(dl_projtask_id=task_id, dl_user_id=request.user)
+    print str(donelist_task.dl_done) + "#"*10
+    if donelist_task.dl_done:
+        donelist_task.dl_done = False
+    else:
+        donelist_task.dl_done = True
+    donelist_task.save()
+    # part for filling Data
+    current_proj = request.user.setting.se_current_proj.id
+    data['projecttask'] = ProjTask.objects.filter(pt_projid=current_proj)
+    data['donelist'] = Donelist.objects.filter(dl_user_id=request.user).filter(dl_projtask_id__pt_projid=current_proj)
+    return render(request, 'tasks/proj_tasks.html', data)
