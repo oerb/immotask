@@ -1,8 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from tasks.models import Task, TaskType, TaskDoc, AuthoriseStruct, TaskTemplateFields
-from tasks.forms import TaskForm
+from .models import Task, TaskType, TaskDoc, AuthoriseStruct, TaskTemplateFields
+from .forms import TaskForm
 from usrsettings.models import Setting
-from projects.models import ProjTask, Project
+from projects.models import ProjTask, Project, Donelist
 from django.shortcuts import get_object_or_404, render, redirect
 from contacts.models import ContactData
 from django.contrib.auth.decorators import login_required
@@ -50,9 +50,11 @@ def new_task(request, parent_id):
 
 @login_required
 def taskprojview(request):
+    data = {}
     current_proj = request.user.setting.se_current_proj.id
-    projecttasks = ProjTask.objects.filter(pt_projid=current_proj)
-    return render(request, 'tasks/proj_tasks.html', {'projecttask': projecttasks})
+    data['projecttask'] = ProjTask.objects.filter(pt_projid=current_proj)
+    data['donelist'] = Donelist.objects.filter(dl_user_id=request.user).filter(dl_projtask_id__pt_projid=current_proj)
+    return render(request, 'tasks/proj_tasks.html', data)
 
 
 @login_required
