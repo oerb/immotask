@@ -35,13 +35,11 @@ def new_task(request, parent_id):
             task.save()
             # Add Task to ProjektTasks
             usrsetting = Setting.objects.filter(se_user=request.user)
-            print str(usrsetting) + "#"*10
             if usrsetting:
                 for pid in usrsetting:
                     proj_id = pid.se_current_proj
                     projtask = ProjTask(pt_taskid=task, pt_projid=proj_id)
                     projtask.save()
-
                     # Add Done Items to Donelist
                     # ----- Level1 -----
                     if task.ta_adrid_from.adr_user_id:
@@ -50,6 +48,7 @@ def new_task(request, parent_id):
                                             dl_level=1
                                             )
                         donelist.save()
+                        print "########## pid run #############"
                     # ----- Level2 -----
                     if task.ta_adrid_to.adr_user_id:
                         donelist = Donelist(dl_projtask_id=projtask,
@@ -57,7 +56,7 @@ def new_task(request, parent_id):
                                             dl_level=1
                                             )
                         donelist.save()
-
+                        print "########## pid run #############"
             return redirect('proj_tasks')
     else:
         form = TaskForm()
@@ -126,8 +125,7 @@ def set_task_done(request, task_id):
     change Donelist.dl_done the True or False state for given Donelist.dl_projtask_id
     """
     data = {}
-    donelist_task = Donelist.objects.get(dl_projtask_id=task_id, dl_user_id=request.user)
-    print str(donelist_task.dl_done) + "#"*10
+    donelist_task = Donelist.objects.get(pk=task_id)
     if donelist_task.dl_done:
         donelist_task.dl_done = False
     else:
