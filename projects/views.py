@@ -90,8 +90,7 @@ def project_set_view(request, proj_id, hide):
                         pro_hide=setvar,
                         pro_date=project.pro_date)
     proj_edit.save()
-    data['projects'] = Project.objects.all()
-    return render(request, 'projects/all_projects.html', data)
+    return all_projects(request)
 
 
 @login_required
