@@ -36,7 +36,7 @@
 {% endblock %}
 {% block banner_right %}
     <div class="list-group">
-            <p class="list-group-item-heading">Projekt - Meldungen</p>
+            <p class="list-group-item-heading">Projekt - Aufgaben</p>
             <a  href="#" class="list-group-item">
                 <span class="badge pull-right">4</span>
                 überfällig
@@ -49,10 +49,10 @@
     <div class="list-group">
         <p class="list-group-item-heading">Kontakt</p>
         <a class="list-group-item" href="{% url "all_contacts" %}">
-            alle ( anlegen / bearbeiten )
+            alle ( anlegen / bearbeiten ) <span class="glyphicon glyphicon-plus pull-right"></span>
         </a>
         <a class="list-group-item" href="#">
-            verborgene
+            verborgene <span class="glyphicon glyphicon-eye-close pull-right"></span>
         </a>
     </div>
 {% endblock %}

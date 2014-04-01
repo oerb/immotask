@@ -36,12 +36,15 @@
 {% endblock %}
 {% block banner_right %}
     <div class="list-group">
+        <p class="list-group-item-heading">Menü</p>
+        <a class="list-group-item" href="{% url "proj_contacts" %}">
+            Projektansicht <span class="glyphicon glyphicon-th-list pull-right"></span>
+        </a>
+    </div>
+    <div class="list-group">
             <p class="list-group-item-heading">Kontakt</p>
-            <a class="list-group-item" href="{% url "proj_contacts" %}">
-                Projektansicht
-            </a>
             <a class="list-group-item" href="{% url "new_contact" %}">
-                anlegen
+                erstellen <span class="glyphicon glyphicon-plus pull-right"></span>
             </a>
     </div>
 {% endblock %}

@@ -53,20 +53,21 @@
                 </div>
         </div>
     </div>
-
 {% endblock %}
 {% block banner_right %}
-    <ul class="nav nav-pills nav-stacked">
-        <li>
-            <a href="{% url "print_typed_task" task.id %}">Drucken</a>
-        </li>
-        <li>
-            <a href="{% url "new_task" task.id %}">
-                Folgeaufgabe erstellen
-            </a>
-        </li>
-        <li>
-            Folge Aufgabenlist drucken
-        </li>
-    </ul>
+<div class="list-group">
+    <p class="list-group-item-heading">Aufgabe</p>
+    <a class="list-group-item" href="{% url "print_typed_task" task.id %}">
+        drucken <span class="glyphicon glyphicon-print pull-right"></span>
+    </a>
+</div>
+<div class="list-group">
+    <p class="list-group-item-heading">Folge Aufgaben</p>
+    <a class="list-group-item" href="{% url "new_task" task.id %}">
+        erstellen
+    </a>
+    <a class="list-group-item" href="#">
+        drucken <span class="glyphicon glyphicon-print pull-right"></span>
+    </a>
+</div>
 {% endblock %}
