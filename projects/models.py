@@ -82,7 +82,7 @@ class ProjTask(models.Model):
     pt_projid = models.ForeignKey(Project)
 
     def __unicode__(self):
-        info = "Projekt: " + str(self.pt_projid.id) + " " + str(self.pt_projid.pro_name) \
+        info = "Projekt: " + str(self.pt_projid.id) + " - " + str(self.pt_projid.pro_name) \
                + " TaskID: " + str(self.pt_taskid.id)
         return info
 

@@ -6,7 +6,7 @@ from projects.models import ProjTask, Project, Donelist, DonelistLayer
 from django.shortcuts import get_object_or_404, render, redirect
 from contacts.models import ContactData
 from django.contrib.auth.decorators import login_required
-
+from django.core.mail import send_mail, EmailMessage
 
 @login_required
 def new_task(request, parent_id):
@@ -58,7 +58,6 @@ def new_task(request, parent_id):
                             donelist.save()
                     # ----- Level 3 to End by DonelistLayer Items -----
                     dl_layer = DonelistLayer.objects.filter(dll_tasktype_id=task.ta_tasktype_id, dll_proj_id=proj_id)
-                    print "dl_layer filtered: " + str(dl_layer) + "#"*10
                     for dl_layer_item in dl_layer:
                         if dl_layer_item.dll_user_id != task.ta_adrid_to.adr_user_id and dl_layer_item.dll_user_id != task.ta_adrid_from.adr_user_id:
                             donelist = Donelist(dl_projtask_id=projtask,
@@ -66,11 +65,40 @@ def new_task(request, parent_id):
                                                 dl_level=dl_layer_item.dll_level
                                                 )
                             donelist.save()
-                            print "## level3 ++ ##"
+                send_task_byMail(task)
             return redirect('proj_tasks')
     else:
         form = TaskForm()
     return render(request, 'contacts/new_contact.html', {'message': message, 'form': form})
+
+
+def send_task_byMail(task):
+    """
+    Send Email to all Task Donelist Level User ID's
+    where to is Level1, from is Level2 and
+    cc is all in Level3
+    """
+    donelist = Donelist.objects.filter(dl_projtask_id=task)
+    for element in donelist:
+        print "Donelist Element: " + str(element) + "// Level: " + str(element.dl_level)
+    shorttxt = str(task.id) + " / " + str(task.ta_shorttxt)
+    email = EmailMessage(shorttxt, "Immotask Message: please read the Attachement")
+    for item in donelist:
+        if item.dl_level == 1:
+            email.to.append(item.dl_user_id.email)
+        elif item.dl_level == 2:
+            email.from_email = item.dl_user_id.email
+        else:
+            email.cc.append(item.dl_user_id.email)
+
+    # email.attach_file() # TODO: Attache File as PDF from Django Html
+    try:
+        email.send(fail_silently=False)  # TODO: Validate this and make it secure for Law
+        email.send()
+        print "Send Email to: " + str(email.to) + " cc: " + str(email.cc)
+        return True
+    except:
+        return False
 
 
 @login_required
