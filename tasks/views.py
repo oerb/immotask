@@ -201,12 +201,13 @@ def set_task_done(request, task_id):
     """
     data = {}
     donelist_task = Donelist.objects.get(pk=task_id)
+    viewstate = donelist_task.dl_done
     if donelist_task.dl_done:
         donelist_task.dl_done = False
     else:
         donelist_task.dl_done = True
     donelist_task.save()
-    return taskprojview(request)
+    return taskprojview(request, done=viewstate)
 
 
 def send_task_byMail(task):

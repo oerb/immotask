@@ -36,15 +36,13 @@
 {% endblock %}
 {% block banner_right %}
     <div class="list-group">
-            <p class="list-group-item-heading">Projekt - Aufgaben</p>
-            <a  href="#" class="list-group-item">
-                <span class="badge pull-right">4</span>
-                überfällig
-            </a>
-            <a class="list-group-item" href="#">
-                <span class="badge pull-right">2</span>
-                neue
-            </a>
+        <p class="list-group-item-heading">Projekt - Aufgaben</p>
+        <a class="list-group-item" href="{% url "proj_tasks" %}">
+            offen<span class="badge pull-right">{{ open_count }}</span>
+        </a>
+        <a class="list-group-item" href="{% url "proj_tasks_done" %}">
+            erledigt<span class="badge pull-right">{{ done_count }}</span>
+        </a>
     </div>
     <div class="list-group">
         <p class="list-group-item-heading">Kontakt</p>

@@ -2,7 +2,7 @@ from contacts.models import Address, Category, ContactType, ContactData, Contact
 from django.shortcuts import get_object_or_404, render, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from contacts.forms import ContactForm, ContactToProjForm
-from projects.models import ProjectAddress, Project, ProjAdrTyp
+from projects.models import ProjectAddress, Project, ProjAdrTyp, Donelist
 from usrsettings.models import Setting
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -25,12 +25,17 @@ def ct_detail_tab(request, address_id, category_id):
 
 @login_required
 def proj_contacts(request):
-    contacttypes = ContactType.objects.all()
-    adr_data = ContactData.objects.all().order_by('cd_contacttype_id__ct_sort_id')
+    data = {}
     current_proj = request.user.setting.se_current_proj.id
-    addresses = ProjectAddress.objects.filter(pa_projid=current_proj)
-    return render(request, 'contacts/proj_contacts.html', {'adr_data': adr_data, 'addresses': addresses,
-                                                           'contacttypes':contacttypes})
+    data['contacttypes'] = ContactType.objects.all()
+    data['adr_data'] = ContactData.objects.all().order_by('cd_contacttype_id__ct_sort_id')
+    data['current_proj'] = request.user.setting.se_current_proj.id
+    data['addresses'] = ProjectAddress.objects.filter(pa_projid=current_proj)
+    data['done_count'] = Donelist.objects.filter(dl_user_id=request.user, dl_done=True).filter(
+        dl_projtask_id__pt_projid=current_proj).count()
+    data['open_count'] = Donelist.objects.filter(dl_user_id=request.user, dl_done=False).filter(
+        dl_projtask_id__pt_projid=current_proj).count()
+    return render(request, 'contacts/proj_contacts.html', data)
 
 
 
