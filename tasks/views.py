@@ -92,9 +92,9 @@ def taskprojview(request, done):
     data['open_count'] = Donelist.objects.filter(dl_user_id=request.user, dl_done=False).filter(
         dl_projtask_id__pt_projid=current_proj).count()
     if done == True:
-        data['task_header'] = 'Projekt Aufgaben - erledigte'
+        data['task_header'] = 'Projekt Aufgaben - erledigt'
     else:
-        data['task_header'] = 'Projekt Aufgaben - offene'
+        data['task_header'] = 'Projekt Aufgaben - offen'
     return render(request, 'tasks/proj_tasks.html', data)
 
 
