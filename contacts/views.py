@@ -5,6 +5,7 @@ from contacts.forms import ContactForm, ContactToProjForm
 from projects.models import ProjectAddress, Project, ProjAdrTyp
 from usrsettings.models import Setting
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 
 # TODO: Url, TAB and Item Id using/filtering in template and view
 
@@ -52,9 +53,18 @@ def new_contact(request):
     if request.method == "POST":
         form = ContactForm(request.POST)
         if form.is_valid():
+            # each Address has a User ID # TODO: if email exists - solve this
+            passwd = User.objects.make_random_password()
+            user = User(username=form.cleaned_data['searchname'],
+                        email=form.cleaned_data['email'],
+                        password=passwd)
+            user.save()
+            print "##### user ####" + str(user)
             adr = Address(adr_searchname=form.cleaned_data['searchname'],
-                          adr_email=form.cleaned_data['email']
-                          ) # TODO: Wrong user_id - Fix this
+                          adr_email=form.cleaned_data['email'],
+                          adr_user_id=user,
+                          )  # TODO: Wrong user_id - Fix this
+            print "##### address ####" + str(adr)
             adr.save()
             contacttypes = ContactType.objects.all()
             for ct_type in contacttypes:

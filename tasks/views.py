@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Task, TaskType, TaskDoc, AuthoriseStruct, TaskTemplateFields
 from .forms import TaskForm
 from usrsettings.models import Setting
-from projects.models import ProjTask, Project, Donelist
+from projects.models import ProjTask, Project, Donelist, DonelistLayer
 from django.shortcuts import get_object_or_404, render, redirect
 from contacts.models import ContactData
 from django.contrib.auth.decorators import login_required
@@ -45,18 +45,30 @@ def new_task(request, parent_id):
                     if task.ta_adrid_from.adr_user_id:
                         donelist = Donelist(dl_projtask_id=projtask,
                                             dl_user_id=task.ta_adrid_from.adr_user_id,
-                                            dl_level=1
+                                            dl_level=2
                                             )
                         donelist.save()
                         print "########## pid run #############"
                     # ----- Level2 -----
                     if task.ta_adrid_to.adr_user_id:
-                        donelist = Donelist(dl_projtask_id=projtask,
-                                            dl_user_id=task.ta_adrid_to.adr_user_id,
-                                            dl_level=1
-                                            )
-                        donelist.save()
-                        print "########## pid run #############"
+                        if task.ta_adrid_to.adr_user_id != task.ta_adrid_from.adr_user_id:
+                            donelist = Donelist(dl_projtask_id=projtask,
+                                                dl_user_id=task.ta_adrid_to.adr_user_id,
+                                                dl_level=1
+                                                )
+                            donelist.save()
+                            print "########## pid run #############"
+                    # ----- Level 3 to End -----
+                    dl_layer = DonelistLayer.objects.filter(dll_tasktype_id=task.ta_tasktype_id, dll_proj_id=proj_id)
+                    print "dl_layer filtered: " + str(dl_layer) + "#"*10
+                    for dl_layer_item in dl_layer:
+                        if dl_layer_item.dll_user_id != task.ta_adrid_to.adr_user_id and dl_layer_item.dll_user_id != task.ta_adrid_from.adr_user_id:
+                            donelist = Donelist(dl_projtask_id=projtask,
+                                                dl_user_id=dl_layer_item.dll_user_id,
+                                                dl_level=dl_layer_item.dll_level
+                                                )
+                            donelist.save()
+                            print "## level3 ++ ##"
             return redirect('proj_tasks')
     else:
         form = TaskForm()
