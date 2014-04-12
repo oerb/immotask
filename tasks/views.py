@@ -86,7 +86,7 @@ def taskprojview(request, done):
     data = {}
     current_proj = request.user.setting.se_current_proj.id
     data['donelist'] = Donelist.objects.filter(dl_user_id=request.user, dl_done=done).filter(
-        dl_projtask_id__pt_projid=current_proj)
+        dl_projtask_id__pt_projid=current_proj).order_by('-dl_projtask_id__pt_taskid__ta_date')
     data['done_count'] = Donelist.objects.filter(dl_user_id=request.user, dl_done=True).filter(
         dl_projtask_id__pt_projid=current_proj).count()
     data['open_count'] = Donelist.objects.filter(dl_user_id=request.user, dl_done=False).filter(

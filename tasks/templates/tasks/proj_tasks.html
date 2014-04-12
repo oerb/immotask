@@ -23,8 +23,8 @@
                     <td><a href="{% url "detail_task" task.dl_projtask_id.pt_taskid.id %}">{{ task.dl_projtask_id.pt_taskid.id }}</a></td>
                     <td><a href="{% url "detail_task" task.dl_projtask_id.pt_taskid.id %}">{{ task.dl_projtask_id.pt_taskid.ta_shorttxt }}</a></td>
                     <td>{{ task.dl_projtask_id.pt_taskid.ta_begin|date:"d.m.Y" }}</td>
-                    <td>{{ task.dl_projtask_id.pt_taskid.ta_adrid_to }}</td>
-                    <td>{{ task.dl_projtask_id.pt_taskid.ta_adrid_from }}</td>
+                    <td><a href="{% url "contact_detailtab" task.dl_projtask_id.pt_taskid.ta_adrid_to.id 1 %}">{{ task.dl_projtask_id.pt_taskid.ta_adrid_to }}</a></td>
+                    <td><a href="{% url "contact_detailtab" task.dl_projtask_id.pt_taskid.ta_adrid_from.id 1 %}">{{ task.dl_projtask_id.pt_taskid.ta_adrid_from }}</a></td>
                     <td>
                         <a href="{% url "done_task" task.id %}">
                             <span class={% if task.dl_done == False %}"glyphicon glyphicon-unchecked">{% else %}"glyphicon glyphicon-ok"{% endif %}</span>
