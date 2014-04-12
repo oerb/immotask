@@ -10,7 +10,8 @@ from django.core.mail import send_mail, EmailMessage
 from django.http import HttpResponse
 from xhtml2pdf import pisa
 from django.utils.six import BytesIO
-
+from django.template.loader import get_template, Context
+from reportlab.pdfgen import canvas
 
 
 @login_required
@@ -77,35 +78,6 @@ def new_task(request, parent_id):
     return render(request, 'contacts/new_contact.html', {'message': message, 'form': form})
 
 
-def send_task_byMail(task):
-    """
-    Send Email to all Task Donelist Level User ID's
-    where to is Level1, from is Level2 and
-    cc is all in Level3
-    """
-    donelist = Donelist.objects.filter(dl_projtask_id=task)
-    for element in donelist:
-        print "Donelist Element: " + str(element) + "// Level: " + str(element.dl_level)
-    shorttxt = str(task.id) + " / " + str(task.ta_shorttxt)
-    email = EmailMessage(shorttxt, "Immotask Message: please read the Attachement")
-    for item in donelist:
-        if item.dl_level == 1:
-            email.to.append(item.dl_user_id.email)
-        elif item.dl_level == 2:
-            email.from_email = item.dl_user_id.email
-        else:
-            email.cc.append(item.dl_user_id.email)
-
-    # email.attach_file() # TODO: Attache File as PDF from Django Html
-    try:
-        email.send(fail_silently=False)  # TODO: Validate this and make it secure for Law
-        email.send()
-        print "Send Email to: " + str(email.to) + " cc: " + str(email.cc)
-        return True
-    except:
-        return False
-
-
 @login_required
 def taskprojview(request):
     data = {}
@@ -162,7 +134,7 @@ def task_typed_print(request, task_id):
     return render(request, template, data)
 
 
-@login_required
+#@login_required
 def get_task_pdf(request, task_id):
     """
     Get the Task as PDF
@@ -175,7 +147,11 @@ def get_task_pdf(request, task_id):
     https://stackoverflow.com/questions/22075485/xhtml2pdf-importerror-django
     """
     data = {}
-    data['task'] = get_object_or_404(Task, pk=task_id)
+    if type(task_id) == Task:
+        task = task_id
+    else:
+        task = get_object_or_404(Task, pk=task_id)
+    data['task'] = task  # get_object_or_404(Task, pk=task_id)
     template = 'tasks/typedprint/' + str(data['task'].ta_tasktype.tt_template)
     # Example: tasks/typedprint/anschreiben.html
     todata = ContactData.objects.filter(cd_address_id=data['task'].ta_adrid_to.id)
@@ -191,15 +167,18 @@ def get_task_pdf(request, task_id):
             data['city'] = element.cd_textfield
         else:
             pass
-    resp = render(request, template, data)
+    #resp = render(request, template, data)
+    t = get_template(template)
+    c = Context(data)
+    resp = t.render(c)
     # print resp.content
     # creating the PDF - needs canvas and HttpResponse
     # pip install reportlab
     # https://docs.djangoproject.com/en/dev/howto/outputting-pdf/
-    response = HttpResponse(content=resp.content ,content_type='application/pdf')
-    response['Content-Disposition']='attachment; filename="immotask.pdf"'
+    response = HttpResponse(content=resp, content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="immotask.pdf"'
     #p = pisa.pisaDocument(src=BytesIO(resp.content.encode('utf-8')), dest=BytesIO(), encoding="utf-8", path=response)
-    p = pisa.CreatePDF(resp.content, response)
+    p = pisa.CreatePDF(resp, response)
     return response
 
 
@@ -216,3 +195,36 @@ def set_task_done(request, task_id):
         donelist_task.dl_done = True
     donelist_task.save()
     return taskprojview(request)
+
+
+def send_task_byMail(task):
+    """
+    Send Email to all Task Donelist Level User ID's
+    where to is Level1, from is Level2 and
+    cc is all in Level3
+    """
+    donelist = Donelist.objects.filter(dl_projtask_id=task)
+    for element in donelist:
+        print "Donelist Element: " + str(element) + "// Level: " + str(element.dl_level)
+    shorttxt = str(task.id) + " / " + str(task.ta_shorttxt)
+    email = EmailMessage(shorttxt, "Immotask Message: please read the Attachement")
+    for item in donelist:
+        if item.dl_level == 1:
+            email.to.append(item.dl_user_id.email)
+        elif item.dl_level == 2:
+            email.from_email = item.dl_user_id.email
+        else:
+            email.cc.append(item.dl_user_id.email)
+    task_pdf = get_task_pdf('', task)
+    print type(task_pdf)
+    filename = "Immotask-" + str(task.id) + "-" + task.ta_shorttxt
+    email.attach(filename, task_pdf.content, 'text/html') # TODO: Attache File as PDF from Django Html
+    print str(email)
+    try:
+        email.send(fail_silently=False)  # TODO: Validate this and make it secure for Law
+        email.send()
+        print "Send Email to: " + str(email.to) + " cc: " + str(email.cc)
+        return True
+    except Exception, e:
+        print "Exception in task/views line 227: " + str(e)
+        return False
