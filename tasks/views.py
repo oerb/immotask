@@ -7,6 +7,11 @@ from django.shortcuts import get_object_or_404, render, redirect
 from contacts.models import ContactData
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail, EmailMessage
+from django.http import HttpResponse
+from xhtml2pdf import pisa
+from django.utils.six import BytesIO
+
+
 
 @login_required
 def new_task(request, parent_id):
@@ -155,6 +160,47 @@ def task_typed_print(request, task_id):
         else:
             pass
     return render(request, template, data)
+
+
+@login_required
+def get_task_pdf(request, task_id):
+    """
+    Get the Task as PDF
+    to get this shit work
+    following package Installation is needed in Ubuntu 12.04:
+    sudo apt-get install libxml2-dev libxslt1-dev
+    pip install lxlm
+    pip install tinycss cssselect cairocffi
+    go to package xhtml2pdf and fix the lines by this:
+    https://stackoverflow.com/questions/22075485/xhtml2pdf-importerror-django
+    """
+    data = {}
+    data['task'] = get_object_or_404(Task, pk=task_id)
+    template = 'tasks/typedprint/' + str(data['task'].ta_tasktype.tt_template)
+    # Example: tasks/typedprint/anschreiben.html
+    todata = ContactData.objects.filter(cd_address_id=data['task'].ta_adrid_to.id)
+    printfields = TaskTemplateFields.objects.filter(id=1)
+    for element in todata:  # TODO: contacttype by task type layout more Elements
+        if element.cd_contacttype_id == printfields[0].ttf_company:
+            data['company'] = element.cd_textfield
+        elif element.cd_contacttype_id== printfields[0].ttf_name:
+            data['name'] = element.cd_textfield
+        elif element.cd_contacttype_id == printfields[0].ttf_zipcode:
+            data['postalcode'] = element.cd_textfield
+        elif element.cd_contacttype_id == printfields[0].ttf_city:
+            data['city'] = element.cd_textfield
+        else:
+            pass
+    resp = render(request, template, data)
+    # print resp.content
+    # creating the PDF - needs canvas and HttpResponse
+    # pip install reportlab
+    # https://docs.djangoproject.com/en/dev/howto/outputting-pdf/
+    response = HttpResponse(content=resp.content ,content_type='application/pdf')
+    response['Content-Disposition']='attachment; filename="immotask.pdf"'
+    #p = pisa.pisaDocument(src=BytesIO(resp.content.encode('utf-8')), dest=BytesIO(), encoding="utf-8", path=response)
+    p = pisa.CreatePDF(resp.content, response)
+    return response
 
 
 @login_required
