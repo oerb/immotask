@@ -59,12 +59,10 @@ def new_contact(request):
                         email=form.cleaned_data['email'],
                         password=passwd)
             user.save()
-            print "##### user ####" + str(user)
             adr = Address(adr_searchname=form.cleaned_data['searchname'],
                           adr_email=form.cleaned_data['email'],
                           adr_user_id=user,
-                          )  # TODO: Wrong user_id - Fix this
-            print "##### address ####" + str(adr)
+                          )
             adr.save()
             contacttypes = ContactType.objects.all()
             for ct_type in contacttypes:

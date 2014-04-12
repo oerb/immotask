@@ -40,7 +40,7 @@ def new_task(request, parent_id):
                     proj_id = pid.se_current_proj
                     projtask = ProjTask(pt_taskid=task, pt_projid=proj_id)
                     projtask.save()
-                    # Add Done Items to Donelist
+                    # Adding Donelist Items to Donelist
                     # ----- Level1 -----
                     if task.ta_adrid_from.adr_user_id:
                         donelist = Donelist(dl_projtask_id=projtask,
@@ -48,7 +48,6 @@ def new_task(request, parent_id):
                                             dl_level=2
                                             )
                         donelist.save()
-                        print "########## pid run #############"
                     # ----- Level2 -----
                     if task.ta_adrid_to.adr_user_id:
                         if task.ta_adrid_to.adr_user_id != task.ta_adrid_from.adr_user_id:
@@ -57,8 +56,7 @@ def new_task(request, parent_id):
                                                 dl_level=1
                                                 )
                             donelist.save()
-                            print "########## pid run #############"
-                    # ----- Level 3 to End -----
+                    # ----- Level 3 to End by DonelistLayer Items -----
                     dl_layer = DonelistLayer.objects.filter(dll_tasktype_id=task.ta_tasktype_id, dll_proj_id=proj_id)
                     print "dl_layer filtered: " + str(dl_layer) + "#"*10
                     for dl_layer_item in dl_layer:
