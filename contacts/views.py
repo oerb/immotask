@@ -53,8 +53,8 @@ def new_contact(request):
         form = ContactForm(request.POST)
         if form.is_valid():
             adr = Address(adr_searchname=form.cleaned_data['searchname'],
-                          adr_email=form.cleaned_data['email'],
-                          adr_user_id=request.user) # TODO: Wrong user_id - Fix this
+                          adr_email=form.cleaned_data['email']
+                          ) # TODO: Wrong user_id - Fix this
             adr.save()
             contacttypes = ContactType.objects.all()
             for ct_type in contacttypes:
@@ -91,7 +91,7 @@ def edit_contact(request, address_id):
                                          cd_address_id=adr)
                 print (ctdata, cd_id)
                 ctdata.save()
-        return redirect('proj_contacts')
+        return redirect('all_contacts')
     else:
         adr = get_object_or_404(Address, pk=address_id)
         datadict = {'searchname': adr.adr_searchname, 'email': adr.adr_email}
