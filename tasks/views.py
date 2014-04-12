@@ -79,10 +79,18 @@ def new_task(request, parent_id):
 
 
 @login_required
-def taskprojview(request):
+def taskprojview(request, done):
+    """
+    Show Open Project-Tasks orderd by Creationdate
+    """
     data = {}
     current_proj = request.user.setting.se_current_proj.id
-    data['donelist'] = Donelist.objects.filter(dl_user_id=request.user).filter(dl_projtask_id__pt_projid=current_proj)
+    data['donelist'] = Donelist.objects.filter(dl_user_id=request.user, dl_done=done).filter(
+        dl_projtask_id__pt_projid=current_proj)
+    data['done_count'] = Donelist.objects.filter(dl_user_id=request.user, dl_done=True).filter(
+        dl_projtask_id__pt_projid=current_proj).count()
+    data['open_count'] = Donelist.objects.filter(dl_user_id=request.user, dl_done=False).filter(
+        dl_projtask_id__pt_projid=current_proj).count()
     return render(request, 'tasks/proj_tasks.html', data)
 
 

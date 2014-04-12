@@ -45,5 +45,11 @@
     <a class="list-group-item" href="{% url "new_task" 0 %}">
         erstellen <span class="glyphicon glyphicon-plus pull-right"></span>
     </a>
+    <a class="list-group-item" href="{% url "proj_tasks" %}">
+        offen<span class="badge pull-right">{{ open_count }}</span>
+    </a>
+    <a class="list-group-item" href="{% url "proj_tasks_done" %}">
+        erledigt<span class="badge pull-right">{{ done_count }}</span>
+    </a>
 </div>
 {% endblock %}
