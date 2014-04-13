@@ -22,3 +22,6 @@ class Setting(models.Model):
     def __unicode__(self):
         info = str(self.se_current_proj) + " / " + str(self.se_user)
         return info
+
+
+

@@ -74,7 +74,7 @@ def all_projects(request):
     data['projects'] = Project.objects.all()
     return render(request, 'projects/all_projects.html', data)
 
-
+@login_required
 def project_set_view(request, proj_id, hide):
     """
     set Hide or Show for Project
@@ -111,7 +111,7 @@ def new_proj_contact_type(request):
         data['form'] = ProjAdrTypeForm()
     return render(request, 'projects/new_projadrtype.html', data)
 
-
+@login_required
 def proj_edit_adrtype(request, projadrtype_id):
     """
     edit Projekt Address Type
@@ -142,3 +142,5 @@ def proj_adrtype_view(request):
     data = {}
     data['projadrtypes'] = ProjAdrTyp.objects.all()
     return render(request, 'projects/projadrtypes.html', data)
+
+

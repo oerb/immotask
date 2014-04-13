@@ -1,11 +1,8 @@
 __author__ = 'oerb'
-
 """
-Form
+Menue Forms
 """
-
 from django import forms
-
 
 
 class LoginForm(forms.Form):

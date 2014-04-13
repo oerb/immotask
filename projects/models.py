@@ -167,3 +167,5 @@ class DonelistLayer(models.Model):
     def __unicode__(self):
         info = str(self.dll_level) + " / " + str(self.dll_user_id) + " / " + str(self.dll_tasktype_id)
         return info
+
+
