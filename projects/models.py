@@ -87,6 +87,18 @@ class ProjTask(models.Model):
         return info
 
 
+class ProjTaskType(models.Model):
+    """
+    ProjTaskType for Join to TaskType in tasks.models
+    """
+    ptty_tasktypeid = models.ForeignKey(TaskType)
+    ptty_projectid = models.ForeignKey(Project)
+
+    def __unicode__(self):
+        info = "TaskType: " + str(self.ptty_tasktypeid.tt_name) + " / Project: " + str(self.ptty_projectid.pro_name)
+        return info
+
+
 class ProjStruct(models.Model):
     """
     Project Structure
@@ -169,3 +181,136 @@ class DonelistLayer(models.Model):
         return info
 
 
+class ProjTopologyPattern(models.Model):
+    """
+    ProjTopologyPattern for a ProjectTree Pattern
+    """
+    ptp_name = models.CharField(max_length=50, verbose_name=u'Bezeichnung')
+    ptp_info = models.CharField(max_length=250, verbose_name=u'Info')
+    ptp_date = models.DateTimeField(auto_now_add=True, editable=False, verbose_name=u'Erstellt')
+    ptp_offdate = models.DateTimeField(auto_now=True, editable=False, verbose_name=u'LastEdit')
+    ptp_isoff = models.BooleanField(default=False, verbose_name=u'entfernt')
+    ptp_group = models.ForeignKey(Group, verbose_name=u'Gruppe')
+    ptp_user = models.ForeignKey(User, default=User, related_name=u'TopoPatternErsteller')
+
+    class Meta:
+        verbose_name = u'ProjTopologyPattern'
+        verbose_name_plural = u'ProjTopologyPatterns'
+        ordering = ['ptp_name']
+
+    def __unicode__(self):
+        return self.ptp_name
+
+
+class ProjTopologyIcons(models.Model):
+    """
+    ProjTopologyIcons for nice Tree Icons
+    """
+    pti_name = models.CharField(max_length=50, verbose_name=u'Bezeichnung')
+    pti_file = models.ImageField(upload_to='topologyIcons/')
+    pti_hide = models.BooleanField(default=False, verbose_name=u'verbergen')
+
+    class Meta:
+        verbose_name = u'ProjTopologyIcons'
+        verbose_name_plural = u'ProjTopologyIconss'
+        ordering = ['pti_name']
+
+    def __unicode__(self):
+        return self.pti_name
+
+
+class ProjTopologyPatternList(models.Model):
+    """
+    ProjTopologyPatternList for a ProjectTree Pattern
+    """
+    ptpl_name = models.CharField(max_length=50, verbose_name=u'Bezeichnung')
+    ptpl_date = models.DateTimeField(auto_now_add=True, editable=False, verbose_name=u'Erstellt')
+    ptpl_offdate = models.DateTimeField(auto_now=True, editable=False, verbose_name=u'LastEdit')
+    ptpl_isoff = models.BooleanField(default=False, verbose_name=u'entfernt')
+    ptpl_group = models.ForeignKey(Group, verbose_name=u'Gruppe')
+    ptpl_user = models.ForeignKey(User, default=User, related_name=u'TopoPatListErsteller')
+    ptpl_parent = models.ForeignKey('ProjTopologyPatternList', verbose_name=u'Parent')
+    ptpl_icon = models.ForeignKey(ProjTopologyIcons, verbose_name=u'Tree Icon', default=1)
+    ptpl_pattern = models.ForeignKey(ProjTopologyPattern, verbose_name=u'TreePattern')
+    ptpl_orderid = models.IntegerField(max_length=5, verbose_name=u'Sortierreihenfolge')
+
+    class Meta:
+        verbose_name = u'ProjTopologyPatternList'
+        verbose_name_plural = u'ProjTopologyPatternLists'
+        ordering = ['ptpl_name']
+
+    def __unicode__(self):
+        return self.ptpl_name
+
+
+class ProjTopology(models.Model):
+    """
+    ProjTopology for Project Tree
+    """
+    pt_name = models.CharField(max_length=50, verbose_name=u'Bezeichnung')
+    pt_parent = models.ForeignKey('ProjTopology', verbose_name=u'Parent')
+    pt_date = models.DateTimeField(auto_now_add=True, editable=False, verbose_name=u'Erstellt')
+    pt_offdate = models.DateTimeField(auto_now=True, editable=False, verbose_name=u'LastEdit')
+    pt_isoff = models.BooleanField(default=False, verbose_name=u'entfernt')
+    pt_group = models.ForeignKey(Group, verbose_name=u'Gruppe')
+    pt_user = models.ForeignKey(User, default=User, related_name=u'TopologyErsteller')
+    pt_icon = models.ForeignKey(ProjTopologyIcons, verbose_name=u'Tree Icon', default=1)
+    pt_orderid = models.IntegerField(max_length=5, verbose_name=u'Sortierreihenfolge')
+    pt_proj = models.ForeignKey(Project, verbose_name=u'Projekt')
+
+    class Meta:
+        verbose_name = u'ProjTopology'
+        verbose_name_plural = u'ProjTopologys'
+        #ordering = ['pt_order_id']
+
+    def __unicode__(self):
+        return self.pt_name
+
+
+class ProjGroup(models.Model):
+    """
+    ProjGroup for Rightmanagement in Projects
+    - Rights -
+    1 = Admin: Manager + Add Manager and Add Admin
+    2 = Manager: Member + Add Member and Guests + Edit Project-TaskTypes + Edit Project-Topology
+    3 = Member: Guest + Add and Edit Tasks, Documents, Addresses
+    4 = Guest: just Look at and manage gotten Tasks, all Guest shown Project Documents, all Addressis - no Edit
+    Guest must be User
+    """
+    RIGHTS_CHOICES = (
+        (1, 'Admin'),
+        (2, 'Manager'),
+        (3, 'Member'),
+        (4, 'Guest'),
+    )
+    pg_user = models.ForeignKey(User, related_name=u'Benutzer')
+    pg_date = models.DateTimeField(auto_now_add=True, verbose_name=u'Erstellt')
+    pg_offdate = models.DateTimeField(auto_now=True, verbose_name=u'Last Edit')
+    pg_isoff = models.BooleanField(verbose_name=u'entfernt', default=False)
+    pg_right = models.IntegerField(verbose_name=u'Projekt-Recht', choices=RIGHTS_CHOICES, default=4)
+
+    class Meta:
+        verbose_name = u'ProjGroup'
+        verbose_name_plural = u'ProjGroups'
+        ordering = ['pg_user']
+
+    def __unicode__(self):
+        return self.pg_user
+
+
+class DocSticker(models.Model):
+    """
+    DocSticker for stick Doc to ProjTopology, Address or Task
+    """
+    dst_doc = models.ForeignKey(Doc, verbose_name=u'Dokument')
+    dst_adr = models.ForeignKey(Address, verbose_name=u'Adresse', blank=True, null=True)
+    dst_projtopology = models.ForeignKey(ProjTopology, verbose_name=u'Projekt Treenode', blank=True, null=True)
+    dst_task = models.ForeignKey(Task, verbose_name=u'Aufgabe', blank=True, null=True)
+
+    class Meta:
+        verbose_name = u'DocSticker'
+        verbose_name_plural = u'DocStickers'
+        ordering = ['dst_doc']
+
+    def __unicode__(self):
+        return self.dst_doc

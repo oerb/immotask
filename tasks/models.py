@@ -4,6 +4,7 @@ from contacts.models import Address, ContactType
 from django.contrib.auth.models import User, Group
 
 
+
 # Create your models here.
 
 
@@ -33,18 +34,78 @@ class AuthoriseStruct(models.Model):
         return self.as_name
 
 
+class ImmoGroup(models.Model):
+    """
+    ImmoGroup for Administration Rights on a Variaty of Projects
+    """
+    ig_name = models.CharField(verbose_name=u'Name', max_length='50')
+    ig_created = models.DateTimeField(verbose_name=u'Erstellt', editable=False, auto_now_add=True)
+    ig_offdate = models.DateTimeField(verbose_name=u'Last Edit', editable=False, auto_now=True)
+    ig_isoff = models.BooleanField(verbose_name=u'entfernt', default=False)
+    ig_hide = models.BooleanField(verbose_name=u'nicht Anzeigen', default=False)
+    ig_user = models.ForeignKey(User, verbose_name=u'Ersteller', default=User)
+
+    class Meta:
+        verbose_name = u'ImmoGroup'
+        verbose_name_plural = u'ImmoGroups'
+        ordering = ['ig_name']
+
+    def __unicode__(self):
+        return self.ig_name
+
+
 class TaskType(models.Model):
     """
     Tasks Types
     like advice, message, note, report
+
+    ProjTaskType in projects.models need an add by new TaskType
     """
     tt_name = models.CharField(verbose_name=u'Name', max_length=100)
     tt_info = models.CharField(verbose_name=u'Info', max_length=250, blank=True)
-    # tt_authstruct_id = models.ForeignKey(AuthoriseStruct)  # Outdated /For a Structure in Signing the Task to get done
-    tt_template = models.CharField(max_length=50, verbose_name=u'Templatename') # for Printlayout
+    # tt_template = models.CharField(max_length=50, verbose_name=u'Template-Name') # for Printlayout
+    tt_templatefile = models.FileField(upload_to="tasktypes/", verbose_name=u'Template-Datei') # TODO: All in one Dir? > Grouped?
+    tt_date = models.DateTimeField(auto_now_add=True, editable=False, verbose_name=u'Erstellt')
+    tt_offdate = models.DateTimeField(auto_now=True, editable=False, verbose_name=u'Last Edit')
+    tt_isoff = models.BooleanField(default=False, verbose_name=u'entfernt')
+    tt_hide = models.BooleanField(default=False, verbose_name=u'verbergen')
+    tt_group = models.ForeignKey(ImmoGroup, verbose_name=u'Gruppe')
+    tt_parent = models.ForeignKey('TaskType', verbose_name=u'Parent') # for History
 
     def __unicode__(self):
         return self.tt_name
+
+
+class ImmoGroupMember(models.Model):
+    """
+    ImmoGroupMember more in ImmoGroup Class
+    - Rights -
+    1 = Admin: Manager + Add Manager and Add Admin
+    2 = Manager: Member + Add Member and Guests + Edit Group-TaskTypes + Edit Group-ProjTopology
+    3 = Member: Guest + Add Project, is Member of all Group Projects
+    4 = Guest: is Guest of all Group-Projects, just Look at and manage gotten Tasks
+    Guest must be User
+    """
+    RIGHTS_CHOICES = (
+        (1, 'Admin'),
+        (2, 'Manager'),
+        (3, 'Member'),
+        (4, 'Guest'),
+    )
+
+    igm_user = models.ForeignKey(User, related_name=u'Ersteller', default=User)
+    igm_right = models.IntegerField(max_length=1, default=4, verbose_name=u'Gruppenrecht', choices=RIGHTS_CHOICES)
+    igm_date = models.DateTimeField(auto_now_add=True, editable=False, verbose_name=u'Erstellt')
+    igm_offdate = models.DateTimeField(auto_now=True, editable=False, verbose_name=u'last Edit')
+    igm_isoff = models.BooleanField(verbose_name=u'entfernt', default=False) # TODO: Editable False and setTrue by Del
+
+    class Meta:
+        verbose_name = u'ImmoGroupMember'
+        verbose_name_plural = u'ImmoGroupMembers'
+        ordering = ['igm_user']
+
+    def __unicode__(self):
+        return self.igm_user.get_username()
 
 
 class Task(models.Model):
@@ -87,6 +148,7 @@ class TaskDoc(models.Model):
 class TaskTemplateFields(models.Model):
     """
     Matching Address_Data Types to Print Template Layoutfields
+    TODO: autogenerate this from DB
     """
     ttf_company = models.ForeignKey(ContactType, related_name=u'Firma', verbose_name=u'Firma')
     ttf_name = models.ForeignKey(ContactType, related_name=u'Name', verbose_name=u'Name')
@@ -99,5 +161,51 @@ class TaskTemplateFields(models.Model):
     ttf_postboxcode = models.ForeignKey(ContactType, related_name=u'Postfach_Nr', verbose_name=u'Postfach Nr')
     ttf_country = models.ForeignKey(ContactType, related_name=u'Land', verbose_name=u'Land')
     ttf_fax = models.ForeignKey(ContactType, related_name=u'Fax', verbose_name=u'Fax')
+
+
+class TaskTypePattern(models.Model):
+    """
+    TaskTypePattern Choice for Project add
+    """
+
+    ttp_name = models.CharField(max_length=50, verbose_name=u'Bezeichnung')
+    ttp_date = models.DateTimeField(auto_now_add=True, editable=False, verbose_name=u'Erstellt')
+    ttp_offdate = models.DateTimeField(auto_now=True, editable=False, verbose_name=u'Last Edit')
+    ttp_isoff = models.BooleanField(default=False, verbose_name=u'entfernt')
+    ttp_group = models.ForeignKey(ImmoGroup, related_name=u'Gruppenrecht')
+    ttp_user = models.ForeignKey(User, editable=False, verbose_name=u'Ersteller', default=User)
+
+    class Meta:
+        verbose_name = u'TaskTypePattern'
+        verbose_name_plural = u'TaskTypePatterns'
+        #ordering = ['']
+
+    def __unicode__(self):
+        return
+
+
+class TaskTypePatternList(models.Model):
+    """
+    TaskTypePatternList join by Class TaskTypePattern
+
+    For give a New Project a TaskType Pattern
+    """
+    ttpl_name = models.CharField(max_length=50, verbose_name=u'Bezeichnung')
+    ttpl_user = models.ForeignKey(User, related_name=u'TaskTypePattErsteller', default=User, editable=False)
+    ttpl_date = models.DateTimeField(auto_now_add=True, editable=False, verbose_name=u'Erstellt')
+    ttpl_offdate = models.DateTimeField(auto_now=True, editable=False, verbose_name=u'Last Edit')
+    ttpl_parent = models.ForeignKey('TaskTypePatternList', blank=True, null=True, related_name='Parent')
+    ttpl_isof = models.BooleanField(default=False, verbose_name=u'entfernt')
+    ttpl_hide = models.BooleanField(default=False, verbose_name=u'verbergen')
+    ttpl_goup = models.ForeignKey(ImmoGroup, verbose_name=u'Gruppenrecht')
+    ttpl_pattern = models.ForeignKey(TaskTypePattern, related_name=u'TaskType Pattern')
+
+    class Meta:
+        verbose_name = u'TaskTypePatternList'
+        verbose_name_plural = u'TaskTypePatternLists'
+        ordering = ['ttpl_name']
+
+    def __unicode__(self):
+        return self.ttpl_name
 
 
