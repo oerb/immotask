@@ -26,11 +26,22 @@
 </head>
 <body>
     <!-- navbar -->
-    <div class="navbar navbar-default navbar-static-top" role="navigation">
-        <div class="container" >
-            <div class="navbar-collapse collapse">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="container-fluid" >
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#immotask-navbar-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="http://www.github.com/oerb/immotask">Immotask</a>
+            </div>
+            <div class="navbar-collapse collapse" id="immotask-navbar-1">
                 <ul class="nav navbar-nav">
-                    <a class="navbar-text" href="{% url 'proj_choice' %}">Projekt: {{ proj_id }}</a>
+                    <li>
+                       <a href="{% url 'proj_choice' %}">Projekt: {{ proj_id }}</a>
+                    </li>
                     {% include "menu/menu.html" %}
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
@@ -39,7 +50,7 @@
                         <a href="{% url	"logout" %}">logout</a>
                     </li>
                     <li>
-                            <p class="navbar-text navbar-right">Hallo {{ user.username }} </p>
+                        <a href="#"><span class="glyphicon glyphicon-user"> {{ user.username }}</span></a>
                     </li>
                     {% else %}
                     <li>
@@ -47,7 +58,7 @@
                     </li>
                     {% endif %}
                     <li>
-                          <p class="navbar-text navbar-right"> </p>
+
                     </li>
                 </ul>
             </div>
