@@ -5,22 +5,23 @@
     <form class="form-horizontal" role="form" action="" method="post">{% csrf_token %}
         <label class="{% if form.errors %}label-warning{% endif %} col-md-offset-3 col-md-6">{{ form.errors }}</label>
             <div class="form-group col-md-10">
-                <label for="" class="col-md-4 control-label ">{{ form.searchname.label_tag }}</label>
+                <label for="" class="col-md-2 control-label ">{{ form.searchname.label_tag }}</label>
                 <div class="col-md-6">
                     {{ form.searchname }}
                 </div>
             </div>
             <div class="form-group col-md-10">
-                <label for="" class="col-md-4 control-label ">{{ form.email.label_tag }}</label>
+                <label for="" class="col-md-2 control-label ">{{ form.email.label_tag }}</label>
                 <div class="col-md-6">
                     {{ form.email }}
                 </div>
             </div>
+            </br>
         <!-- Nav tabs -->
             <ul class="nav nav-tabs col-md-10">
             {% for field in form %}
             {% if field.is_hidden %}
-                <li {% if forloop.first %}class="active"{% endif %}>
+                <li {% if field.auto_id == 'id_cat-1' %}class="active"{% endif %}>
                     <a href="#{{ field.label }}" data-toggle="tab">{{ field.label }}</a>
                 </li>
             {% endif %}
@@ -36,7 +37,7 @@
             {% endif %}
             {% if field.is_hidden and not field.auto_id == 'id_cat-1' %}
             </div>
-            <div class="tab-pane {% if forloop.first %}active{% endif %}" id="{{ field.label }}">
+            <div class="tab-pane" id="{{ field.label }}">
             {% endif %}
             {% if not field.is_hidden and not field.auto_id == 'id_searchname' and not field.auto_id == 'id_email' %}
                 <div class="form-group">
