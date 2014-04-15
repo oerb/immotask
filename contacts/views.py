@@ -1,7 +1,7 @@
 from contacts.models import Address, Category, ContactType, ContactData, ContactDataFulltext
 from django.shortcuts import get_object_or_404, render, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from contacts.forms import ContactForm, ContactToProjForm
+from contacts.forms import ContactForm, ContactToProjForm #, ContactFormTabs
 from projects.models import ProjectAddress, Project, ProjAdrTyp, Donelist
 from usrsettings.models import Setting
 from django.contrib.auth.decorators import login_required
@@ -111,7 +111,7 @@ def edit_contact(request, address_id):
         adr_data = ContactData.objects.filter(cd_address_id=address_id).order_by('cd_contacttype_id__ct_sort_id')
         for adr_element in adr_data:
             datadict['{index}'.format(index=adr_element.cd_contacttype_id.id)] = adr_element.cd_textfield
-        form = ContactForm(initial=datadict)  # TODO: datadict index out of contacttype_id and catagory_id for Tab's
+        form = ContactForm(initial=datadict) # TODO: datadict index out of contacttype_id and catagory_id for Tab's
         # or send filtered by category and ordered and give a list with the stop-point
     return render(request, 'contacts/edit_contact.html', {'message': message, 'form': form, 'categories': categories})
 
