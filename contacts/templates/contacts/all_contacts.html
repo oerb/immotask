@@ -20,7 +20,7 @@
                 <tbody>
                 {% for address in addresses %}
                     <tr>
-                        <td><a href="{% url "contact_detailtab" address.id 1 %}">{{ address }}</a></td>
+                        <td><a href="{% url "edit_contact" address.id %}">{{ address }}</a></td>
                         <td><a href="mailto:{{ address.adr_email }}">{{ address.adr_email }}</a></td>
                         {% for adr in adr_data %}
                             {% if adr.cd_address_id.id == address.id and adr.cd_contacttype_id.ct_viewshown %}
