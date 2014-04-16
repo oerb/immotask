@@ -1,10 +1,11 @@
 {% extends "base.html" %}
 {%  block title %}Kontakt Bearbeiten{% endblock %}
 {% block content %}
-
     <div class="row">
+    <div class="col-md-12">
     <form class="form-horizontal" role="form" action="" method="post">{% csrf_token %}
     <label class="{% if form.errors %}label-warning{% endif %} col-md-offset-3 col-md-6">{{ form.errors }}</label>
+    </div>
     <div class="panel panel-default">
         </br>
         <div class="panel-title">
@@ -64,5 +65,46 @@
         <span class="glyphicon glyphicon-floppy-disk "></span>
     </button>
     </form>
+{% endblock %}
+{% block banner_right %}
+    <ul class="nav nav-pills nav-stacked">
+        <li>
+            <a href="#">
+                <span class="badge pull-right">4</span>
+                überfällige Meldungen
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <span class="badge pull-right">2</span>
+                neue Meldungen
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                Historie
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                Eigene Meldungen offen
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                Dokumente
+            </a>
+        </li>
+        <li>
+            <a href="{% url "add_projadr" address.id %}">
+                Projekt zuordnen
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                Deaktivieren
+            </a>
+        </li>
 
+    </ul>
 {% endblock %}

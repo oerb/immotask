@@ -113,7 +113,7 @@ def edit_contact(request, address_id):
             datadict['{index}'.format(index=adr_element.cd_contacttype_id.id)] = adr_element.cd_textfield
         form = ContactForm(initial=datadict) # TODO: datadict index out of contacttype_id and catagory_id for Tab's
         # or send filtered by category and ordered and give a list with the stop-point
-    return render(request, 'contacts/edit_contact.html', {'message': message, 'form': form, 'categories': categories})
+    return render(request, 'contacts/edit_contact.html', {'address': adr, 'message': message, 'form': form, 'categories': categories})
 
 
 @login_required

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Anschreiben - Print</title>
+</head>
+<body>
+    <div style="font-size: small;line-height: 80%;">
+        <br/>
+        <br/>
+        <p>{{ company }}</p>
+        <p>{{ streat }}</p>
+        <p>{{ postalcode }} {{ city }}</p>
+        <br/>
+        <br/>
+    </div>
+    <div style="font-size: small;line-height: 80%;text-align: right;">{{ task.ta_date|date:"d.m.Y" }}</div>
+    <div style="font-size: small;line-height: 80%;">
+        <br/>
+        <br/>
+        <h4>{{ task.ta_shorttxt }}</h4>
+        </br>
+        <p>Sehr geehrte Damen und Herren,</p>
+        </br>
+        <p>{{ task.ta_longtxt }}</p>
+        </br>
+        </br>
+        <p>Mit freundlichen Grüßen</p>
+        </br>
+        <p>i.A. Dipl. Ing. Björn Leppin</p>
+        </br>
+        <p>WoGebau Wohn- & Gewerbebauträger GmbH & Co.KG</p>
+        <p>Wohlauer Straße 32, 40721 Hilden</p>
+        </br>
+        <p>Tel. 0049 2103 49 09 32 – Fax 0049 2103 49 09 8032</p>
+        <p>www.wohnbau-derr.de – Mail bjoern_leppin@wohnbau-derr de</p>
+        </br>
+        <p>WoGebau Wohn- & Gewerbebauträger GmbH & Co.KG</p>
+        <p>Amtsgericht Düsseldorf HRA 15954</p>
+        <p>Alleinige Komplementärin:</p>
+        <p>WoGebau Wohn- und Gewerbebauträger GmbH</p>
+        <p>Amtsgericht Düsseldorf HRB 45112</p>
+        <p>Geschäftsführer: T. S. Derr, H.-J. Reinert</p>
+    </div>
+</body>
+</html>

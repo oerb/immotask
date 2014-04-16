@@ -70,7 +70,7 @@ class TaskType(models.Model):
     tt_isoff = models.BooleanField(default=False, verbose_name=u'entfernt')
     tt_hide = models.BooleanField(default=False, verbose_name=u'verbergen')
     tt_group = models.ForeignKey(ImmoGroup, verbose_name=u'Gruppe')
-    tt_parent = models.ForeignKey('TaskType', verbose_name=u'Parent') # for History
+    tt_parent = models.ForeignKey('TaskType', blank=True, null=True, verbose_name=u'Parent') # for History
 
     def __unicode__(self):
         return self.tt_name

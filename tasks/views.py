@@ -12,6 +12,7 @@ from xhtml2pdf import pisa
 from django.utils.six import BytesIO
 from django.template.loader import get_template, Context
 from reportlab.pdfgen import canvas
+from Immotask.settings import MEDIA_ROOT, MEDIA_URL
 
 
 @login_required
@@ -95,6 +96,7 @@ def taskprojview(request, done):
         data['task_header'] = 'Projekt Aufgaben - erledigt'
     else:
         data['task_header'] = 'Projekt Aufgaben - offen'
+    print data
     return render(request, 'tasks/proj_tasks.html', data)
 
 
@@ -128,7 +130,7 @@ def task_detail_print(request, task_id):
 def task_typed_print(request, task_id):
     data = {}
     data['task'] = get_object_or_404(Task, pk=task_id)
-    template = 'tasks/typedprint/' + str(data['task'].ta_tasktype.tt_template)
+    template = str(MEDIA_ROOT) + '/' + str(data['task'].ta_tasktype.tt_templatefile)
     # Example: tasks/typedprint/anschreiben.html
     todata = ContactData.objects.filter(cd_address_id=data['task'].ta_adrid_to.id)
     printfields = TaskTemplateFields.objects.filter(id=1)
@@ -164,7 +166,7 @@ def get_task_pdf(request, task_id):
     else:
         task = get_object_or_404(Task, pk=task_id)
     data['task'] = task  # get_object_or_404(Task, pk=task_id)
-    template = 'tasks/typedprint/' + str(data['task'].ta_tasktype.tt_template)
+    template = 'tasks/' + str(data['task'].ta_tasktype.tt_templatefile)
     # Example: tasks/typedprint/anschreiben.html
     todata = ContactData.objects.filter(cd_address_id=data['task'].ta_adrid_to.id)
     printfields = TaskTemplateFields.objects.filter(id=1)
