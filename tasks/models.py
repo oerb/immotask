@@ -2,6 +2,7 @@ from django.db import models
 from docs.models import Doc
 from contacts.models import Address, ContactType
 from django.contrib.auth.models import User, Group
+from tinymce.models import HTMLField
 
 
 
@@ -63,8 +64,8 @@ class TaskType(models.Model):
     """
     tt_name = models.CharField(verbose_name=u'Name', max_length=100)
     tt_info = models.CharField(verbose_name=u'Info', max_length=250, blank=True)
-    # tt_template = models.CharField(max_length=50, verbose_name=u'Template-Name') # for Printlayout
-    tt_templatefile = models.FileField(upload_to="tasktypes/", verbose_name=u'Template-Datei') # TODO: All in one Dir? > Grouped?
+    tt_template = models.CharField(max_length=50, verbose_name=u'Template-Name') # for Printlayout
+    #tt_templatefile = models.FileField(upload_to="tasktypes/", verbose_name=u'Template-Datei') # TODO: All in one Dir? > Grouped?
     tt_date = models.DateTimeField(auto_now_add=True, editable=False, verbose_name=u'Erstellt')
     tt_offdate = models.DateTimeField(auto_now=True, editable=False, verbose_name=u'Last Edit')
     tt_isoff = models.BooleanField(default=False, verbose_name=u'entfernt')
@@ -113,7 +114,7 @@ class Task(models.Model):
     Tasks
     """
     ta_shorttxt = models.CharField(verbose_name=u'Kurztext', max_length=250)
-    ta_longtxt = models.TextField(verbose_name=u'Meldungstext', blank= True)
+    ta_longtxt = HTMLField(verbose_name=u'Meldungstext', blank= True)
     ta_date = models.DateTimeField(verbose_name=u'Erstellt', editable=False, auto_now_add=True) # for first edit TODO: auto set Date
     ta_editor = models.ForeignKey(User, verbose_name=u'Ersteller', default=User)
     ta_begin = models.DateField(verbose_name=u'Begin', blank=True, null=True)
@@ -181,7 +182,7 @@ class TaskTypePattern(models.Model):
         #ordering = ['']
 
     def __unicode__(self):
-        return
+        return self.ttp_name
 
 
 class TaskTypePatternList(models.Model):

@@ -6,7 +6,7 @@
             <h4 class="panel-heading">{{ task.ta_shorttxt }}</h4>
         </div>
         <div class="panel-body">
-            {{ task.ta_longtxt }}
+            {{ task.ta_longtxt|safe }}
         </div>
             <table class="table">
                 <tbody>

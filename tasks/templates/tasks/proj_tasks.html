@@ -53,3 +53,25 @@
     </a>
 </div>
 {% endblock %}
+{% block banner_left %}
+{% for element in projecttree %}
+    <p>{{ element }}</p>
+{% endfor %}
+<div class="tree well">
+    <ul>
+        <li>
+            <span class="glyphicon glyphicon-folder-open"> Folder</span>
+        <ul>
+            <li>
+                <span class="glyphicon glyphicon-minus-sign"> Minus Child</span>
+            <ul>
+                <li>
+                    <span class="glyphicon glyphicon-leaf"> Leaf</span>
+                </li>
+            </ul>
+            </li>
+        </ul>
+        </li>
+    </ul>
+</div>
+{% endblock %}

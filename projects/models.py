@@ -2,7 +2,7 @@ from django.db import models
 from contacts.models import Address
 from menues.models import Image
 from docs.models import Doc
-from tasks.models import Task, TaskType
+from tasks.models import Task, TaskType, ImmoGroup
 from django.contrib.auth.models import User, Group
 
 
@@ -180,6 +180,39 @@ class DonelistLayer(models.Model):
         info = str(self.dll_level) + " / " + str(self.dll_user_id) + " / " + str(self.dll_tasktype_id)
         return info
 
+RIGHTS_CHOICES = (
+        (1, 'Admin'),
+        (2, 'Manager'),
+        (3, 'Member'),
+        (4, 'Guest'),
+    )
+
+class ProjGroup(models.Model):
+    """
+    ProjGroup for Rightmanagement in Projects
+    - Rights -
+    1 = Admin: Manager + Add Manager and Add Admin
+    2 = Manager: Member + Add Member and Guests + Edit Project-TaskTypes + Edit Project-Topology
+    3 = Member: Guest + Add and Edit Tasks, Documents, Addresses
+    4 = Guest: just Look at and manage gotten Tasks, all Guest shown Project Documents, all Addressis - no Edit
+    Guest must be User
+    """
+
+    pg_user = models.ForeignKey(User, verbose_name=u'Benutzer')
+    pg_date = models.DateTimeField(auto_now_add=True, verbose_name=u'Erstellt')
+    pg_offdate = models.DateTimeField(auto_now=True, verbose_name=u'Last Edit')
+    pg_isoff = models.BooleanField(verbose_name=u'entfernt', default=False)
+    pg_right = models.IntegerField(verbose_name=u'Projekt-Recht', choices=RIGHTS_CHOICES, default=4)
+
+    class Meta:
+        verbose_name = u'ProjGroup'
+        verbose_name_plural = u'ProjGroups'
+        # ordering = ['pg_user']
+
+    def __unicode__(self):
+        info = str(self.pg_user) + " | " + str(self.pg_right)
+        return info
+
 
 class ProjTopologyPattern(models.Model):
     """
@@ -190,7 +223,7 @@ class ProjTopologyPattern(models.Model):
     ptp_date = models.DateTimeField(auto_now_add=True, editable=False, verbose_name=u'Erstellt')
     ptp_offdate = models.DateTimeField(auto_now=True, editable=False, verbose_name=u'LastEdit')
     ptp_isoff = models.BooleanField(default=False, verbose_name=u'entfernt')
-    ptp_group = models.ForeignKey(Group, verbose_name=u'Gruppe')
+    ptp_group = models.IntegerField(max_length=2, choices=RIGHTS_CHOICES, verbose_name=u'Gruppe')
     ptp_user = models.ForeignKey(User, default=User, related_name=u'TopoPatternErsteller')
 
     class Meta:
@@ -227,9 +260,9 @@ class ProjTopologyPatternList(models.Model):
     ptpl_date = models.DateTimeField(auto_now_add=True, editable=False, verbose_name=u'Erstellt')
     ptpl_offdate = models.DateTimeField(auto_now=True, editable=False, verbose_name=u'LastEdit')
     ptpl_isoff = models.BooleanField(default=False, verbose_name=u'entfernt')
-    ptpl_group = models.ForeignKey(Group, verbose_name=u'Gruppe')
+    ptpl_group = models.IntegerField(max_length=2,choices=RIGHTS_CHOICES, verbose_name=u'Projekt-Gruppe')
     ptpl_user = models.ForeignKey(User, default=User, related_name=u'TopoPatListErsteller')
-    ptpl_parent = models.ForeignKey('ProjTopologyPatternList', verbose_name=u'Parent')
+    ptpl_parent = models.ForeignKey('ProjTopologyPatternList', verbose_name=u'Parent', blank=True, null=True)
     ptpl_icon = models.ForeignKey(ProjTopologyIcons, verbose_name=u'Tree Icon', default=1)
     ptpl_pattern = models.ForeignKey(ProjTopologyPattern, verbose_name=u'TreePattern')
     ptpl_orderid = models.IntegerField(max_length=5, verbose_name=u'Sortierreihenfolge')
@@ -248,11 +281,11 @@ class ProjTopology(models.Model):
     ProjTopology for Project Tree
     """
     pt_name = models.CharField(max_length=50, verbose_name=u'Bezeichnung')
-    pt_parent = models.ForeignKey('ProjTopology', verbose_name=u'Parent')
+    pt_parent = models.ForeignKey('ProjTopology', verbose_name=u'Parent', null=True, blank=True)
     pt_date = models.DateTimeField(auto_now_add=True, editable=False, verbose_name=u'Erstellt')
     pt_offdate = models.DateTimeField(auto_now=True, editable=False, verbose_name=u'LastEdit')
     pt_isoff = models.BooleanField(default=False, verbose_name=u'entfernt')
-    pt_group = models.ForeignKey(Group, verbose_name=u'Gruppe')
+    pt_group = models.IntegerField(max_length=2, choices=RIGHTS_CHOICES, verbose_name=u'Projekt-Gruppe')
     pt_user = models.ForeignKey(User, default=User, related_name=u'TopologyErsteller')
     pt_icon = models.ForeignKey(ProjTopologyIcons, verbose_name=u'Tree Icon', default=1)
     pt_orderid = models.IntegerField(max_length=5, verbose_name=u'Sortierreihenfolge')
@@ -265,37 +298,6 @@ class ProjTopology(models.Model):
 
     def __unicode__(self):
         return self.pt_name
-
-
-class ProjGroup(models.Model):
-    """
-    ProjGroup for Rightmanagement in Projects
-    - Rights -
-    1 = Admin: Manager + Add Manager and Add Admin
-    2 = Manager: Member + Add Member and Guests + Edit Project-TaskTypes + Edit Project-Topology
-    3 = Member: Guest + Add and Edit Tasks, Documents, Addresses
-    4 = Guest: just Look at and manage gotten Tasks, all Guest shown Project Documents, all Addressis - no Edit
-    Guest must be User
-    """
-    RIGHTS_CHOICES = (
-        (1, 'Admin'),
-        (2, 'Manager'),
-        (3, 'Member'),
-        (4, 'Guest'),
-    )
-    pg_user = models.ForeignKey(User, related_name=u'Benutzer')
-    pg_date = models.DateTimeField(auto_now_add=True, verbose_name=u'Erstellt')
-    pg_offdate = models.DateTimeField(auto_now=True, verbose_name=u'Last Edit')
-    pg_isoff = models.BooleanField(verbose_name=u'entfernt', default=False)
-    pg_right = models.IntegerField(verbose_name=u'Projekt-Recht', choices=RIGHTS_CHOICES, default=4)
-
-    class Meta:
-        verbose_name = u'ProjGroup'
-        verbose_name_plural = u'ProjGroups'
-        ordering = ['pg_user']
-
-    def __unicode__(self):
-        return self.pg_user
 
 
 class DocSticker(models.Model):

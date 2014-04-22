@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Task, TaskType, TaskDoc, AuthoriseStruct, TaskTemplateFields
 from .forms import TaskForm
 from usrsettings.models import Setting
-from projects.models import ProjTask, Project, Donelist, DonelistLayer
+from projects.models import ProjTask, Project, Donelist, DonelistLayer, ProjTopology
 from django.shortcuts import get_object_or_404, render, redirect
 from contacts.models import ContactData
 from django.contrib.auth.decorators import login_required
@@ -48,14 +48,13 @@ def new_task(request, parent_id):
                     projtask = ProjTask(pt_taskid=task, pt_projid=proj_id)
                     projtask.save()
                     # Adding Donelist Items to Donelist
-                    # ----- Level1 -----
-                    if task.ta_adrid_from.adr_user_id:
-                        donelist = Donelist(dl_projtask_id=projtask,
-                                            dl_user_id=task.ta_adrid_from.adr_user_id,
-                                            dl_level=2
-                                            )
-                        donelist.save()
                     # ----- Level2 -----
+                    donelist = Donelist(dl_projtask_id=projtask,
+                                        dl_user_id=task.ta_adrid_from.adr_user_id,
+                                        dl_level=2
+                                        )
+                    donelist.save()
+                    # ----- Level1 -----
                     if task.ta_adrid_to.adr_user_id:
                         if task.ta_adrid_to.adr_user_id != task.ta_adrid_from.adr_user_id:
                             donelist = Donelist(dl_projtask_id=projtask,
@@ -85,6 +84,7 @@ def taskprojview(request, done):
     Show Open Project-Tasks orderd by Creationdate
     """
     data = {}
+    template = 'tasks/proj_tasks.html'
     current_proj = request.user.setting.se_current_proj.id
     data['donelist'] = Donelist.objects.filter(dl_user_id=request.user, dl_done=done).filter(
         dl_projtask_id__pt_projid=current_proj).order_by('-dl_projtask_id__pt_taskid__ta_date')
@@ -92,12 +92,13 @@ def taskprojview(request, done):
         dl_projtask_id__pt_projid=current_proj).count()
     data['open_count'] = Donelist.objects.filter(dl_user_id=request.user, dl_done=False).filter(
         dl_projtask_id__pt_projid=current_proj).count()
+    data['projecttree'] = ProjTopology.objects.filter(pt_proj=current_proj)
     if done == True:
         data['task_header'] = 'Projekt Aufgaben - erledigt'
     else:
         data['task_header'] = 'Projekt Aufgaben - offen'
     print data
-    return render(request, 'tasks/proj_tasks.html', data)
+    return render(request, template, data)
 
 
 @login_required
@@ -130,7 +131,8 @@ def task_detail_print(request, task_id):
 def task_typed_print(request, task_id):
     data = {}
     data['task'] = get_object_or_404(Task, pk=task_id)
-    template = str(MEDIA_ROOT) + '/' + str(data['task'].ta_tasktype.tt_templatefile)
+    # template = str(MEDIA_ROOT) + '/' + str(data['task'].ta_tasktype.tt_templatefile)
+    template = 'tasks/typedprint/' + str(data['task'].ta_tasktype.tt_template)
     # Example: tasks/typedprint/anschreiben.html
     todata = ContactData.objects.filter(cd_address_id=data['task'].ta_adrid_to.id)
     printfields = TaskTemplateFields.objects.filter(id=1)
@@ -166,7 +168,7 @@ def get_task_pdf(request, task_id):
     else:
         task = get_object_or_404(Task, pk=task_id)
     data['task'] = task  # get_object_or_404(Task, pk=task_id)
-    template = 'tasks/' + str(data['task'].ta_tasktype.tt_templatefile)
+    template = 'tasks/typedprint/' + str(data['task'].ta_tasktype.tt_template)
     # Example: tasks/typedprint/anschreiben.html
     todata = ContactData.objects.filter(cd_address_id=data['task'].ta_adrid_to.id)
     printfields = TaskTemplateFields.objects.filter(id=1)

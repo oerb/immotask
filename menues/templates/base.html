@@ -75,10 +75,10 @@
     </div>
     {% endif %}
     <div class="row">
-        <div class="col-md-2">
+        <div class="col-md-3">
             {% block banner_left %}{% endblock %}
         </div>
-        <div class="col-md-8">
+        <div class="col-md-7">
             {% block content %}{% endblock %}
         </div>
         <div class="col-md-2">
@@ -95,6 +95,8 @@
     <script src="{{ STATIC_URL|default:"/static/" }}assets/js/jquery.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="{{ STATIC_URL|default:"/static/" }}bootstrap/js/bootstrap.min.js"></script>
+    <!-- Include all js for Immotask specials like Treeview -->
+    <script src="{{ STATIC_URL|default:"/static/" }}bootstrap/js/immotask.js"></script>
     {% comment %}
     {% endcomment %}
 </body>
