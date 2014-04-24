@@ -97,7 +97,46 @@ def taskprojview(request, done):
         data['task_header'] = 'Projekt Aufgaben - erledigt'
     else:
         data['task_header'] = 'Projekt Aufgaben - offen'
-    print data
+    return render(request, template, data)
+
+
+@login_required
+def proj_tree(request):
+    """
+    Show Project Tree
+    """
+    data = {}
+    current_tree = []
+    template = 'tasks/proj_tree.html'
+    current_proj = request.user.setting.se_current_proj.id
+    data['done_count'] = Donelist.objects.filter(dl_user_id=request.user, dl_done=True).filter(
+        dl_projtask_id__pt_projid=current_proj).count()
+    data['open_count'] = Donelist.objects.filter(dl_user_id=request.user, dl_done=False).filter(
+        dl_projtask_id__pt_projid=current_proj).count()
+    current_projtree = ProjTopology.objects.filter(pt_proj=current_proj)
+    firstnodes = current_projtree.filter(pt_parent=None)
+    def get_childs(parent_id):
+        return current_projtree.filter(pt_parent=parent_id).order_by('pt_orderid')
+    firstloop = True
+    for node in firstnodes:
+        current_tree.append((True, node, True, firstloop))
+        firstloop = False
+        l1nodes = get_childs(node)
+        firstloop2 = True
+        for l2node in l1nodes:
+            l3nodes = get_childs(l2node)
+            if len(l3nodes) >= 1:
+                current_tree.append((True, l2node, True, firstloop2))
+            else:
+                current_tree.append((False, l2node, True, firstloop2))
+            firstloop2 = False
+            firstloop3 = True
+            for l3node in l3nodes:
+                current_tree.append((False, l3node, True, firstloop3))
+                firstloop3 = False
+            current_tree.append((False, None, False))
+        current_tree.append((False, None, False))
+    data['projecttree'] = current_tree
     return render(request, template, data)
 
 

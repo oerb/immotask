@@ -7,7 +7,10 @@
 
 body {
     margin-bottom: 60px;
+    padding: 10px
 }
+
+
 
 .tree {
     min-height:20px;
@@ -21,6 +24,7 @@ body {
     -webkit-box-shadow:inset 0 1px 1px rgba(0, 0, 0, 0.05);
     -moz-box-shadow:inset 0 1px 1px rgba(0, 0, 0, 0.05);
     box-shadow:inset 0 1px 1px rgba(0, 0, 0, 0.05)
+    -webkit-padding-start: 20px
 }
 .tree li {
     list-style-type:none;
