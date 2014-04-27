@@ -23,6 +23,12 @@
         <script src="{{ STATIC_URL|default:"/static/" }}/html5/html5.js"></script>
         <![endif]-->
 	</div>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="{{ STATIC_URL|default:"/static/" }}assets/js/jquery.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="{{ STATIC_URL|default:"/static/" }}bootstrap/js/bootstrap.min.js"></script>
+    <!-- Include all js for Immotask specials like Treeview -->
+    <script src="{{ STATIC_URL|default:"/static/" }}bootstrap/js/immotask.js"></script>
 </head>
 <body>
     <!-- navbar -->
@@ -91,12 +97,6 @@
                 <a href="/menues/impressum/">Impressum</a></p>
         </div>
     </nav>
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="{{ STATIC_URL|default:"/static/" }}assets/js/jquery.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="{{ STATIC_URL|default:"/static/" }}bootstrap/js/bootstrap.min.js"></script>
-    <!-- Include all js for Immotask specials like Treeview -->
-    <script src="{{ STATIC_URL|default:"/static/" }}bootstrap/js/immotask.js"></script>
     {% comment %}
     {% endcomment %}
 </body>

@@ -1,0 +1,33 @@
+{% extends "tasks/main.html" %}
+{% block treeview %}
+<div class="list-group">
+  <a href="#" class="list-group-item active" onclick="togglehidden('#treediv')">
+      Projektbaum
+  </a>
+</div>
+<div class="tree well" id="treediv" style="overflow: scroll;overflow-x: hidden ;max-height: 200px">
+{% for node in projecttree %}
+    {% comment %}
+    node.0 := True if has Childs
+    node.1 := Data  - None if it is Lastloop
+    node.2 := True if it is Firstloop in same TreeLevel
+    {% endcomment %}
+    {% if forloop.first %}<ul>{% endif %}
+    {% if not node.1 == None %}<li>{% endif %}
+        {% if node.2 %}<span class="glyphicon glyphicon-minus-sign"> {{ node.1 }}</span>
+        <a title="Aufgaben" href="{% url "proj_tasks" %}"> <span class="glyphicon glyphicon-ok-circle"> </span> </a>
+            <a title="Dokumente" href="{% url "proj_tasks" %}"> <span class="glyphicon glyphicon-file"> </span> </a>
+            <a title="Bilder" href="{% url "proj_tasks" %}"> <span class="glyphicon glyphicon-camera"> </span> </a>
+            <a title="Kontakt" href="{% url "proj_tasks" %}"> <span class="glyphicon glyphicon-earphone"> </span> </a>
+        {% endif %}
+    {% if node.0 %}<ul>{% else %}</li>{% endif %}
+    {% if node.1 == None %}</ul><!-- None -->{% endif %}
+{% endfor %}
+</div>
+<ol class="breadcrumb">
+  <li><a href="#">Projektbaum</a></li>
+  <li><a href="#">Planung</a></li>
+  <li class="active">Pläne</li>
+</ol>
+{% endblock %}
+

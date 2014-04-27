@@ -1,0 +1,38 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3>{{ task_header }}</h3>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <td>ID</td>
+                    <td>Kurztext</td>
+                    <td>Datum</td>
+                    <td>an</td>
+                    <td>von</td>
+                    <td>Status</td>
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody>
+            {% for task in donelist %}
+                <tr>
+                    <td><a href="{% url "detail_task" task.dl_projtask_id.pt_taskid.id %}">{{ task.dl_projtask_id.pt_taskid.id }}</a></td>
+                    <td><a href="{% url "detail_task" task.dl_projtask_id.pt_taskid.id %}">{{ task.dl_projtask_id.pt_taskid.ta_shorttxt }}</a></td>
+                    <td>{{ task.dl_projtask_id.pt_taskid.ta_begin|date:"d.m.Y" }}</td>
+                    <td><a href="{% url "contact_detailtab" task.dl_projtask_id.pt_taskid.ta_adrid_to.id 1 %}">{{ task.dl_projtask_id.pt_taskid.ta_adrid_to }}</a></td>
+                    <td><a href="{% url "contact_detailtab" task.dl_projtask_id.pt_taskid.ta_adrid_from.id 1 %}">{{ task.dl_projtask_id.pt_taskid.ta_adrid_from }}</a></td>
+                    <td>
+                        <a href="{% url "done_task" task.id %}">
+                            <span class={% if task.dl_done == False %}"glyphicon glyphicon-unchecked">{% else %}"glyphicon glyphicon-ok"{% endif %}</span>
+                        </a>
+                    </td>
+                    <td><a type="button" class="btn-sm" href="{% url "detail_task" task.dl_projtask_id.pt_taskid.id %}"><span class="glyphicon glyphicon-edit"></span></a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>

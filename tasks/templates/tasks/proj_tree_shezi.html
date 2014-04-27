@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% comment %}
+Project Tree
+{% endcomment %}
+{% block content %}
+<div class="tree well">
+    <button type="button" class="close" aria-hidden="true">&times;</button>
+    <ul style="padding-left: 10px">
+        <li>
+            <span class="glyphicon glyphicon-folder-open"> Immotask</span>
+        <ul>
+            <li>
+                <span class="glyphicon glyphicon-minus-sign"> Planung </span>
+            <ul>
+                <li>
+                    <span class="glyphicon glyphicon-leaf"> Pläne</span>
+                    <a title="Aufgaben" href="{% url "proj_tasks" %}"> <span class="glyphicon glyphicon-ok-circle"> </span> </a>
+                    <a title="Dokumente" href="{% url "proj_tasks" %}"> <span class="glyphicon glyphicon-file"> </span> </a>
+                    <a title="Bilder" href="{% url "proj_tasks" %}"> <span class="glyphicon glyphicon-camera"> </span> </a>
+                    <a title="Kontakt" href="{% url "proj_tasks" %}"> <span class="glyphicon glyphicon-earphone"> </span> </a>
+                </li>
+                <li>
+                    <span class="glyphicon glyphicon-minus-sign"> Ämter</span>
+                    <ul>
+                        <li>
+                            <span class="glyphicon glyphicon-leaf"> Stadt Hilden</span>
+                            <a title="Aufgaben" href="{% url "proj_tasks" %}"> <span class="glyphicon glyphicon-ok-circle"> </span> </a>
+                            <a title="Dokumente" href="{% url "proj_tasks" %}"> <span class="glyphicon glyphicon-file"> </span> </a>
+                            <a title="Bilder" href="{% url "proj_tasks" %}"> <span class="glyphicon glyphicon-camera"> </span> </a>
+                            <a title="Kontakt" href="{% url "proj_tasks" %}"> <span class="glyphicon glyphicon-earphone"> </span> </a>
+                        </li>
+                    </ul>
+
+                </li>
+            </ul>
+            </li>
+            <li>
+                <span class="glyphicon glyphicon-minus-sign"> Bauabschnitte</span>
+                <ul>
+                    <li>
+                        <span class="glyphicon glyphicon-leaf"> KG</span>
+                        <a title="Aufgaben" href="{% url "proj_tasks" %}"> <span class="glyphicon glyphicon-ok-circle"> </span> </a>
+                        <a title="Dokumente" href="{% url "proj_tasks" %}"> <span class="glyphicon glyphicon-file"> </span> </a>
+                        <a title="Bilder" href="{% url "proj_tasks" %}"> <span class="glyphicon glyphicon-camera"> </span> </a>
+                        <a title="Kontakt" href="{% url "proj_tasks" %}"> <span class="glyphicon glyphicon-earphone"> </span> </a>
+                    </li>
+                    <li>
+                        <span class="glyphicon glyphicon-leaf"> EG</span>
+                        <a title="Aufgaben" href="{% url "proj_tasks" %}"> <span class="glyphicon glyphicon-ok-circle"> </span> </a>
+                        <a title="Dokumente" href="{% url "proj_tasks" %}"> <span class="glyphicon glyphicon-file"> </span> </a>
+                        <a title="Bilder" href="{% url "proj_tasks" %}"> <span class="glyphicon glyphicon-camera"> </span> </a>
+                        <a title="Kontakt" href="{% url "proj_tasks" %}"> <span class="glyphicon glyphicon-earphone"> </span> </a>
+                    </li>
+                    <li>
+                        <span class="glyphicon glyphicon-leaf"> 1.OG</span>
+                        <a title="Aufgaben" href="{% url "proj_tasks" %}"> <span class="glyphicon glyphicon-ok-circle"> </span> </a>
+                        <a title="Dokumente" href="{% url "proj_tasks" %}"> <span class="glyphicon glyphicon-file"> </span> </a>
+                        <a title="Bilder" href="{% url "proj_tasks" %}"> <span class="glyphicon glyphicon-camera"> </span> </a>
+                        <a title="Kontakt" href="{% url "proj_tasks" %}"> <span class="glyphicon glyphicon-earphone"> </span> </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        </li>
+    </ul>
+</div>
+{% endblock %}
+{% block banner_right %}
+{% endblock %}
+{% block banner_left %}
+    <div class="tree well">
+      {% tree projecttree %}
+      <ul>                             {# indentation section #}
+      {% for item in tree %}           {# item start #}
+      <li>{{ item.description }}
+          {% subtree item.sub_seq %}
+      </li>
+      {% endfor %}                     {# item end #}
+      </ul>                            {# outdentation section #}
+      {% endtree %}
+    </div>
+{% endblock %}

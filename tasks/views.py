@@ -13,6 +13,7 @@ from django.utils.six import BytesIO
 from django.template.loader import get_template, Context
 from reportlab.pdfgen import canvas
 from Immotask.settings import MEDIA_ROOT, MEDIA_URL
+from extlibs import django_tree_tag
 
 
 @login_required
@@ -99,15 +100,45 @@ def taskprojview(request, done):
         data['task_header'] = 'Projekt Aufgaben - offen'
     return render(request, template, data)
 
+def taskmain(request):
+    """
+    Main View with filled in Tasklists by jquery ( bootstrap/js/immotask.js loadcontent )
+    """
+    data = {}
+    template = 'tasks/main.html'
+    current_proj = request.user.setting.se_current_proj.id
+    data['done_count'] = Donelist.objects.filter(dl_user_id=request.user, dl_done=True).filter(
+        dl_projtask_id__pt_projid=current_proj).count()
+    data['open_count'] = Donelist.objects.filter(dl_user_id=request.user, dl_done=False).filter(
+        dl_projtask_id__pt_projid=current_proj).count()
+    return render(request, template, data)
 
 @login_required
-def proj_tree(request):
+def taskmain_projview(request, done):
+    """
+    Show Open Project-Tasks orderd by Creationdate
+    """
+    data = {}
+    template = 'tasks/proj_tasks_jquery.html'
+    current_proj = request.user.setting.se_current_proj.id
+    data['donelist'] = Donelist.objects.filter(dl_user_id=request.user, dl_done=done).filter(
+        dl_projtask_id__pt_projid=current_proj).order_by('-dl_projtask_id__pt_taskid__ta_date')
+    data['projecttree'] = ProjTopology.objects.filter(pt_proj=current_proj)
+    if done == True:
+        data['task_header'] = 'Projekt Aufgaben - erledigt'
+    else:
+        data['task_header'] = 'Projekt Aufgaben - offen'
+    return render(request, template, data)
+
+
+@login_required
+def proj_tree(request, template):
     """
     Show Project Tree
     """
     data = {}
     current_tree = []
-    template = 'tasks/proj_tree.html'
+    template = template # 'tasks/proj_tree.html'
     current_proj = request.user.setting.se_current_proj.id
     data['done_count'] = Donelist.objects.filter(dl_user_id=request.user, dl_done=True).filter(
         dl_projtask_id__pt_projid=current_proj).count()
@@ -137,6 +168,17 @@ def proj_tree(request):
             current_tree.append((False, None, False))
         current_tree.append((False, None, False))
     data['projecttree'] = current_tree
+    return render(request, template, data)
+
+@login_required
+def proj_tree_shezi(request):
+    """
+    Show Project Tree by Shezi's Lib
+    """
+    data = {}
+    template = 'tasks/proj_tree_shezi.html'
+    current_proj = request.user.setting.se_current_proj.id
+    data['projecttree'] = ProjTopology.objects.filter(pt_proj=current_proj)
     return render(request, template, data)
 
 
@@ -284,3 +326,8 @@ def send_task_byMail(task):
     except Exception, e:
         print "Exception in task/views line 227: " + str(e)
         return False
+
+def testjs(request):
+    data = {}
+    template = 'tasks/testjs.html'
+    return render(request, template, data)
