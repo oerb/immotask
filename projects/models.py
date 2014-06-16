@@ -4,6 +4,7 @@ from menues.models import Image
 from docs.models import Doc
 from tasks.models import Task, TaskType, ImmoGroup
 from django.contrib.auth.models import User, Group
+from mptt.models import MPTTModel, TreeForeignKey
 
 
 class Project(models.Model):
@@ -99,16 +100,17 @@ class ProjTaskType(models.Model):
         return info
 
 
-class ProjStruct(models.Model):
+class ProjStruct(MPTTModel):
     """
     Project Structure
     For structuring the Project
         like House, Room, Development, Basement etc. ...
     """
-    ps_sortid = models.IntegerField(blank=True)
+    ps_projid = models.ForeignKey(Project)
     ps_name = models.CharField(verbose_name=u'Name', max_length=100)
     ps_imgid = models.ForeignKey(Image, blank=True, null=True)  # For Images infront of the Trea
-    ps_parent = models.ForeignKey('self', blank=True, null=True, related_name=u'Parent')
+    ps_parent = TreeForeignKey('self', null=True, blank=True, related_name='children')
+    # OLD: models.ForeignKey('self', blank=True, null=True, related_name=u'Parent')
 
     def __unicode__(self):
         return self.ps_name

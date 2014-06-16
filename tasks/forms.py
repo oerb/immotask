@@ -33,5 +33,3 @@ class TaskForm(forms.Form):
     priority = forms.ChoiceField(choices=priority_choices, required=True, initial='1')
     priority.widget.attrs['class']='form-control'
 
-
-
