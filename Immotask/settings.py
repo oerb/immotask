@@ -1,7 +1,7 @@
 # Django settings for Immotask project.
 
 # working directory hack
-import os
+import os, mptt
 
 ROOT_PATH = os.path.realpath(os.path.dirname(__file__))
 
@@ -142,6 +142,7 @@ INSTALLED_APPS = (
     'tasks',
     'docs',
     'usrsettings',
+    'mptt',
 )
 
 # Template processors by Oerb

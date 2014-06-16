@@ -2,11 +2,7 @@ from django.db import models
 from docs.models import Doc
 from contacts.models import Address, ContactType
 from django.contrib.auth.models import User, Group
-from tinymce.models import HTMLField
-
-
-
-# Create your models here.
+# from tinymce.models import HTMLField TODO: FIX Tinymce SpellCheckFail
 
 
 class AuthoriseStruct(models.Model):
@@ -114,7 +110,7 @@ class Task(models.Model):
     Tasks
     """
     ta_shorttxt = models.CharField(verbose_name=u'Kurztext', max_length=250)
-    ta_longtxt = HTMLField(verbose_name=u'Meldungstext', blank= True)
+    ta_longtxt = models.TextField(verbose_name=u'Meldungstext', blank= True)
     ta_date = models.DateTimeField(verbose_name=u'Erstellt', editable=False, auto_now_add=True) # for first edit TODO: auto set Date
     ta_editor = models.ForeignKey(User, verbose_name=u'Ersteller', default=User)
     ta_begin = models.DateField(verbose_name=u'Begin', blank=True, null=True)

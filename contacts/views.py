@@ -23,6 +23,7 @@ def ct_detail_tab(request, address_id, category_id):
                                                        'category_id': category_id,
                                                        'categories': categories})
 
+
 @login_required
 def proj_contacts(request):
     data = {}
@@ -38,7 +39,6 @@ def proj_contacts(request):
     return render(request, 'contacts/proj_contacts.html', data)
 
 
-
 @login_required
 def all_contacts(request):
     """
@@ -51,34 +51,37 @@ def all_contacts(request):
                                                            'contacttypes':contacttypes})
 
 
-
 @login_required
 def new_contact(request):
-    message = None
+    data = {}
+    template = 'contacts/new_contact.html'
+    data['message'] = None
     if request.method == "POST":
-        form = ContactForm(request.POST)
-        if form.is_valid():
+        data['form'] = ContactForm(request.POST)
+        if data['form'].is_valid():
             # each Address has a User ID # TODO: if email exists - solve this
             passwd = User.objects.make_random_password()
-            user = User(username=form.cleaned_data['searchname'],
-                        email=form.cleaned_data['email'],
+            user = User(username=data['form'].cleaned_data['searchname'],
+                        email=data['form'].cleaned_data['email'],
                         password=passwd)
             user.save()
-            adr = Address(adr_searchname=form.cleaned_data['searchname'],
-                          adr_email=form.cleaned_data['email'],
+            adr = Address(adr_searchname=data['form'].cleaned_data['searchname'],
+                          adr_email=data['form'].cleaned_data['email'],
                           adr_user_id=user,
                           )
             adr.save()
             contacttypes = ContactType.objects.all()
             for ct_type in contacttypes:
                 ctdata = ContactData(cd_contacttype_id=ct_type,
-                                     cd_textfield=form.cleaned_data['{index}'.format(index=ct_type.id)],
+                                     cd_textfield=data['form'].cleaned_data['{index}'.format(index=ct_type.id)],
                                      cd_address_id=adr)
                 ctdata.save()
             return redirect('proj_contacts')
     else:
-        form = ContactForm()
-    return render(request, 'contacts/new_contact.html', {'message': message, 'form': form})
+        data['form'] = ContactForm()
+    print data
+    return render(request, template, data)
+
 
 @login_required
 def edit_contact(request, address_id):

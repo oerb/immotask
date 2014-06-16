@@ -21,6 +21,7 @@ def new_task(request, parent_id):
     """
     New Task
     """
+    template = 'tasks/new_task.html'
     message = None
     if request.method == "POST":
         form = TaskForm(request.POST)
@@ -76,7 +77,8 @@ def new_task(request, parent_id):
             return redirect('proj_tasks')
     else:
         form = TaskForm()
-    return render(request, 'contacts/new_contact.html', {'message': message, 'form': form})
+    print form
+    return render(request, template, {'message': message, 'form': form})
 
 
 @login_required
@@ -100,6 +102,7 @@ def taskprojview(request, done):
         data['task_header'] = 'Projekt Aufgaben - offen'
     return render(request, template, data)
 
+
 def taskmain(request):
     """
     Main View with filled in Tasklists by jquery ( bootstrap/js/immotask.js loadcontent )
@@ -112,6 +115,7 @@ def taskmain(request):
     data['open_count'] = Donelist.objects.filter(dl_user_id=request.user, dl_done=False).filter(
         dl_projtask_id__pt_projid=current_proj).count()
     return render(request, template, data)
+
 
 @login_required
 def taskmain_projview(request, done):
@@ -169,6 +173,7 @@ def proj_tree(request, template):
         current_tree.append((False, None, False))
     data['projecttree'] = current_tree
     return render(request, template, data)
+
 
 @login_required
 def proj_tree_shezi(request):
@@ -326,6 +331,7 @@ def send_task_byMail(task):
     except Exception, e:
         print "Exception in task/views line 227: " + str(e)
         return False
+
 
 def testjs(request):
     data = {}
