@@ -108,8 +108,8 @@ class ProjStruct(MPTTModel):
     """
     ps_projid = models.ForeignKey(Project)
     ps_name = models.CharField(verbose_name=u'Name', max_length=100)
-    ps_imgid = models.ForeignKey(Image, blank=True, null=True)  # For Images infront of the Trea
-    ps_parent = TreeForeignKey('self', null=True, blank=True, related_name='children')
+    ps_imgid = models.ForeignKey(Image, blank=True, null=True)  # For Images infront of the Tree
+    parent = TreeForeignKey('self', null=True, blank=True, related_name='children')
     # OLD: models.ForeignKey('self', blank=True, null=True, related_name=u'Parent')
 
     def __unicode__(self):

@@ -5,24 +5,36 @@
       Projektbaum
   </a>
 </div>
+{% load mptt_tags %}
 <div class="tree well" id="treediv" style="overflow: scroll;overflow-x: hidden ;max-height: 200px">
-{% for node in projecttree %}
-    {% comment %}
-    node.0 := True if has Childs
-    node.1 := Data  - None if it is Lastloop
-    node.2 := True if it is Firstloop in same TreeLevel
-    {% endcomment %}
-    {% if forloop.first %}<ul>{% endif %}
-    {% if not node.1 == None %}<li>{% endif %}
-        {% if node.2 %}<span class="glyphicon glyphicon-minus-sign"> {{ node.1 }}</span>
-        <a title="Aufgaben" href="{% url "proj_tasks" %}"> <span class="glyphicon glyphicon-ok-circle"> </span> </a>
-            <a title="Dokumente" href="{% url "proj_tasks" %}"> <span class="glyphicon glyphicon-file"> </span> </a>
-            <a title="Bilder" href="{% url "proj_tasks" %}"> <span class="glyphicon glyphicon-camera"> </span> </a>
-            <a title="Kontakt" href="{% url "proj_tasks" %}"> <span class="glyphicon glyphicon-earphone"> </span> </a>
+    <button type="button" class="close" aria-hidden="true">&times;</button>
+    <ul style="padding-left: 10px">
+    {% recursetree nodes %}
+        <li>
+        {% if node.is_root_node %}
+            <span class="glyphicon glyphicon-folder-open"> {{ node.ps_name }}</span>
         {% endif %}
-    {% if node.0 %}<ul>{% else %}</li>{% endif %}
-    {% if node.1 == None %}</ul><!-- None -->{% endif %}
-{% endfor %}
+        {% if node.is_child_node and not node.is_leaf_node %}
+            <span class="glyphicon glyphicon-folder-open"> {{ node.ps_name }}</span>
+            <a title="Aufgaben" href="#"> <span class="glyphicon glyphicon-ok-circle"> </span> </a>
+            <a title="Dokumente" href="#"> <span class="glyphicon glyphicon-file"> </span> </a>
+            <a title="Bilder" href="#"> <span class="glyphicon glyphicon-camera"> </span> </a>
+            <a title="Kontakt" href="#"> <span class="glyphicon glyphicon-earphone"> </span> </a>
+        {% elif node.is_child_node and node.is_leaf_node %}
+            <span class="glyphicon glyphicon-leaf"> {{ node.ps_name }}</span>
+            <a title="Aufgaben" href="#"> <span class="glyphicon glyphicon-ok-circle"> </span> </a>
+            <a title="Dokumente" href="#"> <span class="glyphicon glyphicon-file"> </span> </a>
+            <a title="Bilder" href="#"> <span class="glyphicon glyphicon-camera"> </span> </a>
+            <a title="Kontakt" href="#"> <span class="glyphicon glyphicon-earphone"> </span> </a>
+        {% endif %}
+        {% if not node.is_leaf_node %}
+            <ul>
+                {{ children }}
+            </ul>
+        {% endif %}
+        </li>
+    {% endrecursetree %}
+    </ul>
 </div>
 <ol class="breadcrumb">
   <li><a href="#">Projektbaum</a></li>

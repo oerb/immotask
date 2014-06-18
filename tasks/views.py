@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Task, TaskType, TaskDoc, AuthoriseStruct, TaskTemplateFields
 from .forms import TaskForm
 from usrsettings.models import Setting
-from projects.models import ProjTask, Project, Donelist, DonelistLayer, ProjTopology
+from projects.models import ProjTask, Project, Donelist, DonelistLayer, ProjTopology, ProjStruct
 from django.shortcuts import get_object_or_404, render, redirect
 from contacts.models import ContactData
 from django.contrib.auth.decorators import login_required
@@ -73,7 +73,7 @@ def new_task(request, parent_id):
                                                 dl_level=dl_layer_item.dll_level
                                                 )
                             donelist.save()
-                send_task_byMail(task)
+                # send_task_byMail(task) TODO: Mail delivery System
             return redirect('proj_tasks')
     else:
         form = TaskForm()
@@ -149,6 +149,7 @@ def proj_tree(request, template):
     data['open_count'] = Donelist.objects.filter(dl_user_id=request.user, dl_done=False).filter(
         dl_projtask_id__pt_projid=current_proj).count()
     current_projtree = ProjTopology.objects.filter(pt_proj=current_proj)
+    data['nodes']= ProjStruct.objects.filter(ps_projid=current_proj)
     firstnodes = current_projtree.filter(pt_parent=None)
     def get_childs(parent_id):
         return current_projtree.filter(pt_parent=parent_id).order_by('pt_orderid')
