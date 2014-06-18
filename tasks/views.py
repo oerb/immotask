@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Task, TaskType, TaskDoc, AuthoriseStruct, TaskTemplateFields
 from .forms import TaskForm
 from usrsettings.models import Setting
-from projects.models import ProjTask, Project, Donelist, DonelistLayer, ProjTopology, ProjStruct
+from projects.models import ProjTask, Project, Donelist, DonelistLayer, ProjStruct # ProjTopology,
 from django.shortcuts import get_object_or_404, render, redirect
 from contacts.models import ContactData
 from django.contrib.auth.decorators import login_required
@@ -24,7 +24,7 @@ def new_task(request, parent_id):
     template = 'tasks/new_task.html'
     message = None
     if request.method == "POST":
-        form = TaskForm(request.POST)
+        form = TaskForm(data=request.POST, user = request.user)
         if form.is_valid():
             task = Task(ta_shorttxt=form.cleaned_data['shorttxt'],
                         ta_longtxt=form.cleaned_data['longtxt'],
@@ -47,7 +47,7 @@ def new_task(request, parent_id):
             if usrsetting:
                 for pid in usrsetting:
                     proj_id = pid.se_current_proj
-                    projtask = ProjTask(pt_taskid=task, pt_projid=proj_id)
+                    projtask = ProjTask(pt_taskid=task, pt_projid=proj_id, pt_projstructid=form.cleaned_data['tree'])
                     projtask.save()
                     # Adding Donelist Items to Donelist
                     # ----- Level2 -----
@@ -76,7 +76,7 @@ def new_task(request, parent_id):
                 # send_task_byMail(task) TODO: Mail delivery System
             return redirect('proj_tasks')
     else:
-        form = TaskForm()
+        form = TaskForm(user = request.user)
     print form
     return render(request, template, {'message': message, 'form': form})
 
@@ -95,7 +95,7 @@ def taskprojview(request, done):
         dl_projtask_id__pt_projid=current_proj).count()
     data['open_count'] = Donelist.objects.filter(dl_user_id=request.user, dl_done=False).filter(
         dl_projtask_id__pt_projid=current_proj).count()
-    data['projecttree'] = ProjTopology.objects.filter(pt_proj=current_proj)
+    #data['projecttree'] = ProjTopology.objects.filter(pt_proj=current_proj)
     if done == True:
         data['task_header'] = 'Projekt Aufgaben - erledigt'
     else:
@@ -118,7 +118,7 @@ def taskmain(request):
 
 
 @login_required
-def taskmain_projview(request, done):
+def taskmain_projview(request, tree_id, done=False ):
     """
     Show Open Project-Tasks orderd by Creationdate
     """
@@ -126,8 +126,8 @@ def taskmain_projview(request, done):
     template = 'tasks/proj_tasks_jquery.html'
     current_proj = request.user.setting.se_current_proj.id
     data['donelist'] = Donelist.objects.filter(dl_user_id=request.user, dl_done=done).filter(
-        dl_projtask_id__pt_projid=current_proj).order_by('-dl_projtask_id__pt_taskid__ta_date')
-    data['projecttree'] = ProjTopology.objects.filter(pt_proj=current_proj)
+        dl_projtask_id__pt_projid=current_proj, dl_projtask_id__pt_projstructid=tree_id).order_by('-dl_projtask_id__pt_taskid__ta_date')
+    #data['projecttree'] = ProjTopology.objects.filter(pt_proj=current_proj)
     if done == True:
         data['task_header'] = 'Projekt Aufgaben - erledigt'
     else:
@@ -148,8 +148,9 @@ def proj_tree(request, template):
         dl_projtask_id__pt_projid=current_proj).count()
     data['open_count'] = Donelist.objects.filter(dl_user_id=request.user, dl_done=False).filter(
         dl_projtask_id__pt_projid=current_proj).count()
-    current_projtree = ProjTopology.objects.filter(pt_proj=current_proj)
+    #current_projtree = ProjTopology.objects.filter(pt_proj=current_proj)
     data['nodes']= ProjStruct.objects.filter(ps_projid=current_proj)
+    """
     firstnodes = current_projtree.filter(pt_parent=None)
     def get_childs(parent_id):
         return current_projtree.filter(pt_parent=parent_id).order_by('pt_orderid')
@@ -173,6 +174,7 @@ def proj_tree(request, template):
             current_tree.append((False, None, False))
         current_tree.append((False, None, False))
     data['projecttree'] = current_tree
+    """
     return render(request, template, data)
 
 

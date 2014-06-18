@@ -2,7 +2,7 @@
 {% block content %}
 {% block treeview %}{% endblock %}
 <div name="tasklist" id="tasklist">
-    <script type="text/javascript">loadcontent('{% url "proj_tasks_jq" %}', '#tasklist');</script>
+    <script type="text/javascript">loadcontent('{% url "proj_tasks_tree_jq" tree_id=0 %}', '#tasklist');</script>
 </div>
 {% endblock %}
 {% block banner_right %}

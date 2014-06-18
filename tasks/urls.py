@@ -9,8 +9,9 @@ urlpatterns = patterns('',
                        url(r'^view/done/$', taskprojview, {'done': True}, name='proj_tasks_done'),
                        # switching to Ajax fills by jquery for tasks
                        url(r'^main/$', taskmain, name='tasks_main'),
-                       url(r'^main/open/$', taskmain_projview, {'done': False}, name='proj_tasks_jq'),
+                       url(r'^main/open/$', taskmain_projview, {'done': False, 'tree_id': 1}, name='proj_tasks_jq'),
                        url(r'^main/done/$', taskmain_projview, {'done': True}, name='proj_tasks_done_jq'),
+                       url(r'^main/done/(?P<tree_id>\d+)/$', taskmain_projview, name='proj_tasks_tree_jq'),
                        # switching to Ajax end
                        url(r'^project-tree/$', proj_tree, {'template': 'tasks/proj_tree.html'}, name='proj_tree'),
                        url(r'^project-tree-jq/$', proj_tree,

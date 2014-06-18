@@ -16,13 +16,13 @@
         {% endif %}
         {% if node.is_child_node and not node.is_leaf_node %}
             <span class="glyphicon glyphicon-folder-open"> {{ node.ps_name }}</span>
-            <a title="Aufgaben" href="#"> <span class="glyphicon glyphicon-ok-circle"> </span> </a>
+            <a title="Aufgaben" href="#" onclick="loadcontent('{% url "proj_tasks_tree_jq" node.id %}', '#tasklist');"> <span class="glyphicon glyphicon-ok-circle"> </span> </a>
             <a title="Dokumente" href="#"> <span class="glyphicon glyphicon-file"> </span> </a>
             <a title="Bilder" href="#"> <span class="glyphicon glyphicon-camera"> </span> </a>
             <a title="Kontakt" href="#"> <span class="glyphicon glyphicon-earphone"> </span> </a>
         {% elif node.is_child_node and node.is_leaf_node %}
             <span class="glyphicon glyphicon-leaf"> {{ node.ps_name }}</span>
-            <a title="Aufgaben" href="#"> <span class="glyphicon glyphicon-ok-circle"> </span> </a>
+            <a title="Aufgaben" href="#" onclick="loadcontent('{% url "proj_tasks_tree_jq" node.id %}', '#tasklist');"> <span class="glyphicon glyphicon-ok-circle"> </span> </a>
             <a title="Dokumente" href="#"> <span class="glyphicon glyphicon-file"> </span> </a>
             <a title="Bilder" href="#"> <span class="glyphicon glyphicon-camera"> </span> </a>
             <a title="Kontakt" href="#"> <span class="glyphicon glyphicon-earphone"> </span> </a>

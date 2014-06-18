@@ -74,6 +74,24 @@ class ProjDataLayer(models.Model):
         return self.pdl_name
 
 
+class ProjStruct(MPTTModel):
+    """
+    Project Structure
+    For structuring the Project
+        like House, Room, Development, Basement etc. ...
+        using MPTT for a TreeStructured Model
+    """
+    ps_projid = models.ForeignKey(Project)
+    ps_name = models.CharField(verbose_name=u'Name', max_length=100)
+    ps_imgid = models.ForeignKey(Image, blank=True, null=True)  # For Images infront of the Tree
+    parent = TreeForeignKey('self', null=True, blank=True, related_name='children')
+    # OLD: models.ForeignKey('self', blank=True, null=True, related_name=u'Parent')
+
+    def __unicode__(self):
+        info = self.ps_name.encode('utf-8') + ' /Tree-id= ' + str(self.id).encode('utf-8')
+        return info
+
+
 class ProjTask(models.Model):
     """
     Project Tasks
@@ -81,6 +99,7 @@ class ProjTask(models.Model):
     """
     pt_taskid = models.ForeignKey(Task)
     pt_projid = models.ForeignKey(Project)
+    pt_projstructid = models.ForeignKey(ProjStruct)
 
     def __unicode__(self):
         info = "Projekt: " + str(self.pt_projid.id) + " - " + str(self.pt_projid.pro_name) \
@@ -98,22 +117,6 @@ class ProjTaskType(models.Model):
     def __unicode__(self):
         info = "TaskType: " + str(self.ptty_tasktypeid.tt_name) + " / Project: " + str(self.ptty_projectid.pro_name)
         return info
-
-
-class ProjStruct(MPTTModel):
-    """
-    Project Structure
-    For structuring the Project
-        like House, Room, Development, Basement etc. ...
-    """
-    ps_projid = models.ForeignKey(Project)
-    ps_name = models.CharField(verbose_name=u'Name', max_length=100)
-    ps_imgid = models.ForeignKey(Image, blank=True, null=True)  # For Images infront of the Tree
-    parent = TreeForeignKey('self', null=True, blank=True, related_name='children')
-    # OLD: models.ForeignKey('self', blank=True, null=True, related_name=u'Parent')
-
-    def __unicode__(self):
-        return self.ps_name
 
 
 class ProjData(models.Model):
@@ -215,11 +218,12 @@ class ProjGroup(models.Model):
         info = str(self.pg_user) + " | " + str(self.pg_right)
         return info
 
-
+"""
 class ProjTopologyPattern(models.Model):
-    """
-    ProjTopologyPattern for a ProjectTree Pattern
-    """
+
+    # ProjTopologyPattern for a ProjectTree Pattern
+    # TODO: Purge this because is all done in ProjStruct
+
     ptp_name = models.CharField(max_length=50, verbose_name=u'Bezeichnung')
     ptp_info = models.CharField(max_length=250, verbose_name=u'Info')
     ptp_date = models.DateTimeField(auto_now_add=True, editable=False, verbose_name=u'Erstellt')
@@ -238,9 +242,9 @@ class ProjTopologyPattern(models.Model):
 
 
 class ProjTopologyIcons(models.Model):
-    """
-    ProjTopologyIcons for nice Tree Icons
-    """
+
+    #ProjTopologyIcons for nice Tree Icons
+
     pti_name = models.CharField(max_length=50, verbose_name=u'Bezeichnung')
     pti_file = models.ImageField(upload_to='topologyIcons/')
     pti_hide = models.BooleanField(default=False, verbose_name=u'verbergen')
@@ -255,9 +259,9 @@ class ProjTopologyIcons(models.Model):
 
 
 class ProjTopologyPatternList(models.Model):
-    """
-    ProjTopologyPatternList for a ProjectTree Pattern
-    """
+
+    # ProjTopologyPatternList for a ProjectTree Pattern
+
     ptpl_name = models.CharField(max_length=50, verbose_name=u'Bezeichnung')
     ptpl_date = models.DateTimeField(auto_now_add=True, editable=False, verbose_name=u'Erstellt')
     ptpl_offdate = models.DateTimeField(auto_now=True, editable=False, verbose_name=u'LastEdit')
@@ -279,9 +283,9 @@ class ProjTopologyPatternList(models.Model):
 
 
 class ProjTopology(models.Model):
-    """
-    ProjTopology for Project Tree
-    """
+
+    #ProjTopology for Project Tree
+
     pt_name = models.CharField(max_length=50, verbose_name=u'Bezeichnung')
     pt_parent = models.ForeignKey('ProjTopology', verbose_name=u'Parent', null=True, blank=True)
     pt_date = models.DateTimeField(auto_now_add=True, editable=False, verbose_name=u'Erstellt')
@@ -303,9 +307,9 @@ class ProjTopology(models.Model):
 
 
 class DocSticker(models.Model):
-    """
-    DocSticker for stick Doc to ProjTopology, Address or Task
-    """
+
+    #DocSticker for stick Doc to ProjTopology, Address or Task
+
     dst_doc = models.ForeignKey(Doc, verbose_name=u'Dokument')
     dst_adr = models.ForeignKey(Address, verbose_name=u'Adresse', blank=True, null=True)
     dst_projtopology = models.ForeignKey(ProjTopology, verbose_name=u'Projekt Treenode', blank=True, null=True)
@@ -318,3 +322,4 @@ class DocSticker(models.Model):
 
     def __unicode__(self):
         return self.dst_doc
+"""
