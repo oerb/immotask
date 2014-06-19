@@ -10,7 +10,7 @@ urlpatterns = patterns('',
                        # switching to Ajax fills by jquery for tasks
                        url(r'^main/$', taskmain, name='tasks_main'),
                        url(r'^main/open/$', taskmain_projview, {'done': False, 'tree_id': 1}, name='proj_tasks_jq'),
-                       url(r'^main/done/(?P<tree_id>\d+)/$', taskmain_projview, name='proj_tasks_done_jq'),
+                       url(r'^main/done/(?P<tree_id>\d+)/(?P<done>\w+)$', taskmain_projview,name='proj_tasks_done_jq'),
                        url(r'^main/open/(?P<tree_id>\d+)/$', taskmain_projview, name='proj_tasks_tree_jq'),
                        url(r'^main/sitebar/(?P<tree_id>\d+)/$', proj_tasks_sidebar, name='proj_tasks_sitebar'),
                        # switching to Ajax end

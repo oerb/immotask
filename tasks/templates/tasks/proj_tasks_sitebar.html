@@ -9,7 +9,7 @@
     <a class="list-group-item" href="#" onclick="loadcontent('{% url "proj_tasks_tree_jq" currentnode %}', '#tasklist');">
         offen<span class="badge pull-right">{{ open_count }}</span>
     </a>
-    <a class="list-group-item" href="#" onclick="loadcontent('{% url "proj_tasks_done_jq" tree_id=currentnode %}', '#tasklist');">
+    <a class="list-group-item" href="#" onclick="loadcontent('{% url "proj_tasks_done_jq" tree_id=currentnode done=False %}', '#tasklist');">
         erledigt<span class="badge pull-right">{{ done_count }}</span>
     </a>
 </div>

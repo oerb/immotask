@@ -315,7 +315,7 @@ def set_task_done(request, task_id):
     else:
         donelist_task.dl_done = True
     donelist_task.save()
-    return taskprojview(request, done=viewstate)
+    return redirect('proj_tree_jq')
 
 
 def send_task_byMail(task):
