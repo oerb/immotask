@@ -6,25 +6,7 @@
 </div>
 {% endblock %}
 {% block banner_right %}
-<div class="list-group">
-    <p class="list-group-item-heading">Aufgaben</p>
-    <a class="list-group-item" href="{% url "new_task" 0 %}">
-        erstellen <span class="glyphicon glyphicon-plus pull-right"></span>
-    </a>
-    <a class="list-group-item" href="#" onclick="loadcontent('{% url "proj_tasks_jq" %}', '#tasklist');">
-        offen<span class="badge pull-right">{{ open_count }}</span>
-    </a>
-    <a class="list-group-item" href="#" onclick="loadcontent('{% url "proj_tasks_done_jq" %}', '#tasklist');">
-        erledigt<span class="badge pull-right">{{ done_count }}</span>
-    </a>
-</div>
-<div class="list-group">
-    <p class="list-group-item-heading">Dokument</p>
-    <a class="list-group-item" href="{% url "new_task" 0 %}">
-        erstellen <span class="glyphicon glyphicon-plus pull-right"></span>
-    </a>
-    <a class="list-group-item" href="{% url "new_task" 0 %}">
-        anzeigen <span class="glyphicon glyphicon-edit pull-right"></span>
-    </a>
+<div name="tasklist" id="sitebar">
+    <script type="text/javascript">loadcontent('{% url "proj_tasks_sitebar" tree_id=0 %}', '#sitebar');</script>
 </div>
 {% endblock %}

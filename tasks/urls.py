@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, url
 from .views import set_proj_view, task_detail, task_typed_print, task_detail_print, set_task_done
-from .views import taskprojview, get_task_pdf, proj_tree, testjs, taskmain, taskmain_projview
+from .views import taskprojview, get_task_pdf, proj_tree, testjs, taskmain, taskmain_projview, proj_tasks_sidebar
 from .views import new_task
 urlpatterns = patterns('',
                        url(r'^new/(?P<parent_id>\d+)$', new_task, name='new_task'),
@@ -10,8 +10,9 @@ urlpatterns = patterns('',
                        # switching to Ajax fills by jquery for tasks
                        url(r'^main/$', taskmain, name='tasks_main'),
                        url(r'^main/open/$', taskmain_projview, {'done': False, 'tree_id': 1}, name='proj_tasks_jq'),
-                       url(r'^main/done/$', taskmain_projview, {'done': True}, name='proj_tasks_done_jq'),
-                       url(r'^main/done/(?P<tree_id>\d+)/$', taskmain_projview, name='proj_tasks_tree_jq'),
+                       url(r'^main/done/(?P<tree_id>\d+)/$', taskmain_projview, name='proj_tasks_done_jq'),
+                       url(r'^main/open/(?P<tree_id>\d+)/$', taskmain_projview, name='proj_tasks_tree_jq'),
+                       url(r'^main/sitebar/(?P<tree_id>\d+)/$', proj_tasks_sidebar, name='proj_tasks_sitebar'),
                        # switching to Ajax end
                        url(r'^project-tree/$', proj_tree, {'template': 'tasks/proj_tree.html'}, name='proj_tree'),
                        url(r'^project-tree-jq/$', proj_tree,

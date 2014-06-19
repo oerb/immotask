@@ -136,9 +136,10 @@ def taskmain_projview(request, tree_id, done=False ):
         data['treemenu'] = []
         data['donelist'] = Donelist.objects.filter(dl_user_id=request.user, dl_done=done).filter(
         dl_projtask_id__pt_projid=current_proj).order_by('-dl_projtask_id__pt_taskid__ta_date')
-
+        data['currentnode'] = 1
     else:
         current_node = get_object_or_404(ProjStruct ,pk=tree_id)
+        data['currentnode'] = current_node.id
         if current_node.is_root_node():
             data['treemenu'] = []
             data['donelist'] = Donelist.objects.filter(dl_user_id=request.user, dl_done=done).filter(
@@ -148,18 +149,44 @@ def taskmain_projview(request, tree_id, done=False ):
             data['donelist'] = Donelist.objects.filter(dl_user_id=request.user, dl_done=done).filter(
             dl_projtask_id__pt_projid=current_proj,
             dl_projtask_id__pt_projstructid=tree_id).order_by('-dl_projtask_id__pt_taskid__ta_date')
-
             treemenu.append(current_node)
             while go:
                 if current_node.is_child_node():
                     current_node = current_node.parent
                     treemenu.append(current_node)
-                    print "Node: "
                 else:
                     go = False
                     break
     treemenu.reverse()
     data['treemenu'] = treemenu
+    return render(request, template, data)
+
+
+@login_required
+def proj_tasks_sidebar(request, tree_id):
+    data = {}
+    template = 'tasks/proj_tasks_sitebar.html'
+    current_proj = request.user.setting.se_current_proj.id
+    if tree_id == "0":
+        data['open_count'] = Donelist.objects.filter(dl_user_id=request.user, dl_done=False).filter(
+        dl_projtask_id__pt_projid=current_proj).count()
+        data['done_count'] = Donelist.objects.filter(dl_user_id=request.user, dl_done=True).filter(
+        dl_projtask_id__pt_projid=current_proj).count()
+    else:
+        current_node = get_object_or_404(ProjStruct ,pk=tree_id)
+        if current_node.is_root_node():
+            data['open_count'] = Donelist.objects.filter(dl_user_id=request.user, dl_done=False).filter(
+            dl_projtask_id__pt_projid=current_proj).count()
+            data['done_count'] = Donelist.objects.filter(dl_user_id=request.user, dl_done=True).filter(
+            dl_projtask_id__pt_projid=current_proj).count()
+        else:
+            data['open_count'] = Donelist.objects.filter(dl_user_id=request.user, dl_done=False).filter(
+            dl_projtask_id__pt_projid=current_proj,
+            dl_projtask_id__pt_projstructid=tree_id).count()
+            data['done_count'] = Donelist.objects.filter(dl_user_id=request.user, dl_done=True).filter(
+            dl_projtask_id__pt_projid=current_proj,
+            dl_projtask_id__pt_projstructid=tree_id).count()
+    data['currentnode']=tree_id
     return render(request, template, data)
 
 

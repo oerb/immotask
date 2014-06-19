@@ -1,0 +1,24 @@
+<div>
+    <p>Current Node: {{ currentnode }}</p>
+</div>
+<div class="list-group">
+    <p class="list-group-item-heading">Aufgaben</p>
+    <a class="list-group-item" href="{% url "new_task" 0 %}">
+        erstellen <span class="glyphicon glyphicon-plus pull-right"></span>
+    </a>
+    <a class="list-group-item" href="#" onclick="loadcontent('{% url "proj_tasks_tree_jq" currentnode %}', '#tasklist');">
+        offen<span class="badge pull-right">{{ open_count }}</span>
+    </a>
+    <a class="list-group-item" href="#" onclick="loadcontent('{% url "proj_tasks_done_jq" tree_id=currentnode %}', '#tasklist');">
+        erledigt<span class="badge pull-right">{{ done_count }}</span>
+    </a>
+</div>
+<div class="list-group">
+    <p class="list-group-item-heading">Dokument</p>
+    <a class="list-group-item" href="{% url "new_task" 0 %}">
+        erstellen <span class="glyphicon glyphicon-plus pull-right"></span>
+    </a>
+    <a class="list-group-item" href="{% url "new_task" 0 %}">
+        anzeigen <span class="glyphicon glyphicon-edit pull-right"></span>
+    </a>
+</div>
