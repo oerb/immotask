@@ -3,7 +3,7 @@ from .views import set_proj_view, task_detail, task_typed_print, task_detail_pri
 from .views import taskprojview, get_task_pdf, proj_tree, testjs, taskmain, taskmain_projview, proj_tasks_sidebar
 from .views import new_task
 urlpatterns = patterns('',
-                       url(r'^new/(?P<parent_id>\d+)$', new_task, name='new_task'),
+                       url(r'^new/(?P<parent_id>\d+)/(?P<tree_id>\d+)$', new_task, name='new_task'),
                        # url(r'^edit/(?P<task_id>\d+)$', 'task.views.edit_task', name='edit_task'),
                        url(r'^view/$', taskprojview, {'done': False}, name='proj_tasks'),
                        url(r'^view/done/$', taskprojview, {'done': True}, name='proj_tasks_done'),

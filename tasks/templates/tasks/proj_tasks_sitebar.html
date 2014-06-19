@@ -3,7 +3,7 @@
 </div>
 <div class="list-group">
     <p class="list-group-item-heading">Aufgaben</p>
-    <a class="list-group-item" href="{% url "new_task" 0 %}">
+    <a class="list-group-item" href="{% url "new_task" parent_id=0 tree_id=currentnode %}">
         erstellen <span class="glyphicon glyphicon-plus pull-right"></span>
     </a>
     <a class="list-group-item" href="#" onclick="loadcontent('{% url "proj_tasks_tree_jq" currentnode %}', '#tasklist');">
@@ -15,10 +15,10 @@
 </div>
 <div class="list-group">
     <p class="list-group-item-heading">Dokument</p>
-    <a class="list-group-item" href="{% url "new_task" 0 %}">
+    <a class="list-group-item" href="#">
         erstellen <span class="glyphicon glyphicon-plus pull-right"></span>
     </a>
-    <a class="list-group-item" href="{% url "new_task" 0 %}">
+    <a class="list-group-item" href="#">
         anzeigen <span class="glyphicon glyphicon-edit pull-right"></span>
     </a>
 </div>

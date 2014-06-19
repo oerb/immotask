@@ -16,8 +16,9 @@ from Immotask.settings import MEDIA_ROOT, MEDIA_URL
 from extlibs import django_tree_tag
 
 
+
 @login_required
-def new_task(request, parent_id):
+def new_task(request, parent_id, tree_id=0):
     """
     New Task
     """
@@ -44,10 +45,11 @@ def new_task(request, parent_id):
             task.save()
             # Add Task to ProjektTasks
             usrsetting = Setting.objects.filter(se_user=request.user)
+            current_node = get_object_or_404(ProjStruct ,pk=tree_id)
             if usrsetting:
                 for pid in usrsetting:
                     proj_id = pid.se_current_proj
-                    projtask = ProjTask(pt_taskid=task, pt_projid=proj_id, pt_projstructid=form.cleaned_data['tree'])
+                    projtask = ProjTask(pt_taskid=task, pt_projid=proj_id, pt_projstructid=current_node)
                     projtask.save()
                     # Adding Donelist Items to Donelist
                     # ----- Level2 -----
@@ -74,10 +76,10 @@ def new_task(request, parent_id):
                                                 )
                             donelist.save()
                 # send_task_byMail(task) TODO: Mail delivery System
-            return redirect('proj_tasks')
+            return redirect('proj_tree_jq')
     else:
         form = TaskForm(user = request.user)
-    print form
+    # print form
     return render(request, template, {'message': message, 'form': form})
 
 
@@ -133,30 +135,28 @@ def taskmain_projview(request, tree_id, done=False ):
     treemenu = []
     go = True
     if tree_id == '0':
-        data['treemenu'] = []
-        data['donelist'] = Donelist.objects.filter(dl_user_id=request.user, dl_done=done).filter(
-        dl_projtask_id__pt_projid=current_proj).order_by('-dl_projtask_id__pt_taskid__ta_date')
-        data['currentnode'] = 1
+        root_node = ProjStruct.objects.filter(ps_projid=current_proj, pk=ProjStruct.objects.root_nodes())
+        current_node = root_node[0]
     else:
         current_node = get_object_or_404(ProjStruct ,pk=tree_id)
         data['currentnode'] = current_node.id
-        if current_node.is_root_node():
-            data['treemenu'] = []
-            data['donelist'] = Donelist.objects.filter(dl_user_id=request.user, dl_done=done).filter(
-            dl_projtask_id__pt_projid=current_proj).order_by('-dl_projtask_id__pt_taskid__ta_date')
-            treemenu.append(current_node)
-        else:
-            data['donelist'] = Donelist.objects.filter(dl_user_id=request.user, dl_done=done).filter(
-            dl_projtask_id__pt_projid=current_proj,
-            dl_projtask_id__pt_projstructid=tree_id).order_by('-dl_projtask_id__pt_taskid__ta_date')
-            treemenu.append(current_node)
-            while go:
-                if current_node.is_child_node():
-                    current_node = current_node.parent
-                    treemenu.append(current_node)
-                else:
-                    go = False
-                    break
+    if current_node.is_root_node():
+        data['treemenu'] = []
+        data['donelist'] = Donelist.objects.filter(dl_user_id=request.user, dl_done=done).filter(
+        dl_projtask_id__pt_projid=current_proj).order_by('-dl_projtask_id__pt_taskid__ta_date')
+        treemenu.append(current_node)
+    else:
+        data['donelist'] = Donelist.objects.filter(dl_user_id=request.user, dl_done=done).filter(
+        dl_projtask_id__pt_projid=current_proj,
+        dl_projtask_id__pt_projstructid=tree_id).order_by('-dl_projtask_id__pt_taskid__ta_date')
+        treemenu.append(current_node)
+        while go:
+            if current_node.is_child_node():
+                current_node = current_node.parent
+                treemenu.append(current_node)
+            else:
+                go = False
+                break
     treemenu.reverse()
     data['treemenu'] = treemenu
     return render(request, template, data)
@@ -168,25 +168,23 @@ def proj_tasks_sidebar(request, tree_id):
     template = 'tasks/proj_tasks_sitebar.html'
     current_proj = request.user.setting.se_current_proj.id
     if tree_id == "0":
+        root_node = ProjStruct.objects.filter(ps_projid=current_proj, pk=ProjStruct.objects.root_nodes())
+        current_node = root_node[0]
+    else:
+        current_node = get_object_or_404(ProjStruct ,pk=tree_id)
+    if current_node.is_root_node():
         data['open_count'] = Donelist.objects.filter(dl_user_id=request.user, dl_done=False).filter(
         dl_projtask_id__pt_projid=current_proj).count()
         data['done_count'] = Donelist.objects.filter(dl_user_id=request.user, dl_done=True).filter(
         dl_projtask_id__pt_projid=current_proj).count()
     else:
-        current_node = get_object_or_404(ProjStruct ,pk=tree_id)
-        if current_node.is_root_node():
-            data['open_count'] = Donelist.objects.filter(dl_user_id=request.user, dl_done=False).filter(
-            dl_projtask_id__pt_projid=current_proj).count()
-            data['done_count'] = Donelist.objects.filter(dl_user_id=request.user, dl_done=True).filter(
-            dl_projtask_id__pt_projid=current_proj).count()
-        else:
-            data['open_count'] = Donelist.objects.filter(dl_user_id=request.user, dl_done=False).filter(
-            dl_projtask_id__pt_projid=current_proj,
-            dl_projtask_id__pt_projstructid=tree_id).count()
-            data['done_count'] = Donelist.objects.filter(dl_user_id=request.user, dl_done=True).filter(
-            dl_projtask_id__pt_projid=current_proj,
-            dl_projtask_id__pt_projstructid=tree_id).count()
-    data['currentnode']=tree_id
+        data['open_count'] = Donelist.objects.filter(dl_user_id=request.user, dl_done=False).filter(
+        dl_projtask_id__pt_projid=current_proj,
+        dl_projtask_id__pt_projstructid=tree_id).count()
+        data['done_count'] = Donelist.objects.filter(dl_user_id=request.user, dl_done=True).filter(
+        dl_projtask_id__pt_projid=current_proj,
+        dl_projtask_id__pt_projstructid=tree_id).count()
+    data['currentnode']=current_node.id
     return render(request, template, data)
 
 

@@ -16,7 +16,7 @@ class TaskForm(forms.Form):
     def __init__( self, user, *args, **kwargs ):
         super( TaskForm, self ).__init__( *args, **kwargs )
         self.current_proj = user.setting.se_current_proj.id
-        self.fields['tree']= forms.ModelChoiceField(queryset=ProjStruct.objects.filter(ps_projid=self.current_proj))
+        #self.fields['tree']= forms.ModelChoiceField(queryset=ProjStruct.objects.filter(ps_projid=self.current_proj))
 
     adr_from = forms.ModelChoiceField(queryset=Address.objects.all())
     adr_from.widget.attrs['class'] = 'form-control'
