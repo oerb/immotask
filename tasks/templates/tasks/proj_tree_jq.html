@@ -13,6 +13,7 @@
         <li>
         {% if node.is_root_node %}
             <span class="glyphicon glyphicon-folder-open"> {{ node.ps_name }}</span>
+            <a title="Aufgaben" href="#" onclick="loadcontent('{% url "proj_tasks_tree_jq" node.id %}', '#tasklist');"> <span class="glyphicon glyphicon-ok-circle"> </span> </a>
         {% endif %}
         {% if node.is_child_node and not node.is_leaf_node %}
             <span class="glyphicon glyphicon-folder-open"> {{ node.ps_name }}</span>

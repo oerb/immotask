@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, url
 from .views import set_proj_view, task_detail, task_typed_print, task_detail_print, set_task_done
-from .views import taskprojview, get_task_pdf, proj_tree, proj_tree_shezi, testjs, taskmain, taskmain_projview
+from .views import taskprojview, get_task_pdf, proj_tree, testjs, taskmain, taskmain_projview
 from .views import new_task
 urlpatterns = patterns('',
                        url(r'^new/(?P<parent_id>\d+)$', new_task, name='new_task'),
@@ -16,7 +16,6 @@ urlpatterns = patterns('',
                        url(r'^project-tree/$', proj_tree, {'template': 'tasks/proj_tree.html'}, name='proj_tree'),
                        url(r'^project-tree-jq/$', proj_tree,
                            {'template': 'tasks/proj_tree_jq.html'}, name='proj_tree_jq'),
-                       url(r'^project-tree-s/$', proj_tree_shezi, name='proj_tree_shezi' ),
                        url(r'^view/(?P<proj_id>\d+)$', set_proj_view, name='task_set_view'),
                        url(r'^testjs/$', testjs, name='testjs'),
                        url(r'^(?P<task_id>\d+)/$', task_detail, name='detail_task'),

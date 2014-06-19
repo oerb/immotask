@@ -88,7 +88,7 @@ class ProjStruct(MPTTModel):
     # OLD: models.ForeignKey('self', blank=True, null=True, related_name=u'Parent')
 
     def __unicode__(self):
-        info = self.ps_name.encode('utf-8') + ' /Tree-id= ' + str(self.id).encode('utf-8')
+        info = self.ps_name + ' /Tree-id= ' + str(self.id).encode('utf-8')
         return info
 
 

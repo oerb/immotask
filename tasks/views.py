@@ -125,9 +125,7 @@ def taskmain_projview(request, tree_id, done=False ):
     data = {}
     template = 'tasks/proj_tasks_jquery.html'
     current_proj = request.user.setting.se_current_proj.id
-    data['donelist'] = Donelist.objects.filter(dl_user_id=request.user, dl_done=done).filter(
-        dl_projtask_id__pt_projid=current_proj, dl_projtask_id__pt_projstructid=tree_id).order_by('-dl_projtask_id__pt_taskid__ta_date')
-    #data['projecttree'] = ProjTopology.objects.filter(pt_proj=current_proj)
+
     if done == True:
         data['task_header'] = 'Projekt Aufgaben - erledigt'
     else:
@@ -136,17 +134,30 @@ def taskmain_projview(request, tree_id, done=False ):
     go = True
     if tree_id == '0':
         data['treemenu'] = []
+        data['donelist'] = Donelist.objects.filter(dl_user_id=request.user, dl_done=done).filter(
+        dl_projtask_id__pt_projid=current_proj).order_by('-dl_projtask_id__pt_taskid__ta_date')
+
     else:
         current_node = get_object_or_404(ProjStruct ,pk=tree_id)
-        treemenu.append(current_node)
-        while go:
-            if current_node.is_child_node():
-                current_node = current_node.parent
-                treemenu.append(current_node)
-                print "Node: "
-            else:
-                go = False
-                break
+        if current_node.is_root_node():
+            data['treemenu'] = []
+            data['donelist'] = Donelist.objects.filter(dl_user_id=request.user, dl_done=done).filter(
+            dl_projtask_id__pt_projid=current_proj).order_by('-dl_projtask_id__pt_taskid__ta_date')
+            treemenu.append(current_node)
+        else:
+            data['donelist'] = Donelist.objects.filter(dl_user_id=request.user, dl_done=done).filter(
+            dl_projtask_id__pt_projid=current_proj,
+            dl_projtask_id__pt_projstructid=tree_id).order_by('-dl_projtask_id__pt_taskid__ta_date')
+
+            treemenu.append(current_node)
+            while go:
+                if current_node.is_child_node():
+                    current_node = current_node.parent
+                    treemenu.append(current_node)
+                    print "Node: "
+                else:
+                    go = False
+                    break
     treemenu.reverse()
     data['treemenu'] = treemenu
     return render(request, template, data)
@@ -165,46 +176,7 @@ def proj_tree(request, template):
         dl_projtask_id__pt_projid=current_proj).count()
     data['open_count'] = Donelist.objects.filter(dl_user_id=request.user, dl_done=False).filter(
         dl_projtask_id__pt_projid=current_proj).count()
-    #current_projtree = ProjTopology.objects.filter(pt_proj=current_proj)
     data['nodes']= ProjStruct.objects.filter(ps_projid=current_proj)
-
-    """
-    firstnodes = current_projtree.filter(pt_parent=None)
-    def get_childs(parent_id):
-        return current_projtree.filter(pt_parent=parent_id).order_by('pt_orderid')
-    firstloop = True
-    for node in firstnodes:
-        current_tree.append((True, node, True, firstloop))
-        firstloop = False
-        l1nodes = get_childs(node)
-        firstloop2 = True
-        for l2node in l1nodes:
-            l3nodes = get_childs(l2node)
-            if len(l3nodes) >= 1:
-                current_tree.append((True, l2node, True, firstloop2))
-            else:
-                current_tree.append((False, l2node, True, firstloop2))
-            firstloop2 = False
-            firstloop3 = True
-            for l3node in l3nodes:
-                current_tree.append((False, l3node, True, firstloop3))
-                firstloop3 = False
-            current_tree.append((False, None, False))
-        current_tree.append((False, None, False))
-    data['projecttree'] = current_tree
-    """
-    return render(request, template, data)
-
-
-@login_required
-def proj_tree_shezi(request):
-    """
-    Show Project Tree by Shezi's Lib
-    """
-    data = {}
-    template = 'tasks/proj_tree_shezi.html'
-    current_proj = request.user.setting.se_current_proj.id
-    data['projecttree'] = ProjTopology.objects.filter(pt_proj=current_proj)
     return render(request, template, data)
 
 
