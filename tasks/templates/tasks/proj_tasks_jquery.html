@@ -1,3 +1,10 @@
+<div>
+    <ol class="breadcrumb">
+      {% for item in treemenu %}
+      <li><a href="#" onclick="loadcontent('{% url "proj_tasks_tree_jq" item.id %}', '#tasklist');">{{ item.ps_name }}</a></li>
+      {% endfor %}
+    </ol>
+</div>
 <div class="panel panel-default">
     <div class="panel-heading">
         <h3>{{ task_header }}</h3>

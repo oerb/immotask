@@ -132,6 +132,23 @@ def taskmain_projview(request, tree_id, done=False ):
         data['task_header'] = 'Projekt Aufgaben - erledigt'
     else:
         data['task_header'] = 'Projekt Aufgaben - offen'
+    treemenu = []
+    go = True
+    if tree_id == '0':
+        data['treemenu'] = []
+    else:
+        current_node = get_object_or_404(ProjStruct ,pk=tree_id)
+        treemenu.append(current_node)
+        while go:
+            if current_node.is_child_node():
+                current_node = current_node.parent
+                treemenu.append(current_node)
+                print "Node: "
+            else:
+                go = False
+                break
+    treemenu.reverse()
+    data['treemenu'] = treemenu
     return render(request, template, data)
 
 
@@ -150,6 +167,7 @@ def proj_tree(request, template):
         dl_projtask_id__pt_projid=current_proj).count()
     #current_projtree = ProjTopology.objects.filter(pt_proj=current_proj)
     data['nodes']= ProjStruct.objects.filter(ps_projid=current_proj)
+
     """
     firstnodes = current_projtree.filter(pt_parent=None)
     def get_childs(parent_id):
