@@ -11,9 +11,9 @@ from django.http import HttpResponse
 from xhtml2pdf import pisa
 from django.utils.six import BytesIO
 from django.template.loader import get_template, Context
-from reportlab.pdfgen import canvas
-from Immotask.settings import MEDIA_ROOT, MEDIA_URL
-from extlibs import django_tree_tag
+#from reportlab.pdfgen import canvas
+#from Immotask.settings import MEDIA_ROOT, MEDIA_URL
+#from extlibs import django_tree_tag
 
 
 
@@ -127,10 +127,10 @@ def taskmain_projview(request, tree_id, done=False ):
     data = {}
     template = 'tasks/proj_tasks_jquery.html'
     current_proj = request.user.setting.se_current_proj.id
-
-    if done == True:
+    print "Done" + " / " + str(done)
+    if done == "True":
         data['task_header'] = 'Projekt Aufgaben - erledigt'
-    else:
+    elif done == False:
         data['task_header'] = 'Projekt Aufgaben - offen'
     treemenu = []
     go = True
