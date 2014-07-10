@@ -56,9 +56,12 @@
     <div class="modal col-md-offset-2 col-md-8" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-content">
             <div class="modal-header">
-                Print Modal
+                <button id="btnPrint" onclick="printdoc();">Print</button>
             </div>
-            <div class="modal-body" id="printmodal">
+            <div class="modal-body" id="printThis">
+
+                    test
+
             </div>
         </div>
     </div>
@@ -66,7 +69,7 @@
 {% block banner_right %}
 <div class="list-group">
     <p class="list-group-item-heading">Aufgabe</p>
-    <a class="list-group-item" onclick="loadcontent('{% url "print_typed_task" task.id %}', '#printmodal');" data-toggle="modal" data-target="#myModal">
+    <a class="list-group-item" onclick="loadcontent('{% url "print_typed_task" task.id %}', '#printThis');" data-toggle="modal" data-target="#myModal">
         drucken <span class="glyphicon glyphicon-print pull-right"></span>
     </a>
 </div>
